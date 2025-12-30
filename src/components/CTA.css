@@ -1,0 +1,67 @@
+.cta {
+  padding: 100px 0 120px;
+}
+
+.cta-box {
+  background-color: #E8E8E8;
+  border: 3px solid #000;
+  border-radius: 8px;
+  padding: 80px 60px;
+  text-align: center;
+  position: relative;
+  box-shadow: 10px 10px 0 #000;
+}
+
+.flower-cta {
+  position: absolute;
+  top: 40px;
+  right: 60px;
+  transform: rotate(25deg);
+}
+
+.cta-box h2 {
+  font-size: 42px;
+  font-weight: 900;
+  margin-bottom: 20px;
+}
+
+.cta-box p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.btn-message {
+  padding: 18px 40px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #FFF;
+  border: 3px solid #000;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+  box-shadow: 5px 5px 0 #000;
+}
+
+.btn-message:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 #000;
+}
+
+.btn-arrow {
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .cta-box {
+    padding: 50px 30px;
+  }
+
+  .cta-box h2 {
+    font-size: 28px;
+  }
+}

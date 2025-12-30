@@ -1,0 +1,58 @@
+.header {
+  padding: 20px 0;
+  background-color: #FFF8F0;
+  border-bottom: 2px solid #000;
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nav {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+  transition: opacity 0.3s;
+}
+
+.nav a:hover {
+  opacity: 0.7;
+}
+
+.say-hi {
+  padding: 8px 20px;
+  border: 2px solid #000;
+  border-radius: 4px;
+}
+
+.say-hi:hover {
+  background-color: #000;
+  color: #FFF8F0;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    gap: 15px;
+  }
+
+  .nav a {
+    font-size: 14px;
+  }
+}
