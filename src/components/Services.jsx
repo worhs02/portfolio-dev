@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Services.css'
 
 function Services() {
@@ -78,6 +78,18 @@ function Services() {
   ]
 
   const [selectedSkill, setSelectedSkill] = useState(skills[0])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSelectedSkill(currentSkill => {
+        const currentIndex = skills.findIndex(skill => skill.id === currentSkill.id)
+        const nextIndex = (currentIndex + 1) % skills.length
+        return skills[nextIndex]
+      })
+    }, 5000) // 5초마다 변경
+
+    return () => clearInterval(interval)
+  }, [skills])
 
   return (
     <section className="services">
