@@ -5,23 +5,15 @@ import { portfolioItems } from '../data/portfolioData'
 function Portfolio() {
   const [showAll, setShowAll] = useState(false)
   const [selectedProject, setSelectedProject] = useState(null)
-  const [currentPage, setCurrentPage] = useState(0)
-  const [isFlipping, setIsFlipping] = useState(false)
+  const [expandedFolders, setExpandedFolders] = useState(['root'])
+  const [selectedFile, setSelectedFile] = useState(null)
   const displayedItems = showAll ? portfolioItems : portfolioItems.slice(0, 4)
-
-  const goToPage = (pageNum) => {
-    if (pageNum === currentPage || isFlipping) return
-    setIsFlipping(true)
-    setTimeout(() => {
-      setCurrentPage(pageNum)
-      setIsFlipping(false)
-    }, 1200)
-  }
 
   useEffect(() => {
     if (selectedProject) {
       document.body.style.overflow = 'hidden'
-      setCurrentPage(0)
+      setExpandedFolders(['root'])
+      setSelectedFile('overview')
     } else {
       document.body.style.overflow = 'unset'
     }
@@ -30,16 +22,167 @@ function Portfolio() {
     }
   }, [selectedProject])
 
-  const pages = [
-    { id: 0, icon: '📝', title: '프로젝트 개요' },
-    { id: 1, icon: '👥', title: '진행 인원' },
-    { id: 2, icon: '🛠️', title: '기술 스택' },
-    { id: 3, icon: '🔧', title: '트러블슈팅' },
-  ]
+  // VS Code Tree Structure
+  const treeFiles = selectedProject ? [
+    {
+      id: 'overview',
+      name: 'README.md',
+      icon: '📄',
+      type: 'file'
+    },
+    {
+      id: 'team',
+      name: 'TEAM.md',
+      icon: '👥',
+      type: 'file'
+    },
+    {
+      id: 'skills',
+      name: 'package.json',
+      icon: '📦',
+      type: 'file'
+    },
+    {
+      id: 'troubleshooting',
+      name: 'TROUBLESHOOTING.md',
+      icon: '🔧',
+      type: 'file'
+    },
+    ...(selectedProject.github ? [{
+      id: 'github',
+      name: '.git',
+      icon: '🔗',
+      type: 'folder'
+    }] : []),
+    ...(selectedProject.award ? [{
+      id: 'award',
+      name: 'AWARD.txt',
+      icon: '🏆',
+      type: 'file'
+    }] : [])
+  ] : []
 
-  if (selectedProject?.github) {
-    pages.push({ id: 4, icon: '🔗', title: 'GitHub' })
+  // Content renderer for each file
+  const getFileContent = (fileId) => {
+    if (!selectedProject) return null
+
+    switch(fileId) {
+      case 'overview':
+        return (
+          <div className="file-content">
+            <div className="file-header">
+              <span className="file-icon">📄</span>
+              <span className="file-name">README.md</span>
+            </div>
+            <div className="file-body">
+              <pre>{selectedProject.overview}</pre>
+            </div>
+          </div>
+        )
+
+      case 'team':
+        return (
+          <div className="file-content">
+            <div className="file-header">
+              <span className="file-icon">👥</span>
+              <span className="file-name">TEAM.md</span>
+            </div>
+            <div className="file-body">
+              <pre>{selectedProject.team}</pre>
+            </div>
+          </div>
+        )
+
+      case 'skills':
+        return (
+          <div className="file-content">
+            <div className="file-header">
+              <span className="file-icon">📦</span>
+              <span className="file-name">package.json</span>
+            </div>
+            <div className="file-body">
+              <pre>{JSON.stringify({ dependencies: selectedProject.skills }, null, 2)}</pre>
+            </div>
+          </div>
+        )
+
+      case 'troubleshooting':
+        return (
+          <div className="file-content">
+            <div className="file-header">
+              <span className="file-icon">🔧</span>
+              <span className="file-name">TROUBLESHOOTING.md</span>
+            </div>
+            <div className="file-body">
+              <pre>{selectedProject.troubleshooting.map((item, idx) => `${idx + 1}. ${item}`).join('\n\n')}</pre>
+            </div>
+          </div>
+        )
+
+      case 'github':
+        return (
+          <div className="file-content">
+            <div className="file-header">
+              <span className="file-icon">🔗</span>
+              <span className="file-name">.git</span>
+            </div>
+            <div className="file-body">
+              <pre>
+                <a href={selectedProject.github} target="_blank" rel="noopener noreferrer" className="file-link">
+                  {selectedProject.github}
+                </a>
+              </pre>
+            </div>
+          </div>
+        )
+
+      case 'award':
+        return (
+          <div className="file-content">
+            <div className="file-header">
+              <span className="file-icon">🏆</span>
+              <span className="file-name">AWARD.txt</span>
+            </div>
+            <div className="file-body">
+              <pre>{selectedProject.award}</pre>
+            </div>
+          </div>
+        )
+
+      default:
+        return null
+    }
   }
+
+  // TreeItem component
+  const TreeItem = ({ file, isSelected, onClick }) => {
+    const isFolderExpanded = file.type === 'folder' && expandedFolders.includes(file.id)
+
+    const handleClick = () => {
+      if (file.type === 'folder') {
+        setExpandedFolders(prev =>
+          prev.includes(file.id)
+            ? prev.filter(id => id !== file.id)
+            : [...prev, file.id]
+        )
+      } else {
+        onClick()
+      }
+    }
+
+    return (
+      <div
+        className={`tree-item ${isSelected ? 'tree-item-selected' : ''}`}
+        onClick={handleClick}
+      >
+        <span className="tree-item-icon">
+          {file.type === 'folder' ? (isFolderExpanded ? '📂' : '📁') : file.icon}
+        </span>
+        <span className="tree-item-name">{file.name}</span>
+      </div>
+    )
+  }
+
 
   return (
     <section className="portfolio" id="portfolio">
@@ -65,12 +208,11 @@ function Portfolio() {
                   {item.award}
                 </div>
               )}
-              <div className="portfolio-image">
-                <div className="placeholder-img" style={{ backgroundColor: item.color }}>
-                  <div className="img-content">{item.emoji}</div>
-                </div>
-              </div>
               <div className="portfolio-info">
+                <div className="folder-icon">
+                  <div className="folder-tab"></div>
+                  <div className="folder-body"></div>
+                </div>
                 <h3>{item.title}</h3>
                 <p className="project-period">{item.period}</p>
               </div>
@@ -91,173 +233,66 @@ function Portfolio() {
       </div>
 
       {selectedProject && (
-        <div className="diary-modal" onClick={() => setSelectedProject(null)}>
-          <div className="diary-wrapper" onClick={(e) => e.stopPropagation()}>
-            <button className="diary-close" onClick={() => setSelectedProject(null)}>
-              ✕
-            </button>
-
-            {/* Page 0 - 프로젝트 개요 */}
-            <div className={`diary-content ${currentPage === 0 ? 'active' : currentPage > 0 ? 'flipped' : 'hidden'}`}>
-              <div className="diary-header">
-                <div className="diary-date">{selectedProject.period}</div>
-                <h2 className="diary-title">{selectedProject.title}</h2>
-                {selectedProject.award && (
-                  <div className="diary-award">{selectedProject.award}</div>
-                )}
+        <div
+          className="vscode-modal"
+          onClick={() => setSelectedProject(null)}
+        >
+          <div
+            className="vscode-window"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Title Bar */}
+            <div className="vscode-titlebar">
+              <div className="vscode-title">
+                <span className="vscode-folder-icon">📁</span>
+                {selectedProject.title}
               </div>
-              <div className="diary-body">
-                <div className="diary-section">
-                  <h3 className="diary-section-title">📝 프로젝트 개요</h3>
-                  <p className="diary-text">{selectedProject.overview}</p>
-                </div>
-              </div>
-              <div className="diary-pagination">
-                {pages.map((page) => (
-                  <button
-                    key={page.id}
-                    className={`page-btn ${currentPage === page.id ? 'active' : ''}`}
-                    onClick={() => setCurrentPage(page.id)}
-                    title={page.title}
-                  >
-                    {page.icon}
-                  </button>
-                ))}
-              </div>
+              <button
+                className="vscode-close"
+                onClick={() => setSelectedProject(null)}
+              >
+                ✕
+              </button>
             </div>
 
-            {/* Page 1 - 진행 인원 */}
-            <div className={`diary-content ${currentPage === 1 ? 'active' : currentPage > 1 ? 'flipped' : 'hidden'}`}>
-              <div className="diary-header">
-                <div className="diary-date">{selectedProject.period}</div>
-                <h2 className="diary-title">{selectedProject.title}</h2>
-                {selectedProject.award && (
-                  <div className="diary-award">{selectedProject.award}</div>
-                )}
-              </div>
-              <div className="diary-body">
-                <div className="diary-section">
-                  <h3 className="diary-section-title">👥 진행 인원</h3>
-                  <p className="diary-text">{selectedProject.team}</p>
+            {/* Main Content */}
+            <div className="vscode-content">
+              {/* Sidebar - File Explorer */}
+              <div className="vscode-sidebar">
+                <div className="vscode-sidebar-header">
+                  <span>EXPLORER</span>
                 </div>
-              </div>
-              <div className="diary-pagination">
-                {pages.map((page) => (
-                  <button
-                    key={page.id}
-                    className={`page-btn ${currentPage === page.id ? 'active' : ''}`}
-                    onClick={() => setCurrentPage(page.id)}
-                    title={page.title}
-                  >
-                    {page.icon}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Page 2 - 기술 스택 */}
-            <div className={`diary-content ${currentPage === 2 ? 'active' : currentPage > 2 ? 'flipped' : 'hidden'}`}>
-              <div className="diary-header">
-                <div className="diary-date">{selectedProject.period}</div>
-                <h2 className="diary-title">{selectedProject.title}</h2>
-                {selectedProject.award && (
-                  <div className="diary-award">{selectedProject.award}</div>
-                )}
-              </div>
-              <div className="diary-body">
-                <div className="diary-section">
-                  <h3 className="diary-section-title">🛠️ 기술 스택</h3>
-                  <div className="diary-skills">
-                    {selectedProject.skills.map((skill, index) => (
-                      <span key={index} className="skill-tag">{skill}</span>
+                <div className="vscode-tree">
+                  <div className="tree-folder-header">
+                    <span className="tree-folder-icon">▼</span>
+                    <span className="tree-folder-name">{selectedProject.title}</span>
+                  </div>
+                  <div className="tree-folder-content">
+                    {treeFiles.map((file) => (
+                      <TreeItem
+                        key={file.id}
+                        file={file}
+                        isSelected={selectedFile === file.id}
+                        onClick={() => setSelectedFile(file.id)}
+                      />
                     ))}
                   </div>
                 </div>
               </div>
-              <div className="diary-pagination">
-                {pages.map((page) => (
-                  <button
-                    key={page.id}
-                    className={`page-btn ${currentPage === page.id ? 'active' : ''}`}
-                    onClick={() => setCurrentPage(page.id)}
-                    title={page.title}
-                  >
-                    {page.icon}
-                  </button>
-                ))}
-              </div>
-            </div>
 
-            {/* Page 3 - 트러블슈팅 */}
-            <div className={`diary-content ${currentPage === 3 ? 'active' : currentPage > 3 ? 'flipped' : 'hidden'}`}>
-              <div className="diary-header">
-                <div className="diary-date">{selectedProject.period}</div>
-                <h2 className="diary-title">{selectedProject.title}</h2>
-                {selectedProject.award && (
-                  <div className="diary-award">{selectedProject.award}</div>
+              {/* Editor - File Content */}
+              <div className="vscode-editor">
+                {selectedFile ? (
+                  getFileContent(selectedFile)
+                ) : (
+                  <div className="vscode-welcome">
+                    <h2>Welcome to {selectedProject.title}</h2>
+                    <p>{selectedProject.period}</p>
+                    <p>Select a file from the explorer to view details</p>
+                  </div>
                 )}
               </div>
-              <div className="diary-body">
-                <div className="diary-section">
-                  <h3 className="diary-section-title">🔧 트러블슈팅</h3>
-                  <ul className="diary-list">
-                    {selectedProject.troubleshooting.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="diary-pagination">
-                {pages.map((page) => (
-                  <button
-                    key={page.id}
-                    className={`page-btn ${currentPage === page.id ? 'active' : ''}`}
-                    onClick={() => setCurrentPage(page.id)}
-                    title={page.title}
-                  >
-                    {page.icon}
-                  </button>
-                ))}
-              </div>
             </div>
-
-            {/* Page 4 - GitHub */}
-            {selectedProject.github && (
-              <div className={`diary-content ${currentPage === 4 ? 'active' : currentPage > 4 ? 'flipped' : 'hidden'}`}>
-                <div className="diary-header">
-                  <div className="diary-date">{selectedProject.period}</div>
-                  <h2 className="diary-title">{selectedProject.title}</h2>
-                  {selectedProject.award && (
-                    <div className="diary-award">{selectedProject.award}</div>
-                  )}
-                </div>
-                <div className="diary-body">
-                  <div className="diary-section">
-                    <h3 className="diary-section-title">🔗 GitHub</h3>
-                    <a
-                      href={selectedProject.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="diary-link"
-                    >
-                      {selectedProject.github}
-                    </a>
-                  </div>
-                </div>
-                <div className="diary-pagination">
-                  {pages.map((page) => (
-                    <button
-                      key={page.id}
-                      className={`page-btn ${currentPage === page.id ? 'active' : ''}`}
-                      onClick={() => setCurrentPage(page.id)}
-                      title={page.title}
-                    >
-                      {page.icon}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}
