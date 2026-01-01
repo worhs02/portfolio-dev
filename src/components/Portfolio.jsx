@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './Portfolio.css'
 import { portfolioItems } from '../data/portfolioData'
 
-function Portfolio() {
+function Portfolio({ onClose, isWindow = false }) {
   const [showAll, setShowAll] = useState(false)
   const [selectedProject, setSelectedProject] = useState(null)
   const [expandedFolders, setExpandedFolders] = useState(['root'])
@@ -190,7 +190,10 @@ function Portfolio() {
         <div className="finder-window">
           <div className="finder-titlebar">
             <div className="finder-controls">
-              <span className="finder-btn close"></span>
+              <span
+                className="finder-btn close"
+                onClick={onClose}
+              ></span>
               <span className="finder-btn minimize"></span>
               <span className="finder-btn maximize"></span>
             </div>

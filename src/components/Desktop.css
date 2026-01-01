@@ -1,0 +1,316 @@
+.desktop {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.desktop-background {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Desktop Icons */
+.desktop-icons {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  user-select: none;
+}
+
+.desktop-icon:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.desktop-icon:active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.icon-image {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Folder Icon on Desktop */
+.folder-icon-desktop {
+  position: relative;
+}
+
+.folder-tab-desktop {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 35px;
+  height: 8px;
+  background: linear-gradient(135deg, #62B5F6 0%, #4BA5F3 100%);
+  border-radius: 4px 4px 0 0;
+}
+
+.folder-body-desktop {
+  position: absolute;
+  top: 18px;
+  left: 10px;
+  width: 70px;
+  height: 52px;
+  background: linear-gradient(135deg, #54A8F5 0%, #4A9EE8 100%);
+  border-radius: 0 6px 6px 6px;
+  box-shadow:
+    0 4px 12px rgba(74, 158, 232, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* App Icon on Desktop */
+.app-icon-desktop {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF5252 100%);
+  border-radius: 16px;
+  box-shadow:
+    0 4px 12px rgba(255, 107, 107, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-icon-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-emoji {
+  font-size: 40px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.icon-label {
+  color: #FFF;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  max-width: 100px;
+  word-wrap: break-word;
+}
+
+/* Window Wrapper */
+.window-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1000px;
+  height: 700px;
+  max-width: 90vw;
+  max-height: 90vh;
+  min-width: 600px;
+  min-height: 400px;
+  overflow: hidden;
+  z-index: 100;
+  resize: both;
+}
+
+/* Resize handle indicator */
+.window-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.1) 100%);
+  pointer-events: none;
+  border-bottom-right-radius: 12px;
+}
+
+.window-wrapper .portfolio {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.window-wrapper .container {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  padding: 0;
+}
+
+.window-wrapper .finder-window {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.window-wrapper .finder-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Hide scrollbar */
+.window-wrapper .finder-content::-webkit-scrollbar {
+  display: none;
+}
+
+.window-wrapper .finder-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Tech Window */
+.tech-window {
+  background-color: #ECECEC;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid #CFCFCF;
+  min-width: 600px;
+  min-height: 400px;
+}
+
+.tech-content {
+  padding: 40px;
+  background-color: #F5F5F5;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.tech-content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.tech-content p {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Dock */
+.dock {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 8px 16px;
+  display: flex;
+  gap: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.dock-item {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 32px;
+}
+
+.dock-item:hover {
+  transform: translateY(-8px) scale(1.1);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dock-folder-icon,
+.dock-app-icon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .desktop-icons {
+    top: 20px;
+    right: 20px;
+    gap: 30px;
+  }
+
+  .desktop-icon {
+    padding: 8px;
+  }
+
+  .icon-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .folder-body-desktop {
+    width: 50px;
+    height: 40px;
+  }
+
+  .app-emoji {
+    font-size: 30px;
+  }
+
+  .icon-label {
+    font-size: 12px;
+  }
+
+  .window-wrapper {
+    width: 95vw !important;
+    height: 80vh !important;
+    min-width: 300px;
+    min-height: 400px;
+    resize: none;
+  }
+
+  .window-wrapper::after {
+    display: none;
+  }
+
+  .tech-window {
+    min-width: 100%;
+  }
+
+  .dock {
+    bottom: 10px;
+    padding: 6px 12px;
+    gap: 8px;
+  }
+
+  .dock-item {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+  }
+}
