@@ -1,13 +1,34 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './Portfolio.css'
 import { portfolioItems } from '../data/portfolioData'
 
 function Portfolio({ onClose, isWindow = false }) {
-  const [showAll, setShowAll] = useState(false)
   const [selectedProject, setSelectedProject] = useState(null)
   const [expandedFolders, setExpandedFolders] = useState(['root'])
   const [selectedFile, setSelectedFile] = useState(null)
-  const displayedItems = showAll ? portfolioItems : portfolioItems.slice(0, 4)
+
+  // Window drag/resize states
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [size, setSize] = useState({ width: 900, height: 650 })
+  const [isDragging, setIsDragging] = useState(false)
+  const [isResizing, setIsResizing] = useState(false)
+  const [resizeDirection, setResizeDirection] = useState(null)
+  const [isMaximized, setIsMaximized] = useState(false)
+  const [prevSize, setPrevSize] = useState({ width: 900, height: 650 })
+  const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 })
+
+  const windowRef = useRef(null)
+  const dragStartPos = useRef({ x: 0, y: 0 })
+  const resizeStartPos = useRef({ x: 0, y: 0 })
+  const resizeStartSize = useRef({ width: 0, height: 0 })
+  const resizeStartWindowPos = useRef({ x: 0, y: 0 })
+
+  // 초기 중앙 배치
+  useEffect(() => {
+    const centerX = (window.innerWidth - 900) / 2
+    const centerY = (window.innerHeight - 650) / 2
+    setPosition({ x: Math.max(0, centerX), y: Math.max(0, centerY) })
+  }, [])
 
   useEffect(() => {
     if (selectedProject) {
@@ -21,6 +42,159 @@ function Portfolio({ onClose, isWindow = false }) {
       document.body.style.overflow = 'unset'
     }
   }, [selectedProject])
+
+  // 타이틀바에 드래그 이벤트 연결
+  useEffect(() => {
+    const titlebar = windowRef.current?.querySelector('.finder-titlebar')
+    if (!titlebar) return
+
+    const handleMouseDownDrag = (e) => {
+      if (e.target.closest('.finder-controls') || e.target.closest('.finder-btn')) {
+        return
+      }
+
+      if (isMaximized) return // 최대화 상태에서는 드래그 불가
+
+      setIsDragging(true)
+      dragStartPos.current = {
+        x: e.clientX - position.x,
+        y: e.clientY - position.y
+      }
+      e.preventDefault()
+    }
+
+    titlebar.addEventListener('mousedown', handleMouseDownDrag)
+    titlebar.style.cursor = isMaximized ? 'default' : 'grab'
+
+    return () => {
+      titlebar.removeEventListener('mousedown', handleMouseDownDrag)
+    }
+  }, [position, isMaximized])
+
+  // 타이틀바 커서 업데이트
+  useEffect(() => {
+    const titlebar = windowRef.current?.querySelector('.finder-titlebar')
+    if (titlebar) {
+      titlebar.style.cursor = isDragging ? 'grabbing' : 'grab'
+    }
+  }, [isDragging])
+
+  // 마우스 이동 처리
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (isDragging) {
+        const newX = e.clientX - dragStartPos.current.x
+        const newY = e.clientY - dragStartPos.current.y
+
+        const maxX = window.innerWidth - 100
+        const maxY = window.innerHeight - 50
+
+        setPosition({
+          x: Math.max(0, Math.min(newX, maxX)),
+          y: Math.max(0, Math.min(newY, maxY))
+        })
+      }
+
+      if (isResizing && resizeDirection) {
+        const deltaX = e.clientX - resizeStartPos.current.x
+        const deltaY = e.clientY - resizeStartPos.current.y
+
+        let newWidth = resizeStartSize.current.width
+        let newHeight = resizeStartSize.current.height
+        let newX = position.x
+        let newY = position.y
+
+        if (resizeDirection.includes('e')) {
+          newWidth = Math.max(400, resizeStartSize.current.width + deltaX)
+        }
+        if (resizeDirection.includes('w')) {
+          const potentialWidth = resizeStartSize.current.width - deltaX
+          if (potentialWidth >= 400) {
+            newWidth = potentialWidth
+            newX = resizeStartWindowPos.current.x + deltaX
+          }
+        }
+        if (resizeDirection.includes('s')) {
+          newHeight = Math.max(300, resizeStartSize.current.height + deltaY)
+        }
+        if (resizeDirection.includes('n')) {
+          const potentialHeight = resizeStartSize.current.height - deltaY
+          if (potentialHeight >= 300) {
+            newHeight = potentialHeight
+            newY = resizeStartWindowPos.current.y + deltaY
+          }
+        }
+
+        setSize({ width: newWidth, height: newHeight })
+        if (newX !== position.x || newY !== position.y) {
+          setPosition({ x: newX, y: newY })
+        }
+      }
+    }
+
+    const handleMouseUp = () => {
+      setIsDragging(false)
+      setIsResizing(false)
+      setResizeDirection(null)
+    }
+
+    if (isDragging || isResizing) {
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+      }
+    }
+  }, [isDragging, isResizing, resizeDirection, position, size])
+
+  // 리사이즈 시작
+  const handleMouseDownResize = (e, direction) => {
+    if (isMaximized) return // 최대화 상태에서는 리사이즈 불가
+
+    if (windowRef.current) {
+      const rect = windowRef.current.getBoundingClientRect()
+      const currentSize = {
+        width: rect.width,
+        height: rect.height
+      }
+      setSize(currentSize)
+      resizeStartSize.current = currentSize
+    }
+
+    setIsResizing(true)
+    setResizeDirection(direction)
+    resizeStartPos.current = { x: e.clientX, y: e.clientY }
+    resizeStartWindowPos.current = { ...position }
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
+  // 최대화/복원
+  const handleMaximize = () => {
+    if (isMaximized) {
+      // 복원
+      setSize(prevSize)
+      setPosition(prevPosition)
+      setIsMaximized(false)
+    } else {
+      // 최대화
+      setPrevSize(size)
+      setPrevPosition(position)
+      setSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
+      setPosition({ x: 0, y: 0 })
+      setIsMaximized(true)
+    }
+  }
+
+  // 최소화 (윈도우 닫기)
+  const handleMinimize = () => {
+    onClose()
+  }
 
   // VS Code Tree Structure
   const treeFiles = selectedProject ? [
@@ -185,7 +359,31 @@ function Portfolio({ onClose, isWindow = false }) {
 
 
   return (
-    <section className="portfolio" id="portfolio">
+    <section
+      ref={windowRef}
+      className={`portfolio ${isWindow !== false ? 'draggable-window' : ''}`}
+      id="portfolio"
+      style={isWindow !== false ? {
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        width: `${size.width}px`,
+        height: `${size.height}px`
+      } : {}}
+    >
+      {/* 리사이즈 핸들 - 8개 방향 (window 모드일 때만) */}
+      {isWindow !== false && (
+        <>
+          <div className="resize-handle resize-n" onMouseDown={(e) => handleMouseDownResize(e, 'n')} />
+          <div className="resize-handle resize-s" onMouseDown={(e) => handleMouseDownResize(e, 's')} />
+          <div className="resize-handle resize-e" onMouseDown={(e) => handleMouseDownResize(e, 'e')} />
+          <div className="resize-handle resize-w" onMouseDown={(e) => handleMouseDownResize(e, 'w')} />
+          <div className="resize-handle resize-ne" onMouseDown={(e) => handleMouseDownResize(e, 'ne')} />
+          <div className="resize-handle resize-nw" onMouseDown={(e) => handleMouseDownResize(e, 'nw')} />
+          <div className="resize-handle resize-se" onMouseDown={(e) => handleMouseDownResize(e, 'se')} />
+          <div className="resize-handle resize-sw" onMouseDown={(e) => handleMouseDownResize(e, 'sw')} />
+        </>
+      )}
+
       <div className="container">
         <div className="finder-window">
           <div className="finder-titlebar">
@@ -194,15 +392,21 @@ function Portfolio({ onClose, isWindow = false }) {
                 className="finder-btn close"
                 onClick={onClose}
               ></span>
-              <span className="finder-btn minimize"></span>
-              <span className="finder-btn maximize"></span>
+              <span
+                className="finder-btn minimize"
+                onClick={handleMinimize}
+              ></span>
+              <span
+                className="finder-btn maximize"
+                onClick={handleMaximize}
+              ></span>
             </div>
             <div className="finder-title">My Portfolio</div>
           </div>
 
           <div className="finder-content">
             <div className="portfolio-grid">
-          {displayedItems.map((item) => (
+          {portfolioItems.map((item) => (
             <div
               key={item.id}
               className="portfolio-card"
@@ -224,17 +428,6 @@ function Portfolio({ onClose, isWindow = false }) {
             </div>
           ))}
             </div>
-
-            {portfolioItems.length > 4 && (
-              <div className="portfolio-more">
-                <button
-                  className="more-btn"
-                  onClick={() => setShowAll(!showAll)}
-                >
-                  {showAll ? '접기 ↑' : '더보기 ↓'}
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>

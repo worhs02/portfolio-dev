@@ -13,7 +13,7 @@ function App() {
       <Header />
       <Hero />
       <Services />
-      <Portfolio />
+      <Portfolio isWindow={false} />
       <CTA />
       <Footer />
     </div>

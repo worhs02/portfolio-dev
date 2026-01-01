@@ -1,5 +1,107 @@
 .portfolio {
-  padding: 100px 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Draggable window */
+.portfolio.draggable-window {
+  position: absolute;
+  z-index: 100;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* 리사이즈 핸들 공통 스타일 */
+.resize-handle {
+  position: absolute;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+/* 상단 */
+.resize-handle.resize-n {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  cursor: ns-resize;
+}
+
+/* 하단 */
+.resize-handle.resize-s {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  cursor: ns-resize;
+}
+
+/* 좌측 */
+.resize-handle.resize-w {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  cursor: ew-resize;
+}
+
+/* 우측 */
+.resize-handle.resize-e {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 4px;
+  cursor: ew-resize;
+}
+
+/* 좌상단 모서리 */
+.resize-handle.resize-nw {
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  cursor: nwse-resize;
+  z-index: 1001;
+}
+
+/* 우상단 모서리 */
+.resize-handle.resize-ne {
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  cursor: nesw-resize;
+  z-index: 1001;
+}
+
+/* 좌하단 모서리 */
+.resize-handle.resize-sw {
+  bottom: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  cursor: nesw-resize;
+  z-index: 1001;
+}
+
+/* 우하단 모서리 */
+.resize-handle.resize-se {
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  cursor: nwse-resize;
+  z-index: 1001;
+}
+
+/* Container fills the draggable window */
+.portfolio .container {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 /* Finder Window */
@@ -7,8 +109,12 @@
   background-color: #ECECEC;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
   border: 1px solid #CFCFCF;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Finder Titlebar */
@@ -53,17 +159,23 @@
 
 .finder-title {
   flex: 1;
-  text-align: center;
+  text-align: left;
   font-size: 14px;
   font-weight: 600;
   color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
   margin-right: 80px;
 }
 
 .finder-content {
   padding: 40px;
-  background-color: #F5F5F5;
-  min-height: 500px;
+  background-color: transparent;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .portfolio-title {
@@ -655,5 +767,24 @@
   .file-body {
     padding: 12px;
     font-size: 12px;
+  }
+}
+
+/* 반응형 - 모바일에서는 드래그/리사이즈 비활성화 */
+@media (max-width: 768px) {
+  .portfolio.draggable-window {
+    position: fixed !important;
+    top: 5vh !important;
+    left: 2.5vw !important;
+    width: 95vw !important;
+    height: 80vh !important;
+  }
+
+  .resize-handle {
+    display: none;
+  }
+
+  .finder-titlebar {
+    cursor: default !important;
   }
 }

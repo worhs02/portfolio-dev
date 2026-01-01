@@ -113,108 +113,30 @@
   word-wrap: break-word;
 }
 
-/* Window Wrapper */
-.window-wrapper {
-  position: absolute;
+/* Window 스타일은 Window.css에서 관리 */
+
+/* Tech Stack Window */
+.tech-stack-window {
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 1000px;
-  height: 700px;
-  max-width: 90vw;
-  max-height: 90vh;
-  min-width: 600px;
-  min-height: 400px;
-  overflow: hidden;
+  width: 90vw;
+  max-width: 1200px;
+  height: 85vh;
+  max-height: 800px;
   z-index: 100;
-  resize: both;
 }
 
-/* Resize handle indicator */
-.window-wrapper::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(135deg,
-    transparent 0%,
-    transparent 50%,
-    rgba(0, 0, 0, 0.1) 50%,
-    rgba(0, 0, 0, 0.1) 100%);
-  pointer-events: none;
-  border-bottom-right-radius: 12px;
-}
-
-.window-wrapper .portfolio {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  overflow: hidden;
-}
-
-.window-wrapper .container {
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  padding: 0;
-}
-
-.window-wrapper .finder-window {
-  width: 100%;
+.tech-stack-window .skills-showcase {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.window-wrapper .finder-content {
+.tech-stack-window .window-content {
   flex: 1;
   overflow-y: auto;
-  overflow-x: hidden;
-}
-
-/* Hide scrollbar */
-.window-wrapper .finder-content::-webkit-scrollbar {
-  display: none;
-}
-
-.window-wrapper .finder-content {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Tech Window */
-.tech-window {
-  background-color: #ECECEC;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  border: 1px solid #CFCFCF;
-  min-width: 600px;
-  min-height: 400px;
-}
-
-.tech-content {
-  padding: 40px;
-  background-color: #F5F5F5;
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
-
-.tech-content h2 {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-}
-
-.tech-content p {
-  font-size: 16px;
-  color: #666;
 }
 
 /* Dock */
@@ -284,18 +206,6 @@
 
   .icon-label {
     font-size: 12px;
-  }
-
-  .window-wrapper {
-    width: 95vw !important;
-    height: 80vh !important;
-    min-width: 300px;
-    min-height: 400px;
-    resize: none;
-  }
-
-  .window-wrapper::after {
-    display: none;
   }
 
   .tech-window {

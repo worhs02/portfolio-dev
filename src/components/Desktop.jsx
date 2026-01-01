@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './Desktop.css'
 import Portfolio from './Portfolio'
+import TechStack from './TechStack'
 
 function Desktop() {
   const [openWindows, setOpenWindows] = useState({
@@ -42,10 +43,29 @@ function Desktop() {
             className="desktop-icon"
             onDoubleClick={() => handleDoubleClick('techStack')}
           >
-            <div className="icon-image app-icon-desktop">
-              <div className="app-icon-inner">
-                <span className="app-emoji">☺</span>
-              </div>
+            <div className="icon-image app-icon-desktop tech-memo-icon">
+              <svg viewBox="0 0 100 100" width="60" height="60">
+                <defs>
+                  <filter id="shadow">
+                    <feDropShadow dx="2" dy="2" stdDeviation="2" floodOpacity="0.3"/>
+                  </filter>
+                </defs>
+                <g transform="rotate(-3 50 50)">
+                  {/* 테이프 */}
+                  <rect x="30" y="8" width="40" height="8" rx="2" fill="rgba(150,150,150,0.4)"/>
+                  {/* 메모지 */}
+                  <rect x="15" y="15" width="70" height="70" rx="6"
+                    fill="#FFFACD"
+                    stroke="#000"
+                    strokeWidth="3"
+                    filter="url(#shadow)"/>
+                  {/* 톱니바퀴 */}
+                  <g transform="translate(50, 50) scale(0.5)">
+                    <circle cx="0" cy="0" r="15" fill="#424242" stroke="#222" strokeWidth="2"/>
+                    <circle cx="0" cy="0" r="6" fill="#D32F2F"/>
+                  </g>
+                </g>
+              </svg>
             </div>
             <div className="icon-label">Tech Stack & Skills</div>
           </div>
@@ -53,31 +73,11 @@ function Desktop() {
 
         {/* Windows */}
         {openWindows.projects && (
-          <div className="window-wrapper">
-            <Portfolio onClose={() => handleCloseWindow('projects')} />
-          </div>
+          <Portfolio onClose={() => handleCloseWindow('projects')} />
         )}
 
         {openWindows.techStack && (
-          <div className="window-wrapper">
-            <div className="tech-window">
-              <div className="finder-titlebar">
-                <div className="finder-controls">
-                  <span
-                    className="finder-btn close"
-                    onClick={() => handleCloseWindow('techStack')}
-                  ></span>
-                  <span className="finder-btn minimize"></span>
-                  <span className="finder-btn maximize"></span>
-                </div>
-                <div className="finder-title">Tech Stack & Skills ☺</div>
-              </div>
-              <div className="tech-content">
-                <h2>Tech Stack & Skills Coming Soon!</h2>
-                <p>This window will show your tech stack and skills.</p>
-              </div>
-            </div>
-          </div>
+          <TechStack onClose={() => handleCloseWindow('techStack')} />
         )}
 
         {/* Dock (optional) */}
@@ -86,7 +86,19 @@ function Desktop() {
             <div className="dock-folder-icon">📁</div>
           </div>
           <div className="dock-item" onClick={() => handleDoubleClick('techStack')}>
-            <div className="dock-app-icon">☺</div>
+            <svg viewBox="0 0 100 100" width="40" height="40">
+              <g transform="rotate(-3 50 50)">
+                <rect x="30" y="8" width="40" height="8" rx="2" fill="rgba(150,150,150,0.4)"/>
+                <rect x="15" y="15" width="70" height="70" rx="6"
+                  fill="#FFFACD"
+                  stroke="#000"
+                  strokeWidth="3"/>
+                <g transform="translate(50, 50) scale(0.5)">
+                  <circle cx="0" cy="0" r="15" fill="#424242" stroke="#222" strokeWidth="2"/>
+                  <circle cx="0" cy="0" r="6" fill="#D32F2F"/>
+                </g>
+              </g>
+            </svg>
           </div>
         </div>
       </div>
