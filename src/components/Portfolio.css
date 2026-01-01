@@ -2,34 +2,79 @@
   padding: 100px 0;
 }
 
-.portfolio-title {
-  font-size: 48px;
-  font-weight: 900;
-  margin-bottom: 60px;
-  display: inline-flex;
+/* Finder Window */
+.finder-window {
+  background-color: #ECECEC;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid #CFCFCF;
+}
+
+/* Finder Titlebar */
+.finder-titlebar {
+  background: linear-gradient(to bottom, #E8E8E8 0%, #D5D5D5 100%);
+  border-bottom: 1px solid #B8B8B8;
+  padding: 12px 16px;
+  display: flex;
   align-items: center;
-  gap: 15px;
-  position: relative;
+  gap: 12px;
 }
 
-.portfolio-title::after {
-  content: '';
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  right: 100px;
-  height: 4px;
-  background-color: #000;
+.finder-controls {
+  display: flex;
+  gap: 8px;
 }
 
-.title-decor {
-  display: inline-block;
+.finder-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.finder-btn.close {
+  background: linear-gradient(to bottom, #FF5F57 0%, #FF5F57 100%);
+}
+
+.finder-btn.minimize {
+  background: linear-gradient(to bottom, #FFBD2E 0%, #FFBD2E 100%);
+}
+
+.finder-btn.maximize {
+  background: linear-gradient(to bottom, #28CA42 0%, #28CA42 100%);
+}
+
+.finder-btn:hover {
+  opacity: 0.8;
+}
+
+.finder-title {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  margin-right: 80px;
+}
+
+.finder-content {
+  padding: 40px;
+  background-color: #F5F5F5;
+  min-height: 500px;
+}
+
+.portfolio-title {
+  display: none;
 }
 
 .portfolio-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 50px 40px;
+  margin-bottom: 30px;
 }
 
 /* macOS Folder Style */
@@ -517,12 +562,27 @@
 }
 
 @media (max-width: 768px) {
-  .portfolio-grid {
-    grid-template-columns: 1fr;
+  .finder-window {
+    border-radius: 8px;
   }
 
-  .portfolio-title {
-    font-size: 32px;
+  .finder-titlebar {
+    padding: 10px 12px;
+  }
+
+  .finder-title {
+    font-size: 13px;
+    margin-right: 50px;
+  }
+
+  .finder-content {
+    padding: 20px;
+    min-height: 300px;
+  }
+
+  .portfolio-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 30px 20px;
   }
 
   .portfolio-card {

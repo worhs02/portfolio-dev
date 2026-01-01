@@ -187,16 +187,18 @@ function Portfolio() {
   return (
     <section className="portfolio" id="portfolio">
       <div className="container">
-        <h2 className="portfolio-title">
-          My Portfolio
-          <span className="title-decor">
-            <svg width="50" height="50" viewBox="0 0 50 50">
-              <path d="M25 5 L28 22 L25 25 L22 22 Z M5 25 L22 28 L25 25 L22 22 Z M25 45 L22 28 L25 25 L28 28 Z M45 25 L28 22 L25 25 L28 28 Z M15 15 L20 20 L25 25 M35 15 L30 20 L25 25 M15 35 L20 30 L25 25 M35 35 L30 30 L25 25" stroke="#87CEEB" strokeWidth="2" fill="none"/>
-            </svg>
-          </span>
-        </h2>
+        <div className="finder-window">
+          <div className="finder-titlebar">
+            <div className="finder-controls">
+              <span className="finder-btn close"></span>
+              <span className="finder-btn minimize"></span>
+              <span className="finder-btn maximize"></span>
+            </div>
+            <div className="finder-title">My Portfolio</div>
+          </div>
 
-        <div className="portfolio-grid">
+          <div className="finder-content">
+            <div className="portfolio-grid">
           {displayedItems.map((item) => (
             <div
               key={item.id}
@@ -218,18 +220,20 @@ function Portfolio() {
               </div>
             </div>
           ))}
-        </div>
+            </div>
 
-        {portfolioItems.length > 4 && (
-          <div className="portfolio-more">
-            <button
-              className="more-btn"
-              onClick={() => setShowAll(!showAll)}
-            >
-              {showAll ? '접기 ↑' : '더보기 ↓'}
-            </button>
+            {portfolioItems.length > 4 && (
+              <div className="portfolio-more">
+                <button
+                  className="more-btn"
+                  onClick={() => setShowAll(!showAll)}
+                >
+                  {showAll ? '접기 ↑' : '더보기 ↓'}
+                </button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       {selectedProject && (
