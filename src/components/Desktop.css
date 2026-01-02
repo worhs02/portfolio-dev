@@ -125,6 +125,10 @@
   position: fixed;
   z-index: 100;
   width: 1240px; /* 1200px container + 40px padding */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: none;
+  border: 1px solid #CFCFCF;
 }
 
 .tech-stack-window .container {
@@ -135,6 +139,8 @@
 
 .tech-stack-window .skills-showcase {
   width: 100%;
+  border: none;
+  box-shadow: none;
 }
 
 .tech-stack-window .window-content {

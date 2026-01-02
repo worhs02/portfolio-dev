@@ -85,6 +85,15 @@ function TechStack({ onClose, onClick, zIndex }) {
   const windowRef = useRef(null)
   const dragStartPos = useRef({ x: 0, y: 0 })
 
+  // 스플래시 화면 타이머
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false)
+    }, 2000) // 2초 후 스플래시 숨김
+
+    return () => clearTimeout(timer)
+  }, [])
+
   // 초기 중앙 배치
   useEffect(() => {
     const centerX = (window.innerWidth - 1240) / 2  // 1200px + padding 40px
@@ -129,7 +138,7 @@ function TechStack({ onClose, onClick, zIndex }) {
     return () => {
       titlebar.removeEventListener('mousedown', handleMouseDownDrag)
     }
-  }, [position])
+  }, [position, showSplash])
 
   // 타이틀바 커서 업데이트
   useEffect(() => {
@@ -182,8 +191,37 @@ function TechStack({ onClose, onClick, zIndex }) {
         zIndex: zIndex || 100
       }}
     >
-      <div className="container">
-        <div className="skills-showcase">
+      {showSplash ? (
+        <div className="splash-screen">
+          <div className="splash-screen-inner">
+            <div className="splash-content">
+              <svg viewBox="0 0 100 100" width="120" height="120" className="splash-icon">
+                <defs>
+                  <filter id="splash-shadow">
+                    <feDropShadow dx="3" dy="3" stdDeviation="3" floodOpacity="0.3"/>
+                  </filter>
+                </defs>
+                <g transform="rotate(-3 50 50)">
+                  <rect x="30" y="8" width="40" height="10" rx="2" fill="rgba(180,180,180,0.7)" stroke="rgba(0,0,0,0.1)" strokeWidth="1"/>
+                  <rect x="15" y="15" width="70" height="70" rx="6"
+                    fill="#FFFACD"
+                    stroke="#000"
+                    strokeWidth="3"
+                    filter="url(#splash-shadow)"/>
+                </g>
+              </svg>
+              <h1 className="splash-title">Tech Stack & Skills</h1>
+              <div className="splash-loader">
+                <div className="loader-dot"></div>
+                <div className="loader-dot"></div>
+                <div className="loader-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="container">
+          <div className="skills-showcase">
           <div className="window-header">
             <div className="window-dots">
               <span className="dot" onClick={onClose} style={{ cursor: 'pointer', background: '#FF5F57' }}></span>
@@ -229,6 +267,7 @@ function TechStack({ onClose, onClick, zIndex }) {
           </div>
         </div>
       </div>
+      )}
     </div>
   )
 }
