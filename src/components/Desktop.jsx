@@ -9,11 +9,19 @@ function Desktop() {
     techStack: false
   })
 
+  const [windowZIndex, setWindowZIndex] = useState({
+    projects: 100,
+    techStack: 100
+  })
+
+  const [maxZIndex, setMaxZIndex] = useState(100)
+
   const handleDoubleClick = (windowName) => {
     setOpenWindows(prev => ({
       ...prev,
       [windowName]: true
     }))
+    bringToFront(windowName)
   }
 
   const handleCloseWindow = (windowName) => {
@@ -21,6 +29,15 @@ function Desktop() {
       ...prev,
       [windowName]: false
     }))
+  }
+
+  const bringToFront = (windowName) => {
+    const newZIndex = maxZIndex + 1
+    setWindowZIndex(prev => ({
+      ...prev,
+      [windowName]: newZIndex
+    }))
+    setMaxZIndex(newZIndex)
   }
 
   return (
@@ -52,18 +69,13 @@ function Desktop() {
                 </defs>
                 <g transform="rotate(-3 50 50)">
                   {/* 테이프 */}
-                  <rect x="30" y="8" width="40" height="8" rx="2" fill="rgba(150,150,150,0.4)"/>
+                  <rect x="30" y="8" width="40" height="10" rx="2" fill="rgba(180,180,180,0.7)" stroke="rgba(0,0,0,0.1)" strokeWidth="1"/>
                   {/* 메모지 */}
                   <rect x="15" y="15" width="70" height="70" rx="6"
                     fill="#FFFACD"
                     stroke="#000"
                     strokeWidth="3"
                     filter="url(#shadow)"/>
-                  {/* 톱니바퀴 */}
-                  <g transform="translate(50, 50) scale(0.5)">
-                    <circle cx="0" cy="0" r="15" fill="#424242" stroke="#222" strokeWidth="2"/>
-                    <circle cx="0" cy="0" r="6" fill="#D32F2F"/>
-                  </g>
                 </g>
               </svg>
             </div>
@@ -73,32 +85,39 @@ function Desktop() {
 
         {/* Windows */}
         {openWindows.projects && (
-          <Portfolio onClose={() => handleCloseWindow('projects')} />
+          <Portfolio
+            onClose={() => handleCloseWindow('projects')}
+            isWindow={true}
+            onClick={() => bringToFront('projects')}
+            zIndex={windowZIndex.projects}
+          />
         )}
 
         {openWindows.techStack && (
-          <TechStack onClose={() => handleCloseWindow('techStack')} />
+          <TechStack
+            onClose={() => handleCloseWindow('techStack')}
+            onClick={() => bringToFront('techStack')}
+            zIndex={windowZIndex.techStack}
+          />
         )}
 
-        {/* Dock (optional) */}
+        {/* Dock */}
         <div className="dock">
-          <div className="dock-item" onClick={() => handleDoubleClick('projects')}>
+          <div className={`dock-item ${openWindows.projects ? 'active' : ''}`} onClick={() => handleDoubleClick('projects')}>
             <div className="dock-folder-icon">📁</div>
+            {openWindows.projects && <div className="dock-indicator"></div>}
           </div>
-          <div className="dock-item" onClick={() => handleDoubleClick('techStack')}>
+          <div className={`dock-item ${openWindows.techStack ? 'active' : ''}`} onClick={() => handleDoubleClick('techStack')}>
             <svg viewBox="0 0 100 100" width="40" height="40">
               <g transform="rotate(-3 50 50)">
-                <rect x="30" y="8" width="40" height="8" rx="2" fill="rgba(150,150,150,0.4)"/>
+                <rect x="30" y="8" width="40" height="10" rx="2" fill="rgba(180,180,180,0.7)" stroke="rgba(0,0,0,0.1)" strokeWidth="1"/>
                 <rect x="15" y="15" width="70" height="70" rx="6"
                   fill="#FFFACD"
                   stroke="#000"
                   strokeWidth="3"/>
-                <g transform="translate(50, 50) scale(0.5)">
-                  <circle cx="0" cy="0" r="15" fill="#424242" stroke="#222" strokeWidth="2"/>
-                  <circle cx="0" cy="0" r="6" fill="#D32F2F"/>
-                </g>
               </g>
             </svg>
+            {openWindows.techStack && <div className="dock-indicator"></div>}
           </div>
         </div>
       </div>

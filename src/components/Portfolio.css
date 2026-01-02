@@ -10,7 +10,11 @@
   position: absolute;
   z-index: 100;
   overflow: hidden;
-  transition: all 0.3s ease;
+}
+
+.portfolio.draggable-window.dragging,
+.portfolio.draggable-window.resizing {
+  transition: none;
 }
 
 /* 리사이즈 핸들 공통 스타일 */
@@ -102,6 +106,7 @@
   height: 100%;
   padding: 0;
   margin: 0;
+  max-width: none;
 }
 
 /* Finder Window */

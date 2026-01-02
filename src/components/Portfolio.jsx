@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import './Portfolio.css'
 import { portfolioItems } from '../data/portfolioData'
 
-function Portfolio({ onClose, isWindow = false }) {
+function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
   const [selectedProject, setSelectedProject] = useState(null)
   const [expandedFolders, setExpandedFolders] = useState(['root'])
   const [selectedFile, setSelectedFile] = useState(null)
@@ -361,14 +361,22 @@ function Portfolio({ onClose, isWindow = false }) {
   return (
     <section
       ref={windowRef}
-      className={`portfolio ${isWindow !== false ? 'draggable-window' : ''}`}
+      className={`portfolio ${isWindow !== false ? 'draggable-window' : ''} ${isDragging ? 'dragging' : ''} ${isResizing ? 'resizing' : ''} ${isMaximized ? 'maximized' : ''}`}
       id="portfolio"
-      style={isWindow !== false ? {
+      onClick={onClick}
+      style={isWindow !== false ? (isMaximized ? {
+        left: '0',
+        top: '0',
+        width: '100vw',
+        height: '100vh',
+        zIndex: zIndex || 100
+      } : {
         left: `${position.x}px`,
         top: `${position.y}px`,
         width: `${size.width}px`,
-        height: `${size.height}px`
-      } : {}}
+        height: `${size.height}px`,
+        zIndex: zIndex || 100
+      }) : {}}
     >
       {/* 리사이즈 핸들 - 8개 방향 (window 모드일 때만) */}
       {isWindow !== false && (
