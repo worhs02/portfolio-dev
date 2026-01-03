@@ -43,6 +43,24 @@ function Desktop() {
   return (
     <div className="desktop">
       <div className="desktop-background">
+        {/* macOS Menu Bar */}
+        <div className="macos-menubar">
+          <div className="menubar-left">
+            <span className="apple-logo"></span>
+            <span className="menu-item">Finder</span>
+            <span className="menu-item">파일</span>
+            <span className="menu-item">편집</span>
+            <span className="menu-item">보기</span>
+            <span className="menu-item">이동</span>
+          </div>
+          <div className="menubar-right">
+            <span className="menu-icon">🔋</span>
+            <span className="menu-icon">📶</span>
+            <span className="menu-icon">🔍</span>
+            <span className="menu-time">오후 2:39</span>
+          </div>
+        </div>
+
         {/* Desktop Icons */}
         <div className="desktop-icons">
           <div
