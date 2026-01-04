@@ -10,10 +10,14 @@ function DesktopTest() {
     setIsLoggedIn(true)
   }
 
+  const handleLogout = () => {
+    setIsLoggedIn(false)
+  }
+
   return (
     <div className="App">
       {!isLoggedIn && <LoginScreen onLogin={handleLogin} />}
-      <Desktop />
+      <Desktop onLogout={handleLogout} />
     </div>
   )
 }

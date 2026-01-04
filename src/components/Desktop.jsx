@@ -2,17 +2,20 @@ import React, { useState } from 'react'
 import './Desktop.css'
 import Portfolio from './Portfolio'
 import TechStack from './TechStack'
+import Velog from './Velog'
 import Modal from './Modal'
 
-function Desktop() {
+function Desktop({ onLogout }) {
   const [openWindows, setOpenWindows] = useState({
     projects: false,
-    techStack: false
+    techStack: false,
+    velog: false
   })
 
   const [windowZIndex, setWindowZIndex] = useState({
     projects: 100,
-    techStack: 100
+    techStack: 100,
+    velog: 100
   })
 
   const [maxZIndex, setMaxZIndex] = useState(100)
@@ -20,7 +23,8 @@ function Desktop() {
   const [openMenu, setOpenMenu] = useState(null)
   const [minimizedWindows, setMinimizedWindows] = useState({
     projects: false,
-    techStack: false
+    techStack: false,
+    velog: false
   })
   const [modal, setModal] = useState({
     isOpen: false,
@@ -100,6 +104,17 @@ function Desktop() {
             '보기': ['실제 크기', '확대', '축소'],
             '윈도우': ['최소화', '확대/축소', null, '모든 윈도우 보기'],
             '도움말': ['Tech Stack 도움말']
+          }
+        }
+      case 'velog':
+        return {
+          title: 'Velog',
+          menus: {
+            '파일': ['새로고침', '닫기'],
+            '편집': ['복사', '붙여넣기'],
+            '보기': ['실제 크기', '확대', '축소'],
+            '윈도우': ['최소화', '확대/축소'],
+            '도움말': ['Velog 도움말']
           }
         }
       default:
@@ -317,17 +332,9 @@ function Desktop() {
         })
         break
       case '잠금':
-        setModal({
-          isOpen: true,
-          title: '잠금',
-          width: 350,
-          content: (
-            <div style={{ textAlign: 'center', padding: '20px' }}>
-              <p>🔒</p>
-              <p>화면이 잠겼습니다.</p>
-            </div>
-          )
-        })
+        if (onLogout) {
+          onLogout()
+        }
         break
       default:
         console.log(`Apple 메뉴: ${action}`)
@@ -654,6 +661,19 @@ function Desktop() {
             </div>
             <div className="icon-label">Tech Stack & Skills</div>
           </div>
+
+          <div
+            className="desktop-icon"
+            onDoubleClick={() => handleDoubleClick('velog')}
+          >
+            <div className="icon-image app-icon-desktop velog-icon">
+              <svg viewBox="0 0 100 100" width="60" height="60">
+                <rect x="10" y="10" width="80" height="80" rx="12" fill="#20C997"/>
+                <text x="50" y="65" fontSize="48" fontWeight="bold" fill="white" textAnchor="middle" fontFamily="Arial, sans-serif">V</text>
+              </svg>
+            </div>
+            <div className="icon-label">Velog</div>
+          </div>
         </div>
 
         {/* Windows */}
@@ -663,6 +683,7 @@ function Desktop() {
             isWindow={true}
             onClick={(e) => bringToFront('projects', e)}
             zIndex={windowZIndex.projects}
+            onMinimize={() => handleMinimize('projects')}
           />
         )}
 
@@ -671,6 +692,16 @@ function Desktop() {
             onClose={() => handleCloseWindow('techStack')}
             onClick={(e) => bringToFront('techStack', e)}
             zIndex={windowZIndex.techStack}
+            onMinimize={() => handleMinimize('techStack')}
+          />
+        )}
+
+        {openWindows.velog && !minimizedWindows.velog && (
+          <Velog
+            onClose={() => handleCloseWindow('velog')}
+            onClick={(e) => bringToFront('velog', e)}
+            zIndex={windowZIndex.velog}
+            onMinimize={() => handleMinimize('velog')}
           />
         )}
 
@@ -709,6 +740,22 @@ function Desktop() {
               </g>
             </svg>
             {openWindows.techStack && <div className="dock-indicator"></div>}
+          </div>
+          <div
+            className={`dock-item ${openWindows.velog ? 'active' : ''}`}
+            onClick={() => {
+              if (minimizedWindows.velog) {
+                handleRestore('velog')
+              } else {
+                handleDoubleClick('velog')
+              }
+            }}
+          >
+            <svg viewBox="0 0 100 100" width="40" height="40">
+              <rect x="10" y="10" width="80" height="80" rx="12" fill="#20C997"/>
+              <text x="50" y="65" fontSize="48" fontWeight="bold" fill="white" textAnchor="middle" fontFamily="Arial, sans-serif">V</text>
+            </svg>
+            {openWindows.velog && <div className="dock-indicator"></div>}
           </div>
         </div>
       </div>
