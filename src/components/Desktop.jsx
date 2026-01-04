@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './Desktop.css'
 import Portfolio from './Portfolio'
 import TechStack from './TechStack'
+import Modal from './Modal'
 
 function Desktop() {
   const [openWindows, setOpenWindows] = useState({
@@ -20,6 +21,12 @@ function Desktop() {
   const [minimizedWindows, setMinimizedWindows] = useState({
     projects: false,
     techStack: false
+  })
+  const [modal, setModal] = useState({
+    isOpen: false,
+    title: '',
+    content: null,
+    width: 400
   })
 
   const handleDoubleClick = (windowName) => {
@@ -113,19 +120,217 @@ function Desktop() {
 
   const handleBatteryClick = () => {
     const batteryLevel = Math.floor(Math.random() * 100)
-    alert(`배터리 잔량: ${batteryLevel}%\n전원 어댑터: ${batteryLevel < 50 ? '연결됨' : '연결 안됨'}`)
+    const isCharging = batteryLevel < 50
+    setModal({
+      isOpen: true,
+      title: '배터리',
+      width: 350,
+      content: (
+        <div>
+          <h2>배터리 정보</h2>
+          <p><strong>잔량:</strong> {batteryLevel}%</p>
+          <p><strong>상태:</strong> {isCharging ? '충전 중' : '배터리 사용 중'}</p>
+          <p><strong>전원:</strong> {isCharging ? '전원 어댑터 연결됨' : '연결 안됨'}</p>
+          <div style={{ marginTop: '12px', background: '#f5f5f5', padding: '12px', borderRadius: '6px' }}>
+            <div style={{ background: batteryLevel > 20 ? '#28CA42' : '#FF5F57', height: '8px', borderRadius: '4px', width: `${batteryLevel}%` }}></div>
+          </div>
+        </div>
+      )
+    })
   }
 
   const handleWifiClick = () => {
     const networks = ['My WiFi', 'Guest Network', 'Office WiFi', 'iPhone']
     const connected = networks[0]
-    alert(`현재 연결: ${connected}\n\n사용 가능한 네트워크:\n${networks.map(n => n === connected ? `✓ ${n}` : `  ${n}`).join('\n')}`)
+    setModal({
+      isOpen: true,
+      title: 'Wi-Fi',
+      width: 350,
+      content: (
+        <div>
+          <h2>Wi-Fi 네트워크</h2>
+          <p style={{ marginBottom: '12px' }}><strong>현재 연결:</strong> {connected}</p>
+          <ul className="modal-list">
+            {networks.map((network, idx) => (
+              <li key={idx} className={network === connected ? 'active' : ''}>
+                {network === connected ? '✓ ' : ''}{network}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    })
   }
 
   const handleSpotlightClick = () => {
-    const searchTerm = prompt('Spotlight 검색:', '')
-    if (searchTerm) {
-      alert(`"${searchTerm}" 검색 결과:\n\n• Projects 폴더\n• Tech Stack 메모\n• ${searchTerm}.txt`)
+    setModal({
+      isOpen: true,
+      title: 'Spotlight 검색',
+      width: 500,
+      content: (
+        <div>
+          <input
+            type="text"
+            className="modal-input"
+            placeholder="검색어를 입력하세요..."
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && e.target.value) {
+                const searchTerm = e.target.value
+                setModal(prev => ({
+                  ...prev,
+                  content: (
+                    <div>
+                      <input
+                        type="text"
+                        className="modal-input"
+                        placeholder="검색어를 입력하세요..."
+                        defaultValue={searchTerm}
+                      />
+                      <h2>"{searchTerm}" 검색 결과</h2>
+                      <ul className="modal-list">
+                        <li>📁 Projects 폴더</li>
+                        <li>📝 Tech Stack 메모</li>
+                        <li>📄 {searchTerm}.txt</li>
+                        <li>🖼️ {searchTerm}.png</li>
+                      </ul>
+                    </div>
+                  )
+                }))
+              }
+            }}
+          />
+        </div>
+      )
+    })
+  }
+
+  const handleAppleMenuAction = (action) => {
+    setOpenMenu(null)
+
+    switch(action) {
+      case '이 Mac에 관하여':
+        setModal({
+          isOpen: true,
+          title: '이 Mac에 관하여',
+          width: 400,
+          content: (
+            <div style={{ textAlign: 'center' }}>
+              <h2 style={{ fontSize: '24px', margin: '0 0 8px 0' }}>Portfolio OS</h2>
+              <p style={{ fontSize: '14px', color: '#888', margin: '0 0 20px 0' }}>버전 1.0.0</p>
+              <div style={{ background: '#f5f5f5', padding: '16px', borderRadius: '8px', marginBottom: '16px' }}>
+                <p style={{ margin: '4px 0' }}><strong>제작:</strong> Your Name</p>
+                <p style={{ margin: '4px 0' }}><strong>기술:</strong> React + Vite</p>
+                <p style={{ margin: '4px 0' }}><strong>디자인:</strong> macOS Inspired</p>
+              </div>
+            </div>
+          )
+        })
+        break
+      case '시스템 설정...':
+      case 'App Store...':
+        setModal({
+          isOpen: true,
+          title: action.replace('...', ''),
+          width: 350,
+          content: (
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              <p>이 기능은 현재 사용할 수 없습니다.</p>
+            </div>
+          )
+        })
+        break
+      case '강제 종료...':
+        const openWindowsList = Object.entries(openWindows)
+          .filter(([_, isOpen]) => isOpen)
+          .map(([name, _]) => name === 'projects' ? 'Projects' : 'Tech Stack')
+        setModal({
+          isOpen: true,
+          title: '강제 종료',
+          width: 400,
+          content: openWindowsList.length > 0 ? (
+            <div>
+              <h2>실행 중인 앱</h2>
+              <ul className="modal-list">
+                {openWindowsList.map((app, idx) => (
+                  <li key={idx}>{app}</li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              <p>실행 중인 앱이 없습니다.</p>
+            </div>
+          )
+        })
+        break
+      case '잠자기':
+        setModal({
+          isOpen: true,
+          title: '잠자기',
+          width: 350,
+          content: (
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              <p>시스템을 잠자기 모드로 전환합니다.</p>
+            </div>
+          )
+        })
+        break
+      case '다시 시작...':
+        setModal({
+          isOpen: true,
+          title: '다시 시작',
+          width: 400,
+          content: (
+            <div>
+              <p>컴퓨터를 다시 시작하시겠습니까?</p>
+              <div className="modal-buttons">
+                <button className="modal-button secondary" onClick={() => setModal({ ...modal, isOpen: false })}>
+                  취소
+                </button>
+                <button className="modal-button primary" onClick={() => window.location.reload()}>
+                  다시 시작
+                </button>
+              </div>
+            </div>
+          )
+        })
+        break
+      case '시스템 종료...':
+        setModal({
+          isOpen: true,
+          title: '시스템 종료',
+          width: 400,
+          content: (
+            <div>
+              <p>컴퓨터를 종료하시겠습니까?</p>
+              <div className="modal-buttons">
+                <button className="modal-button secondary" onClick={() => setModal({ ...modal, isOpen: false })}>
+                  취소
+                </button>
+                <button className="modal-button primary" onClick={() => window.close()}>
+                  시스템 종료
+                </button>
+              </div>
+            </div>
+          )
+        })
+        break
+      case '잠금':
+        setModal({
+          isOpen: true,
+          title: '잠금',
+          width: 350,
+          content: (
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              <p>🔒</p>
+              <p>화면이 잠겼습니다.</p>
+            </div>
+          )
+        })
+        break
+      default:
+        console.log(`Apple 메뉴: ${action}`)
     }
   }
 
@@ -153,15 +358,23 @@ function Desktop() {
         }
         break
       case '저장':
-        alert('저장되었습니다')
+        setModal({
+          isOpen: true,
+          title: '저장',
+          width: 300,
+          content: <div style={{ textAlign: 'center', padding: '20px' }}><p>✓ 저장되었습니다</p></div>
+        })
         break
 
       // 편집 메뉴
       case '실행 취소':
-        alert('실행 취소')
-        break
       case '다시 실행':
-        alert('다시 실행')
+        setModal({
+          isOpen: true,
+          title: action,
+          width: 300,
+          content: <div style={{ textAlign: 'center', padding: '20px' }}><p>{action} 완료</p></div>
+        })
         break
       case '잘라내기':
         document.execCommand('cut')
@@ -181,18 +394,26 @@ function Desktop() {
       case '목록':
       case '열':
       case '갤러리':
-        alert(`${action} 보기로 변경`)
-        break
       case '실제 크기':
       case '확대':
       case '축소':
-        alert(`${action}`)
+        setModal({
+          isOpen: true,
+          title: '보기',
+          width: 300,
+          content: <div style={{ textAlign: 'center', padding: '20px' }}><p>{action} 보기로 변경되었습니다</p></div>
+        })
         break
 
       // 이동 메뉴
       case '뒤로':
       case '앞으로':
-        alert(`${action}`)
+        setModal({
+          isOpen: true,
+          title: action,
+          width: 300,
+          content: <div style={{ textAlign: 'center', padding: '20px' }}><p>{action} 이동</p></div>
+        })
         break
       case '데스크탑':
         setActiveWindow(null)
@@ -202,7 +423,12 @@ function Desktop() {
         break
       case '문서':
       case '다운로드':
-        alert(`${action}로 이동`)
+        setModal({
+          isOpen: true,
+          title: '이동',
+          width: 300,
+          content: <div style={{ textAlign: 'center', padding: '20px' }}><p>{action}로 이동</p></div>
+        })
         break
 
       // 윈도우 메뉴
@@ -213,12 +439,22 @@ function Desktop() {
         break
       case '확대/축소':
         if (activeWindow) {
-          alert('확대/축소 토글')
+          setModal({
+            isOpen: true,
+            title: '확대/축소',
+            width: 300,
+            content: <div style={{ textAlign: 'center', padding: '20px' }}><p>확대/축소 토글</p></div>
+          })
         }
         break
       case 'Finder 앞으로 가져오기':
       case '모든 윈도우 보기':
-        alert(action)
+        setModal({
+          isOpen: true,
+          title: action,
+          width: 300,
+          content: <div style={{ textAlign: 'center', padding: '20px' }}><p>{action}</p></div>
+        })
         break
 
       // 정렬 메뉴
@@ -226,17 +462,49 @@ function Desktop() {
       case '종류':
       case '날짜':
       case '크기':
-        alert(`${action}순으로 정렬`)
+        setModal({
+          isOpen: true,
+          title: '정렬',
+          width: 300,
+          content: <div style={{ textAlign: 'center', padding: '20px' }}><p>{action}순으로 정렬되었습니다</p></div>
+        })
         break
 
       // 도움말 메뉴
       case 'Projects 도움말':
       case 'Tech Stack 도움말':
       case 'Finder 도움말':
-        alert(`${menuData.title} 도움말을 표시합니다`)
+        setModal({
+          isOpen: true,
+          title: '도움말',
+          width: 400,
+          content: (
+            <div>
+              <h2>{menuData.title} 도움말</h2>
+              <p>이 앱에 대한 도움말을 표시합니다.</p>
+            </div>
+          )
+        })
         break
       case '키보드 단축키':
-        alert('키보드 단축키:\n⌘N - 새 윈도우\n⌘W - 닫기\n⌘C - 복사\n⌘V - 붙여넣기')
+        setModal({
+          isOpen: true,
+          title: '키보드 단축키',
+          width: 400,
+          content: (
+            <div>
+              <h2>키보드 단축키</h2>
+              <ul className="modal-list">
+                <li>⌘N - 새 윈도우</li>
+                <li>⌘W - 닫기</li>
+                <li>⌘C - 복사</li>
+                <li>⌘V - 붙여넣기</li>
+                <li>⌘X - 잘라내기</li>
+                <li>⌘A - 모두 선택</li>
+              </ul>
+            </div>
+          )
+        })
         break
 
       default:
@@ -253,7 +521,48 @@ function Desktop() {
         {/* macOS Menu Bar */}
         <div className="macos-menubar" onClick={(e) => e.stopPropagation()}>
           <div className="menubar-left">
-            <span className="apple-logo"></span>
+            <div className="menu-item-wrapper">
+              <span
+                className={`apple-logo ${openMenu === 'apple' ? 'active' : ''}`}
+                onClick={() => setOpenMenu(openMenu === 'apple' ? null : 'apple')}
+              >
+                <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor">
+                  <path d="M11.8 8.5c0-1.5 0.8-2.8 2-3.5-0.8-1.1-2-1.8-3.5-1.8-1.4 0-2.2 0.7-3.3 0.7-1.1 0-2-0.7-3.3-0.7C1.5 3.2 0 4.8 0 7.5c0 1.8 0.7 3.7 1.6 5.2 0.8 1.2 1.5 2.3 2.6 2.3 1 0 1.4-0.6 2.8-0.6 1.4 0 1.7 0.6 2.8 0.6 1.1 0 1.9-1.2 2.6-2.3 0.5-0.8 0.7-1.2 1.1-2.1-2.1-0.8-2.7-3.9-0.7-5.1zM9.5 2.2c0.6-0.7 1-1.7 0.9-2.7-0.9 0.1-1.9 0.6-2.5 1.3-0.6 0.7-1 1.6-0.9 2.6 1 0.1 2-0.5 2.5-1.2z"/>
+                </svg>
+              </span>
+              {openMenu === 'apple' && (
+                <div className="menu-dropdown">
+                  <div className="menu-dropdown-item" onClick={() => handleAppleMenuAction('이 Mac에 관하여')}>
+                    이 Mac에 관하여
+                  </div>
+                  <div className="menu-divider"></div>
+                  <div className="menu-dropdown-item" onClick={() => handleAppleMenuAction('시스템 설정...')}>
+                    시스템 설정...
+                  </div>
+                  <div className="menu-dropdown-item" onClick={() => handleAppleMenuAction('App Store...')}>
+                    App Store...
+                  </div>
+                  <div className="menu-divider"></div>
+                  <div className="menu-dropdown-item" onClick={() => handleAppleMenuAction('강제 종료...')}>
+                    강제 종료...
+                  </div>
+                  <div className="menu-divider"></div>
+                  <div className="menu-dropdown-item" onClick={() => handleAppleMenuAction('잠자기')}>
+                    잠자기
+                  </div>
+                  <div className="menu-dropdown-item" onClick={() => handleAppleMenuAction('다시 시작...')}>
+                    다시 시작...
+                  </div>
+                  <div className="menu-dropdown-item" onClick={() => handleAppleMenuAction('시스템 종료...')}>
+                    시스템 종료...
+                  </div>
+                  <div className="menu-divider"></div>
+                  <div className="menu-dropdown-item" onClick={() => handleAppleMenuAction('잠금')}>
+                    잠금
+                  </div>
+                </div>
+              )}
+            </div>
             <span className="menu-item menu-title">{menuData.title}</span>
             {Object.keys(menuData.menus).map((menuName, index) => (
               <div key={index} className="menu-item-wrapper">
@@ -403,6 +712,16 @@ function Desktop() {
           </div>
         </div>
       </div>
+
+      {/* Modal */}
+      <Modal
+        isOpen={modal.isOpen}
+        onClose={() => setModal({ ...modal, isOpen: false })}
+        title={modal.title}
+        width={modal.width}
+      >
+        {modal.content}
+      </Modal>
     </div>
   )
 }
