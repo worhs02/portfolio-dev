@@ -227,6 +227,16 @@
   box-shadow: none !important;
 }
 
+.velog-icon {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.github-icon {
+  background: none !important;
+  box-shadow: none !important;
+}
+
 .app-icon-inner {
   width: 100%;
   height: 100%;

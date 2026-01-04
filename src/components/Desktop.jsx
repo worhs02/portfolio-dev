@@ -3,19 +3,22 @@ import './Desktop.css'
 import Portfolio from './Portfolio'
 import TechStack from './TechStack'
 import Velog from './Velog'
+import GitHub from './GitHub'
 import Modal from './Modal'
 
 function Desktop({ onLogout }) {
   const [openWindows, setOpenWindows] = useState({
     projects: false,
     techStack: false,
-    velog: false
+    velog: false,
+    github: false
   })
 
   const [windowZIndex, setWindowZIndex] = useState({
     projects: 100,
     techStack: 100,
-    velog: 100
+    velog: 100,
+    github: 100
   })
 
   const [maxZIndex, setMaxZIndex] = useState(100)
@@ -24,7 +27,8 @@ function Desktop({ onLogout }) {
   const [minimizedWindows, setMinimizedWindows] = useState({
     projects: false,
     techStack: false,
-    velog: false
+    velog: false,
+    github: false
   })
   const [modal, setModal] = useState({
     isOpen: false,
@@ -115,6 +119,17 @@ function Desktop({ onLogout }) {
             '보기': ['실제 크기', '확대', '축소'],
             '윈도우': ['최소화', '확대/축소'],
             '도움말': ['Velog 도움말']
+          }
+        }
+      case 'github':
+        return {
+          title: 'GitHub',
+          menus: {
+            '파일': ['새로고침', '닫기'],
+            '편집': ['복사', '붙여넣기'],
+            '보기': ['실제 크기', '확대', '축소'],
+            '윈도우': ['최소화', '확대/축소'],
+            '도움말': ['GitHub 도움말']
           }
         }
       default:
@@ -674,6 +689,19 @@ function Desktop({ onLogout }) {
             </div>
             <div className="icon-label">Velog</div>
           </div>
+
+          <div
+            className="desktop-icon"
+            onDoubleClick={() => handleDoubleClick('github')}
+          >
+            <div className="icon-image app-icon-desktop github-icon">
+              <svg viewBox="0 0 100 100" width="60" height="60">
+                <rect x="10" y="10" width="80" height="80" rx="12" fill="#24292e"/>
+                <path d="M50,30c-11,0-20,9-20,20c0,8.8,5.7,16.3,13.7,19c1,0.2,1.4-0.4,1.4-1c0-0.5,0-1.7,0-3.4c-5.6,1.2-6.8-2.7-6.8-2.7 c-0.9-2.3-2.2-2.9-2.2-2.9c-1.8-1.2,0.1-1.2,0.1-1.2c2,0.1,3.1,2.1,3.1,2.1c1.8,3.1,4.7,2.2,5.8,1.7c0.2-1.3,0.7-2.2,1.3-2.7 c-4.5-0.5-9.2-2.2-9.2-9.9c0-2.2,0.8-4,2.1-5.4c-0.2-0.5-0.9-2.6,0.2-5.3c0,0,1.7-0.5,5.5,2.1c1.6-0.4,3.3-0.7,5-0.7 c1.7,0,3.4,0.2,5,0.7c3.8-2.6,5.5-2.1,5.5-2.1c1.1,2.8,0.4,4.8,0.2,5.3c1.3,1.4,2.1,3.2,2.1,5.4c0,7.7-4.7,9.4-9.2,9.9 c0.7,0.6,1.4,1.8,1.4,3.7c0,2.7,0,4.8,0,5.5c0,0.5,0.4,1.2,1.4,1c8-2.7,13.7-10.2,13.7-19C70,39,61,30,50,30z" fill="white"/>
+              </svg>
+            </div>
+            <div className="icon-label">GitHub</div>
+          </div>
         </div>
 
         {/* Windows */}
@@ -702,6 +730,15 @@ function Desktop({ onLogout }) {
             onClick={(e) => bringToFront('velog', e)}
             zIndex={windowZIndex.velog}
             onMinimize={() => handleMinimize('velog')}
+          />
+        )}
+
+        {openWindows.github && !minimizedWindows.github && (
+          <GitHub
+            onClose={() => handleCloseWindow('github')}
+            onClick={(e) => bringToFront('github', e)}
+            zIndex={windowZIndex.github}
+            onMinimize={() => handleMinimize('github')}
           />
         )}
 
@@ -756,6 +793,22 @@ function Desktop({ onLogout }) {
               <text x="50" y="65" fontSize="48" fontWeight="bold" fill="white" textAnchor="middle" fontFamily="Arial, sans-serif">V</text>
             </svg>
             {openWindows.velog && <div className="dock-indicator"></div>}
+          </div>
+          <div
+            className={`dock-item ${openWindows.github ? 'active' : ''}`}
+            onClick={() => {
+              if (minimizedWindows.github) {
+                handleRestore('github')
+              } else {
+                handleDoubleClick('github')
+              }
+            }}
+          >
+            <svg viewBox="0 0 100 100" width="40" height="40">
+              <rect x="10" y="10" width="80" height="80" rx="12" fill="#24292e"/>
+              <path d="M50,30c-11,0-20,9-20,20c0,8.8,5.7,16.3,13.7,19c1,0.2,1.4-0.4,1.4-1c0-0.5,0-1.7,0-3.4c-5.6,1.2-6.8-2.7-6.8-2.7 c-0.9-2.3-2.2-2.9-2.2-2.9c-1.8-1.2,0.1-1.2,0.1-1.2c2,0.1,3.1,2.1,3.1,2.1c1.8,3.1,4.7,2.2,5.8,1.7c0.2-1.3,0.7-2.2,1.3-2.7 c-4.5-0.5-9.2-2.2-9.2-9.9c0-2.2,0.8-4,2.1-5.4c-0.2-0.5-0.9-2.6,0.2-5.3c0,0,1.7-0.5,5.5,2.1c1.6-0.4,3.3-0.7,5-0.7 c1.7,0,3.4,0.2,5,0.7c3.8-2.6,5.5-2.1,5.5-2.1c1.1,2.8,0.4,4.8,0.2,5.3c1.3,1.4,2.1,3.2,2.1,5.4c0,7.7-4.7,9.4-9.2,9.9 c0.7,0.6,1.4,1.8,1.4,3.7c0,2.7,0,4.8,0,5.5c0,0.5,0.4,1.2,1.4,1c8-2.7,13.7-10.2,13.7-19C70,39,61,30,50,30z" fill="white"/>
+            </svg>
+            {openWindows.github && <div className="dock-indicator"></div>}
           </div>
         </div>
       </div>

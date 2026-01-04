@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
-import './Velog.css'
+import './GitHub.css'
 
-function Velog({ onClose, onClick, zIndex, onMinimize }) {
-  const [url, setUrl] = useState('https://velog.io/@a_zin/posts')
+function GitHub({ onClose, onClick, zIndex, onMinimize }) {
+  const [userData, setUserData] = useState(null)
+  const [repos, setRepos] = useState([])
+  const [loading, setLoading] = useState(true)
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [size, setSize] = useState({ width: 1000, height: 700 })
   const [isDragging, setIsDragging] = useState(false)
@@ -17,6 +19,30 @@ function Velog({ onClose, onClick, zIndex, onMinimize }) {
   const resizeStartWindowPos = useRef({ x: 0, y: 0 })
   const windowRef = useRef(null)
 
+  // GitHub 데이터 가져오기
+  useEffect(() => {
+    const fetchGitHubData = async () => {
+      try {
+        // 사용자 정보 가져오기
+        const userResponse = await fetch('https://api.github.com/users/worhs02')
+        const userData = await userResponse.json()
+        setUserData(userData)
+
+        // 레포지토리 가져오기 (최근 6개)
+        const reposResponse = await fetch('https://api.github.com/users/worhs02/repos?sort=updated&per_page=6')
+        const reposData = await reposResponse.json()
+        setRepos(reposData)
+
+        setLoading(false)
+      } catch (error) {
+        console.error('GitHub 데이터 가져오기 실패:', error)
+        setLoading(false)
+      }
+    }
+
+    fetchGitHubData()
+  }, [])
+
   // 초기 중앙 배치
   useEffect(() => {
     const centerX = (window.innerWidth - 1000) / 2
@@ -26,12 +52,12 @@ function Velog({ onClose, onClick, zIndex, onMinimize }) {
 
   // 타이틀바 드래그
   useEffect(() => {
-    const titlebar = windowRef.current?.querySelector('.velog-titlebar')
+    const titlebar = windowRef.current?.querySelector('.github-titlebar')
     if (!titlebar) return
 
     const handleMouseDown = (e) => {
-      if (e.target.closest('.velog-controls')) return
-      if (isMaximized) return // 최대화 상태에서는 드래그 불가
+      if (e.target.closest('.github-controls')) return
+      if (isMaximized) return
 
       setIsDragging(true)
       dragStartPos.current = {
@@ -121,19 +147,28 @@ function Velog({ onClose, onClick, zIndex, onMinimize }) {
 
   // 타이틀바 커서 업데이트
   useEffect(() => {
-    const titlebar = windowRef.current?.querySelector('.velog-titlebar')
+    const titlebar = windowRef.current?.querySelector('.github-titlebar')
     if (titlebar) {
       titlebar.style.cursor = isDragging ? 'grabbing' : 'grab'
     }
   }, [isDragging])
 
   const handleRefresh = () => {
-    // iframe만 리로드 (타임스탬프 추가)
-    setUrl('https://velog.io/@a_zin/posts?t=' + Date.now())
+    setLoading(true)
+    // GitHub 데이터 다시 가져오기
+    fetch('https://api.github.com/users/worhs02')
+      .then(res => res.json())
+      .then(data => setUserData(data))
+    fetch('https://api.github.com/users/worhs02/repos?sort=updated&per_page=6')
+      .then(res => res.json())
+      .then(data => {
+        setRepos(data)
+        setLoading(false)
+      })
   }
 
   const handleMouseDownResize = (e, direction) => {
-    if (isMaximized) return // 최대화 상태에서는 리사이즈 불가
+    if (isMaximized) return
 
     if (windowRef.current) {
       const rect = windowRef.current.getBoundingClientRect()
@@ -155,12 +190,10 @@ function Velog({ onClose, onClick, zIndex, onMinimize }) {
 
   const handleMaximize = () => {
     if (isMaximized) {
-      // 복원
       setSize(prevSize)
       setPosition(prevPosition)
       setIsMaximized(false)
     } else {
-      // 최대화
       setPrevSize(size)
       setPrevPosition(position)
       setSize({
@@ -175,7 +208,7 @@ function Velog({ onClose, onClick, zIndex, onMinimize }) {
   return (
     <div
       ref={windowRef}
-      className={`velog-window ${isDragging ? 'dragging' : ''} ${isMaximized ? 'maximized' : ''}`}
+      className={`github-window ${isDragging ? 'dragging' : ''} ${isMaximized ? 'maximized' : ''}`}
       style={{
         zIndex,
         left: `${position.x}px`,
@@ -185,7 +218,7 @@ function Velog({ onClose, onClick, zIndex, onMinimize }) {
       }}
       onClick={onClick}
     >
-      {/* 리사이즈 핸들 - 8개 방향 */}
+      {/* 리사이즈 핸들 */}
       {!isMaximized && (
         <>
           <div className="resize-handle resize-n" onMouseDown={(e) => handleMouseDownResize(e, 'n')} />
@@ -199,22 +232,22 @@ function Velog({ onClose, onClick, zIndex, onMinimize }) {
         </>
       )}
 
-      <div className="velog-titlebar">
-        <div className="velog-controls">
-          <span className="velog-btn close" onClick={onClose}></span>
-          <span className="velog-btn minimize" onClick={onMinimize}></span>
-          <span className="velog-btn maximize" onClick={handleMaximize}></span>
+      <div className="github-titlebar">
+        <div className="github-controls">
+          <span className="github-btn close" onClick={onClose}></span>
+          <span className="github-btn minimize" onClick={onMinimize}></span>
+          <span className="github-btn maximize" onClick={handleMaximize}></span>
         </div>
       </div>
 
-      <div className="velog-toolbar">
-        <div className="velog-nav-buttons">
+      <div className="github-toolbar">
+        <div className="github-nav-buttons">
           <button className="nav-btn" onClick={handleRefresh} title="새로고침">⟳</button>
         </div>
-        <div className="velog-url-bar">
+        <div className="github-url-bar">
           <input
             type="text"
-            value={url}
+            value="https://github.com/worhs02"
             readOnly
             className="url-input"
             placeholder="URL"
@@ -222,16 +255,69 @@ function Velog({ onClose, onClick, zIndex, onMinimize }) {
         </div>
       </div>
 
-      <div className="velog-content">
-        <iframe
-          src={url}
-          title="Velog"
-          className="velog-iframe"
-          frameBorder="0"
-        />
+      <div className="github-content">
+        {loading ? (
+          <div className="loading">데이터 로딩 중...</div>
+        ) : userData ? (
+          <div className="github-profile">
+            {/* 프로필 헤더 */}
+            <div className="profile-header">
+              <img src={userData.avatar_url} alt={userData.name} className="avatar" />
+              <div className="profile-info">
+                <h1>{userData.name || userData.login}</h1>
+                <p className="username">@{userData.login}</p>
+                {userData.bio && <p className="bio">{userData.bio}</p>}
+                <div className="stats">
+                  <div className="stat-item">
+                    <strong>{userData.public_repos}</strong>
+                    <span>repositories</span>
+                  </div>
+                  <div className="stat-item">
+                    <strong>{userData.followers}</strong>
+                    <span>followers</span>
+                  </div>
+                  <div className="stat-item">
+                    <strong>{userData.following}</strong>
+                    <span>following</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 잔디 (Contribution Graph) */}
+            <div className="contributions">
+              <h2>Contribution Graph</h2>
+              <img
+                src={`https://ghchart.rshah.org/20C997/worhs02`}
+                alt="GitHub Contributions"
+                className="contribution-graph"
+              />
+            </div>
+
+            {/* 최근 레포지토리 */}
+            <div className="repositories">
+              <h2>Recent Repositories</h2>
+              <div className="repo-grid">
+                {repos.map(repo => (
+                  <div key={repo.id} className="repo-card">
+                    <h3>{repo.name}</h3>
+                    <p className="repo-description">{repo.description || 'No description'}</p>
+                    <div className="repo-stats">
+                      {repo.language && <span className="language">● {repo.language}</span>}
+                      <span className="stars">⭐ {repo.stargazers_count}</span>
+                      <span className="forks">🔀 {repo.forks_count}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="error">데이터를 불러올 수 없습니다.</div>
+        )}
       </div>
     </div>
   )
 }
 
-export default Velog
+export default GitHub
