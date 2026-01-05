@@ -37,6 +37,11 @@ function Desktop({ onLogout }) {
     content: null,
     width: 400
   })
+  const [currentWifi, setCurrentWifi] = useState('My WiFi')
+  const [wifiSpeed, setWifiSpeed] = useState({
+    download: 150,
+    upload: 80
+  })
 
   const handleDoubleClick = (windowName) => {
     setOpenWindows(prev => ({
@@ -171,25 +176,98 @@ function Desktop({ onLogout }) {
   }
 
   const handleWifiClick = () => {
-    const networks = ['My WiFi', 'Guest Network', 'Office WiFi', 'iPhone']
-    const connected = networks[0]
+    const networks = [
+      { name: 'My WiFi', signal: 4, secure: true },
+      { name: 'Guest Network', signal: 3, secure: false },
+      { name: 'Office WiFi', signal: 3, secure: true },
+      { name: 'iPhone', signal: 2, secure: true },
+      { name: 'Cafe WiFi', signal: 1, secure: false }
+    ]
+
+    const getSignalIcon = (strength) => {
+      return (
+        <svg width="20" height="14" viewBox="0 0 20 14" fill="none">
+          <rect x="0" y="10" width="3" height="4" fill={strength >= 1 ? '#333' : '#ddd'} rx="0.5"/>
+          <rect x="5" y="7" width="3" height="7" fill={strength >= 2 ? '#333' : '#ddd'} rx="0.5"/>
+          <rect x="10" y="4" width="3" height="10" fill={strength >= 3 ? '#333' : '#ddd'} rx="0.5"/>
+          <rect x="15" y="0" width="3" height="14" fill={strength >= 4 ? '#333' : '#ddd'} rx="0.5"/>
+        </svg>
+      )
+    }
+
+    const renderWifiModal = (wifi, speed) => (
+      <div>
+        <div style={{
+          background: '#f5f5f5',
+          padding: '16px',
+          borderRadius: '8px',
+          marginBottom: '20px',
+          border: '1px solid #ddd'
+        }}>
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#333' }}>
+            현재 연결: <strong>{wifi}</strong>
+          </h3>
+          <div style={{ display: 'flex', gap: '20px', fontSize: '14px', color: '#666' }}>
+            <div>
+              <span style={{ color: '#28CA42' }}>↓</span> {speed.download} KB/s
+            </div>
+            <div>
+              <span style={{ color: '#007AFF' }}>↑</span> {speed.upload} KB/s
+            </div>
+          </div>
+        </div>
+
+        <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#666' }}>
+          사용 가능한 네트워크
+        </h3>
+        <ul className="modal-list" style={{ margin: 0 }}>
+          {networks.map((network, idx) => (
+            <li
+              key={idx}
+              onClick={() => handleNetworkSwitch(network.name)}
+              style={{
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '10px 12px',
+                background: network.name === wifi ? '#e3f2fd' : 'transparent'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {network.name === wifi && <span style={{ color: '#007AFF' }}>✓</span>}
+                <span>{network.name}</span>
+                {network.secure && <span style={{ fontSize: '12px' }}>🔒</span>}
+              </div>
+              <span style={{ fontSize: '12px', color: '#999' }}>
+                {getSignalIcon(network.signal)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+
+    const handleNetworkSwitch = (networkName) => {
+      const newSpeed = {
+        download: Math.floor(Math.random() * 200) + 50,
+        upload: Math.floor(Math.random() * 100) + 30
+      }
+      setCurrentWifi(networkName)
+      setWifiSpeed(newSpeed)
+
+      // 모달 컨텐츠 즉시 업데이트
+      setModal(prev => ({
+        ...prev,
+        content: renderWifiModal(networkName, newSpeed)
+      }))
+    }
+
     setModal({
       isOpen: true,
       title: 'Wi-Fi',
-      width: 350,
-      content: (
-        <div>
-          <h2>Wi-Fi 네트워크</h2>
-          <p style={{ marginBottom: '12px' }}><strong>현재 연결:</strong> {connected}</p>
-          <ul className="modal-list">
-            {networks.map((network, idx) => (
-              <li key={idx} className={network === connected ? 'active' : ''}>
-                {network === connected ? '✓ ' : ''}{network}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
+      width: 400,
+      content: renderWifiModal(currentWifi, wifiSpeed)
     })
   }
 
@@ -700,14 +778,17 @@ function Desktop({ onLogout }) {
             ))}
           </div>
           <div className="menubar-right">
-            <span className="menu-icon" onClick={handleWifiClick} title="Wi-Fi">
-              <svg width="18" height="13" viewBox="0 0 18 13" fill="currentColor">
-                <path d="M9 11 C8.5 11 8 11.5 8 12 C8 12.5 8.5 13 9 13 C9.5 13 10 12.5 10 12 C10 11.5 9.5 11 9 11Z"/>
-                <path d="M9 8 C7 8 5.5 9 4.5 10 L6 11 C6.5 10.5 7.5 10 9 10 C10.5 10 11.5 10.5 12 11 L13.5 10 C12.5 9 11 8 9 8Z" opacity="0.8"/>
-                <path d="M9 5 C6 5 3.5 6.5 2 8 L3.5 9.5 C4.5 8.5 6.5 7 9 7 C11.5 7 13.5 8.5 14.5 9.5 L16 8 C14.5 6.5 12 5 9 5Z" opacity="0.6"/>
-                <path d="M9 2 C5 2 2 3.5 0.5 5 L2 6.5 C3 5.5 5.5 4 9 4 C12.5 4 15 5.5 16 6.5 L17.5 5 C16 3.5 13 2 9 2Z" opacity="0.4"/>
-              </svg>
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }} onClick={handleWifiClick}>
+              <div style={{ fontSize: '9px', lineHeight: '1.3', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <div>↓{wifiSpeed.download} KB/s</div>
+                <div>↑{wifiSpeed.upload} KB/s</div>
+              </div>
+              <span className="menu-icon" title="Wi-Fi">
+                <svg width="18" height="14" viewBox="0 0 640 512" fill="currentColor">
+                  <path d="M54.2 202.9C123.2 136.7 216.8 96 320 96s196.8 40.7 265.8 106.9c12.8 12.2 33 11.8 45.2-.9s11.8-33-.9-45.2C549.7 79.5 440.4 32 320 32S90.3 79.5 9.8 156.7C-2.9 169-3.3 189.2 8.9 202s32.5 13.2 45.2 .9zM320 256c56.8 0 108.6 21.1 148.2 56c13.3 11.7 33.5 10.4 45.2-2.8s10.4-33.5-2.8-45.2C459.8 219.2 393 192 320 192s-139.8 27.2-190.5 72c-13.3 11.7-14.5 31.9-2.8 45.2s31.9 14.5 45.2 2.8c39.5-34.9 91.3-56 148.2-56zm64 160a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z"/>
+                </svg>
+              </span>
+            </div>
             <span className="menu-icon" onClick={handleBatteryClick} title="배터리">
               <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
                 <rect x="1" y="2" width="16" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
