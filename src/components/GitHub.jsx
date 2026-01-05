@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './GitHub.css'
+import { portfolioItems } from '../data/portfolioData'
 
 function GitHub({ onClose, onClick, zIndex, onMinimize }) {
   const [userData, setUserData] = useState(null)
@@ -28,10 +29,28 @@ function GitHub({ onClose, onClick, zIndex, onMinimize }) {
         const userData = await userResponse.json()
         setUserData(userData)
 
-        // 레포지토리 가져오기 (최근 6개)
-        const reposResponse = await fetch('https://api.github.com/users/worhs02/repos?sort=updated&per_page=6')
-        const reposData = await reposResponse.json()
-        setRepos(reposData)
+        // portfolioData에서 GitHub 링크 추출
+        const githubUrls = portfolioItems
+          .filter(item => item.github)
+          .map(item => item.github)
+
+        // URL에서 레포지토리 이름 추출 (예: https://github.com/worhs02/repo-name -> repo-name)
+        const repoNames = githubUrls.map(url => {
+          const parts = url.split('/')
+          return parts[parts.length - 1]
+        })
+
+        // 각 레포지토리 정보 가져오기
+        const repoPromises = repoNames.map(name =>
+          fetch(`https://api.github.com/repos/worhs02/${name}`)
+            .then(res => res.json())
+            .catch(err => ({ error: true, name }))
+        )
+
+        const reposData = await Promise.all(repoPromises)
+        // 에러가 없고 실제로 존재하는 레포만 필터링
+        const validRepos = reposData.filter(repo => !repo.message && !repo.error)
+        setRepos(validRepos.slice(0, 6)) // 최대 6개만 표시
 
         setLoading(false)
       } catch (error) {
@@ -153,18 +172,39 @@ function GitHub({ onClose, onClick, zIndex, onMinimize }) {
     }
   }, [isDragging])
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setLoading(true)
-    // GitHub 데이터 다시 가져오기
-    fetch('https://api.github.com/users/worhs02')
-      .then(res => res.json())
-      .then(data => setUserData(data))
-    fetch('https://api.github.com/users/worhs02/repos?sort=updated&per_page=6')
-      .then(res => res.json())
-      .then(data => {
-        setRepos(data)
-        setLoading(false)
+    try {
+      // GitHub 데이터 다시 가져오기
+      const userResponse = await fetch('https://api.github.com/users/worhs02')
+      const userData = await userResponse.json()
+      setUserData(userData)
+
+      // portfolioData에서 GitHub 링크 추출
+      const githubUrls = portfolioItems
+        .filter(item => item.github)
+        .map(item => item.github)
+
+      const repoNames = githubUrls.map(url => {
+        const parts = url.split('/')
+        return parts[parts.length - 1]
       })
+
+      const repoPromises = repoNames.map(name =>
+        fetch(`https://api.github.com/repos/worhs02/${name}`)
+          .then(res => res.json())
+          .catch(err => ({ error: true, name }))
+      )
+
+      const reposData = await Promise.all(repoPromises)
+      const validRepos = reposData.filter(repo => !repo.message && !repo.error)
+      setRepos(validRepos.slice(0, 6))
+
+      setLoading(false)
+    } catch (error) {
+      console.error('새로고침 실패:', error)
+      setLoading(false)
+    }
   }
 
   const handleMouseDownResize = (e, direction) => {
@@ -262,11 +302,20 @@ function GitHub({ onClose, onClick, zIndex, onMinimize }) {
           <div className="github-profile">
             {/* 프로필 헤더 */}
             <div className="profile-header">
-              <img src={userData.avatar_url} alt={userData.name} className="avatar" />
-              <div className="profile-info">
+              {/* 프로필 사진 */}
+              <div className="avatar-container">
+                <img src={userData.avatar_url} alt={userData.name} className="avatar" />
+              </div>
+
+              {/* 이름/아이디 */}
+              <div className="name-container">
                 <h1>{userData.name || userData.login}</h1>
                 <p className="username">@{userData.login}</p>
                 {userData.bio && <p className="bio">{userData.bio}</p>}
+              </div>
+
+              {/* 레포지토리 정보 */}
+              <div className="stats-container">
                 <div className="stats">
                   <div className="stat-item">
                     <strong>{userData.public_repos}</strong>
@@ -296,7 +345,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize }) {
 
             {/* 최근 레포지토리 */}
             <div className="repositories">
-              <h2>Recent Repositories</h2>
+              <h2>My Projects</h2>
               <div className="repo-grid">
                 {repos.map(repo => (
                   <div key={repo.id} className="repo-card">
