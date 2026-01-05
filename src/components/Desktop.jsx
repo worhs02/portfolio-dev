@@ -4,6 +4,7 @@ import Portfolio from './Portfolio'
 import TechStack from './TechStack'
 import Velog from './Velog'
 import GitHub from './GitHub'
+import Mail from './Mail'
 import Modal from './Modal'
 import { portfolioItems } from '../data/portfolioData'
 
@@ -12,14 +13,16 @@ function Desktop({ onLogout }) {
     projects: false,
     techStack: false,
     velog: false,
-    github: false
+    github: false,
+    mail: false
   })
 
   const [windowZIndex, setWindowZIndex] = useState({
     projects: 100,
     techStack: 100,
     velog: 100,
-    github: 100
+    github: 100,
+    mail: 100
   })
 
   const [maxZIndex, setMaxZIndex] = useState(100)
@@ -29,7 +32,8 @@ function Desktop({ onLogout }) {
     projects: false,
     techStack: false,
     velog: false,
-    github: false
+    github: false,
+    mail: false
   })
   const [modal, setModal] = useState({
     isOpen: false,
@@ -870,6 +874,30 @@ function Desktop({ onLogout }) {
             </div>
             <div className="icon-label">GitHub</div>
           </div>
+
+          <div
+            className="desktop-icon"
+            onDoubleClick={() => handleDoubleClick('mail')}
+          >
+            <div className="icon-image app-icon-desktop">
+              <svg viewBox="0 0 100 100" width="60" height="60">
+                <defs>
+                  <linearGradient id="mailGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#2E9AFE', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#0080FF', stopOpacity: 1 }} />
+                  </linearGradient>
+                </defs>
+                <rect x="10" y="10" width="80" height="80" rx="18" fill="url(#mailGradient)"/>
+                <g transform="translate(50, 50)">
+                  <rect x="-22" y="-14" width="44" height="28" rx="2" fill="white"/>
+                  <path d="M -22 -14 L 0 2 L 22 -14" fill="none" stroke="#0080FF" strokeWidth="2" strokeLinejoin="round"/>
+                  <path d="M -22 14 L -6 0" fill="none" stroke="#0080FF" strokeWidth="1.5" strokeLinecap="round"/>
+                  <path d="M 22 14 L 6 0" fill="none" stroke="#0080FF" strokeWidth="1.5" strokeLinecap="round"/>
+                </g>
+              </svg>
+            </div>
+            <div className="icon-label">Mail</div>
+          </div>
         </div>
 
         {/* Windows */}
@@ -907,6 +935,15 @@ function Desktop({ onLogout }) {
             onClick={(e) => bringToFront('github', e)}
             zIndex={windowZIndex.github}
             onMinimize={() => handleMinimize('github')}
+          />
+        )}
+
+        {openWindows.mail && !minimizedWindows.mail && (
+          <Mail
+            onClose={() => handleCloseWindow('mail')}
+            onClick={(e) => bringToFront('mail', e)}
+            zIndex={windowZIndex.mail}
+            onMinimize={() => handleMinimize('mail')}
           />
         )}
 
@@ -977,6 +1014,33 @@ function Desktop({ onLogout }) {
               <path d="M50,30c-11,0-20,9-20,20c0,8.8,5.7,16.3,13.7,19c1,0.2,1.4-0.4,1.4-1c0-0.5,0-1.7,0-3.4c-5.6,1.2-6.8-2.7-6.8-2.7 c-0.9-2.3-2.2-2.9-2.2-2.9c-1.8-1.2,0.1-1.2,0.1-1.2c2,0.1,3.1,2.1,3.1,2.1c1.8,3.1,4.7,2.2,5.8,1.7c0.2-1.3,0.7-2.2,1.3-2.7 c-4.5-0.5-9.2-2.2-9.2-9.9c0-2.2,0.8-4,2.1-5.4c-0.2-0.5-0.9-2.6,0.2-5.3c0,0,1.7-0.5,5.5,2.1c1.6-0.4,3.3-0.7,5-0.7 c1.7,0,3.4,0.2,5,0.7c3.8-2.6,5.5-2.1,5.5-2.1c1.1,2.8,0.4,4.8,0.2,5.3c1.3,1.4,2.1,3.2,2.1,5.4c0,7.7-4.7,9.4-9.2,9.9 c0.7,0.6,1.4,1.8,1.4,3.7c0,2.7,0,4.8,0,5.5c0,0.5,0.4,1.2,1.4,1c8-2.7,13.7-10.2,13.7-19C70,39,61,30,50,30z" fill="white"/>
             </svg>
             {openWindows.github && <div className="dock-indicator"></div>}
+          </div>
+          <div
+            className={`dock-item ${openWindows.mail ? 'active' : ''}`}
+            onClick={() => {
+              if (minimizedWindows.mail) {
+                handleRestore('mail')
+              } else {
+                handleDoubleClick('mail')
+              }
+            }}
+          >
+            <svg viewBox="0 0 100 100" width="40" height="40">
+              <defs>
+                <linearGradient id="mailGradientDock" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style={{ stopColor: '#2E9AFE', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#0080FF', stopOpacity: 1 }} />
+                </linearGradient>
+              </defs>
+              <rect x="10" y="10" width="80" height="80" rx="18" fill="url(#mailGradientDock)"/>
+              <g transform="translate(50, 50)">
+                <rect x="-22" y="-14" width="44" height="28" rx="2" fill="white"/>
+                <path d="M -22 -14 L 0 2 L 22 -14" fill="none" stroke="#0080FF" strokeWidth="2" strokeLinejoin="round"/>
+                <path d="M -22 14 L -6 0" fill="none" stroke="#0080FF" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M 22 14 L 6 0" fill="none" stroke="#0080FF" strokeWidth="1.5" strokeLinecap="round"/>
+              </g>
+            </svg>
+            {openWindows.mail && <div className="dock-indicator"></div>}
           </div>
         </div>
       </div>

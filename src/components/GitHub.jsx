@@ -349,9 +349,10 @@ function GitHub({ onClose, onClick, zIndex, onMinimize }) {
             <div className="contributions">
               <h2>Contribution Graph</h2>
               <img
-                src={`https://ghchart.rshah.org/20C997/worhs02`}
+                src={`https://ghchart.rshah.org/20C997/worhs02?v=${new Date().toISOString().split('T')[0]}`}
                 alt="GitHub Contributions"
                 className="contribution-graph"
+                key={new Date().toISOString().split('T')[0]}
               />
             </div>
 
