@@ -26,7 +26,11 @@ function GitHub({ onClose, onClick, zIndex, onMinimize }) {
       try {
         // 사용자 정보 가져오기
         const userResponse = await fetch('https://api.github.com/users/worhs02')
+        if (!userResponse.ok) {
+          throw new Error(`GitHub API Error: ${userResponse.status}`)
+        }
         const userData = await userResponse.json()
+        console.log('User Data:', userData)
         setUserData(userData)
 
         // portfolioData에서 GitHub 링크 추출
@@ -55,6 +59,9 @@ function GitHub({ onClose, onClick, zIndex, onMinimize }) {
         setLoading(false)
       } catch (error) {
         console.error('GitHub 데이터 가져오기 실패:', error)
+        // 에러 시에도 로딩 상태 해제하고 빈 데이터 설정
+        setUserData(null)
+        setRepos([])
         setLoading(false)
       }
     }
@@ -298,7 +305,12 @@ function GitHub({ onClose, onClick, zIndex, onMinimize }) {
       <div className="github-content">
         {loading ? (
           <div className="loading">데이터 로딩 중...</div>
-        ) : userData ? (
+        ) : !userData ? (
+          <div className="error">
+            GitHub 데이터를 불러올 수 없습니다.<br/>
+            브라우저 콘솔을 확인해주세요.
+          </div>
+        ) : (
           <div className="github-profile">
             {/* 프로필 헤더 */}
             <div className="profile-header">
@@ -348,7 +360,11 @@ function GitHub({ onClose, onClick, zIndex, onMinimize }) {
               <h2>My Projects</h2>
               <div className="repo-grid">
                 {repos.map(repo => (
-                  <div key={repo.id} className="repo-card">
+                  <div
+                    key={repo.id}
+                    className="repo-card"
+                    onClick={() => window.open(repo.html_url, '_blank', 'noopener,noreferrer')}
+                  >
                     <h3>{repo.name}</h3>
                     <p className="repo-description">{repo.description || 'No description'}</p>
                     <div className="repo-stats">
@@ -361,8 +377,6 @@ function GitHub({ onClose, onClick, zIndex, onMinimize }) {
               </div>
             </div>
           </div>
-        ) : (
-          <div className="error">데이터를 불러올 수 없습니다.</div>
         )}
       </div>
     </div>
