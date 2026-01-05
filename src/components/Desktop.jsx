@@ -5,6 +5,7 @@ import TechStack from './TechStack'
 import Velog from './Velog'
 import GitHub from './GitHub'
 import Modal from './Modal'
+import { portfolioItems } from '../data/portfolioData'
 
 function Desktop({ onLogout }) {
   const [openWindows, setOpenWindows] = useState({
@@ -196,7 +197,7 @@ function Desktop({ onLogout }) {
     setModal({
       isOpen: true,
       title: 'Spotlight 검색',
-      width: 500,
+      width: 600,
       content: (
         <div>
           <input
@@ -204,9 +205,9 @@ function Desktop({ onLogout }) {
             className="modal-input"
             placeholder="검색어를 입력하세요..."
             autoFocus
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && e.target.value) {
-                const searchTerm = e.target.value
+            onChange={(e) => {
+              const searchTerm = e.target.value.toLowerCase()
+              if (!searchTerm) {
                 setModal(prev => ({
                   ...prev,
                   content: (
@@ -215,19 +216,103 @@ function Desktop({ onLogout }) {
                         type="text"
                         className="modal-input"
                         placeholder="검색어를 입력하세요..."
-                        defaultValue={searchTerm}
+                        autoFocus
+                        onChange={(e) => handleSpotlightClick()}
                       />
-                      <h2>"{searchTerm}" 검색 결과</h2>
-                      <ul className="modal-list">
-                        <li>📁 Projects 폴더</li>
-                        <li>📝 Tech Stack 메모</li>
-                        <li>📄 {searchTerm}.txt</li>
-                        <li>🖼️ {searchTerm}.png</li>
-                      </ul>
+                      <p style={{ textAlign: 'center', color: '#666', marginTop: '20px' }}>
+                        검색어를 입력하세요
+                      </p>
                     </div>
                   )
                 }))
+                return
               }
+
+              // 앱 검색
+              const apps = [
+                { name: 'Projects', icon: '📁', action: () => handleDoubleClick('projects') },
+                { name: 'Tech Stack', icon: '💻', action: () => handleDoubleClick('techStack') },
+                { name: 'Velog', icon: '📝', action: () => handleDoubleClick('velog') },
+                { name: 'GitHub', icon: '🐙', action: () => handleDoubleClick('github') }
+              ].filter(app => app.name.toLowerCase().includes(searchTerm))
+
+              // 포트폴리오 프로젝트 검색
+              const projects = portfolioItems.filter(item =>
+                item.title?.toLowerCase().includes(searchTerm) ||
+                item.overview?.toLowerCase().includes(searchTerm) ||
+                item.skills?.some(skill => skill.toLowerCase().includes(searchTerm))
+              )
+
+              setModal(prev => ({
+                ...prev,
+                content: (
+                  <div>
+                    <input
+                      type="text"
+                      className="modal-input"
+                      placeholder="검색어를 입력하세요..."
+                      defaultValue={e.target.value}
+                      autoFocus
+                      onChange={(e) => handleSpotlightClick()}
+                    />
+
+                    {apps.length === 0 && projects.length === 0 ? (
+                      <p style={{ textAlign: 'center', color: '#666', marginTop: '20px' }}>
+                        "{e.target.value}" 검색 결과가 없습니다
+                      </p>
+                    ) : (
+                      <>
+                        {apps.length > 0 && (
+                          <>
+                            <h3 style={{ marginTop: '20px', marginBottom: '10px', fontSize: '14px', color: '#666' }}>
+                              애플리케이션
+                            </h3>
+                            <ul className="modal-list">
+                              {apps.map((app, idx) => (
+                                <li
+                                  key={idx}
+                                  onClick={() => {
+                                    app.action()
+                                    setModal({ isOpen: false, title: '', content: null })
+                                  }}
+                                  style={{ cursor: 'pointer' }}
+                                >
+                                  {app.icon} {app.name}
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+
+                        {projects.length > 0 && (
+                          <>
+                            <h3 style={{ marginTop: '20px', marginBottom: '10px', fontSize: '14px', color: '#666' }}>
+                              프로젝트
+                            </h3>
+                            <ul className="modal-list">
+                              {projects.map((project, idx) => (
+                                <li
+                                  key={idx}
+                                  onClick={() => {
+                                    handleDoubleClick('projects')
+                                    setModal({ isOpen: false, title: '', content: null })
+                                  }}
+                                  style={{ cursor: 'pointer' }}
+                                >
+                                  {project.emoji} {project.title}
+                                  <div style={{ fontSize: '12px', color: '#999', marginTop: '4px' }}>
+                                    {project.overview?.substring(0, 60)}...
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )
+              }))
             }}
           />
         </div>
@@ -615,23 +700,25 @@ function Desktop({ onLogout }) {
             ))}
           </div>
           <div className="menubar-right">
-            <span className="menu-icon" onClick={handleBatteryClick} title="배터리">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                <rect x="1" y="5" width="11" height="6" rx="1" stroke="currentColor" fill="none" strokeWidth="1"/>
-                <rect x="12" y="7" width="2" height="2" fill="currentColor"/>
-                <rect x="3" y="7" width="3" height="2" fill="currentColor"/>
+            <span className="menu-icon" onClick={handleWifiClick} title="Wi-Fi">
+              <svg width="18" height="13" viewBox="0 0 18 13" fill="currentColor">
+                <path d="M9 11 C8.5 11 8 11.5 8 12 C8 12.5 8.5 13 9 13 C9.5 13 10 12.5 10 12 C10 11.5 9.5 11 9 11Z"/>
+                <path d="M9 8 C7 8 5.5 9 4.5 10 L6 11 C6.5 10.5 7.5 10 9 10 C10.5 10 11.5 10.5 12 11 L13.5 10 C12.5 9 11 8 9 8Z" opacity="0.8"/>
+                <path d="M9 5 C6 5 3.5 6.5 2 8 L3.5 9.5 C4.5 8.5 6.5 7 9 7 C11.5 7 13.5 8.5 14.5 9.5 L16 8 C14.5 6.5 12 5 9 5Z" opacity="0.6"/>
+                <path d="M9 2 C5 2 2 3.5 0.5 5 L2 6.5 C3 5.5 5.5 4 9 4 C12.5 4 15 5.5 16 6.5 L17.5 5 C16 3.5 13 2 9 2Z" opacity="0.4"/>
               </svg>
             </span>
-            <span className="menu-icon" onClick={handleWifiClick} title="Wi-Fi">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M2 11 L8 2 L14 11 L11 11 L11 14 L5 14 L5 11 Z" stroke="currentColor" fill="none" strokeWidth="1"/>
-                <path d="M4 11 C4 11 4 9 8 9 C12 9 12 11 12 11"/>
+            <span className="menu-icon" onClick={handleBatteryClick} title="배터리">
+              <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
+                <rect x="1" y="2" width="16" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
+                <rect x="17.5" y="4.5" width="1.5" height="3" rx="0.5" fill="currentColor"/>
+                <rect x="2.5" y="3.5" width="6" height="5" rx="0.5" fill="currentColor"/>
               </svg>
             </span>
             <span className="menu-icon" onClick={handleSpotlightClick} title="Spotlight 검색">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                <circle cx="6" cy="6" r="4" stroke="currentColor" fill="none" strokeWidth="1.5"/>
-                <line x1="9" y1="9" x2="13" y2="13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.5"/>
+                <line x1="9.5" y1="9.5" x2="13.5" y2="13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               </svg>
             </span>
             <span className="menu-time">{new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>
