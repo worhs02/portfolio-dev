@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Desktop.css'
 import Portfolio from './Portfolio'
 import TechStack from './TechStack'
@@ -42,10 +42,68 @@ function Desktop({ onLogout }) {
     width: 400
   })
   const [currentWifi, setCurrentWifi] = useState('My WiFi')
+
+  // GitHub 오늘의 커밋 수 상태
+  const [todayCommits, setTodayCommits] = useState(0)
+  const [batteryPercent, setBatteryPercent] = useState(100)
   const [wifiSpeed, setWifiSpeed] = useState({
     download: 150,
     upload: 80
   })
+
+  // GitHub 오늘의 커밋 수 가져오기
+  useEffect(() => {
+    const fetchTodayCommits = async () => {
+      try {
+        const today = new Date().toISOString().split('T')[0]
+        const username = 'worhs02'
+
+        // GitHub Events API로 오늘의 이벤트 가져오기
+        const response = await fetch(`https://api.github.com/users/${username}/events`)
+        const events = await response.json()
+
+        // 오늘 날짜의 PushEvent만 필터링
+        const todayPushEvents = events.filter(event => {
+          if (event.type !== 'PushEvent') return false
+          const eventDate = new Date(event.created_at).toISOString().split('T')[0]
+          return eventDate === today
+        })
+
+        // 총 커밋 수 계산
+        const totalCommits = todayPushEvents.reduce((sum, event) => {
+          return sum + (event.payload.commits?.length || 0)
+        }, 0)
+
+        setTodayCommits(totalCommits)
+
+        // 커밋 수에 따라 배터리 퍼센트 설정
+        let percent = 100
+        if (totalCommits === 0) {
+          percent = 100 // 커밋이 없으면 100%
+        } else if (totalCommits <= 5) {
+          percent = 70 // 5개 이하면 70%
+        } else if (totalCommits <= 10) {
+          percent = 50 // 10개 이하면 50%
+        } else if (totalCommits <= 15) {
+          percent = 30 // 15개 이하면 30%
+        } else {
+          percent = 10 // 그 이상이면 10%
+        }
+
+        setBatteryPercent(percent)
+      } catch (error) {
+        console.error('GitHub 커밋 가져오기 실패:', error)
+        setTodayCommits(0)
+        setBatteryPercent(100)
+      }
+    }
+
+    fetchTodayCommits()
+
+    // 10분마다 업데이트
+    const interval = setInterval(fetchTodayCommits, 10 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   const handleDoubleClick = (windowName) => {
     setOpenWindows(prev => ({
@@ -159,20 +217,63 @@ function Desktop({ onLogout }) {
   const menuData = getMenuItems()
 
   const handleBatteryClick = () => {
-    const batteryLevel = Math.floor(Math.random() * 100)
-    const isCharging = batteryLevel < 50
+    const isCharging = batteryPercent < 100
+
+    let statusMessage = ''
+    if (todayCommits === 0) {
+      statusMessage = '오늘 아직 커밋이 없어요! 코딩을 시작해볼까요?'
+    } else if (todayCommits <= 5) {
+      statusMessage = '좋은 출발이에요! 조금만 더 힘내봐요!'
+    } else if (todayCommits <= 10) {
+      statusMessage = '열심히 하고 있네요! 계속 파이팅!'
+    } else if (todayCommits <= 15) {
+      statusMessage = '대단해요! 오늘 정말 많이 하셨어요!'
+    } else {
+      statusMessage = '와우! 오늘 커밋왕이시네요!'
+    }
+
     setModal({
       isOpen: true,
-      title: '배터리',
-      width: 350,
+      title: 'GitHub 커밋 배터리',
+      width: 400,
       content: (
-        <div>
-          <h2>배터리 정보</h2>
-          <p><strong>잔량:</strong> {batteryLevel}%</p>
-          <p><strong>상태:</strong> {isCharging ? '충전 중' : '배터리 사용 중'}</p>
-          <p><strong>전원:</strong> {isCharging ? '전원 어댑터 연결됨' : '연결 안됨'}</p>
-          <div style={{ marginTop: '12px', background: '#f5f5f5', padding: '12px', borderRadius: '6px' }}>
-            <div style={{ background: batteryLevel > 20 ? '#28CA42' : '#FF5F57', height: '8px', borderRadius: '4px', width: `${batteryLevel}%` }}></div>
+        <div style={{ padding: '8px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <div style={{ fontSize: '48px', fontWeight: 'bold', color: '#007AFF', marginBottom: '8px' }}>
+              {todayCommits}
+            </div>
+            <div style={{ fontSize: '16px', color: '#666', marginBottom: '4px' }}>
+              오늘의 커밋 수
+            </div>
+            <div style={{ fontSize: '14px', color: '#999' }}>
+              {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </div>
+          </div>
+
+          <div style={{ background: '#f5f5f5', padding: '16px', borderRadius: '8px', marginBottom: '16px' }}>
+            <div style={{ fontSize: '13px', color: '#666', marginBottom: '8px' }}>배터리 잔량</div>
+            <div style={{ background: '#e0e0e0', height: '12px', borderRadius: '6px', overflow: 'hidden' }}>
+              <div style={{
+                background: batteryPercent > 50 ? '#28CA42' : batteryPercent > 20 ? '#FFBD2E' : '#FF5F57',
+                height: '100%',
+                borderRadius: '6px',
+                width: `${batteryPercent}%`,
+                transition: 'width 0.3s ease'
+              }}></div>
+            </div>
+            <div style={{ fontSize: '14px', fontWeight: '600', marginTop: '8px', color: '#333' }}>
+              {batteryPercent}%
+            </div>
+          </div>
+
+          <div style={{ background: '#f0f7ff', padding: '14px', borderRadius: '8px', border: '1px solid #d0e7ff' }}>
+            <div style={{ fontSize: '14px', color: '#007AFF', lineHeight: '1.6' }}>
+              💡 {statusMessage}
+            </div>
+          </div>
+
+          <div style={{ marginTop: '16px', fontSize: '12px', color: '#999', textAlign: 'center' }}>
+            커밋할수록 배터리가 소모됩니다
           </div>
         </div>
       )
@@ -793,11 +894,19 @@ function Desktop({ onLogout }) {
                 </svg>
               </span>
             </div>
-            <span className="menu-icon" onClick={handleBatteryClick} title="배터리">
+            <span className="menu-icon" onClick={handleBatteryClick} title={`배터리: ${batteryPercent}% (오늘 ${todayCommits}개 커밋)`}>
               <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
                 <rect x="1" y="2" width="16" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
                 <rect x="17.5" y="4.5" width="1.5" height="3" rx="0.5" fill="currentColor"/>
-                <rect x="2.5" y="3.5" width="6" height="5" rx="0.5" fill="currentColor"/>
+                <rect
+                  x="2.5"
+                  y="3.5"
+                  width={13 * (batteryPercent / 100)}
+                  height="5"
+                  rx="0.5"
+                  fill={batteryPercent > 50 ? '#28CA42' : batteryPercent > 20 ? '#FFBD2E' : '#FF5F57'}
+                  style={{ transition: 'width 0.3s ease' }}
+                />
               </svg>
             </span>
             <span className="menu-icon" onClick={handleSpotlightClick} title="Spotlight 검색">
