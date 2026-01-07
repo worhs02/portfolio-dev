@@ -135,6 +135,8 @@
   overflow-y: auto;
   background: #fff;
   padding: 24px 40px;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .loading,

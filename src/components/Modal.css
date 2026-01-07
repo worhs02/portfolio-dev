@@ -89,6 +89,8 @@
   padding: 20px;
   overflow-y: auto;
   background: #fff;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .modal-content h2 {

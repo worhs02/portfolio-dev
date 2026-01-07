@@ -84,21 +84,32 @@ function Desktop({ onLogout }) {
         const today = new Date().toISOString().split('T')[0]
         const username = 'worhs02'
 
+        console.log('오늘 날짜:', today)
+
         // GitHub Events API로 오늘의 이벤트 가져오기
         const response = await fetch(`https://api.github.com/users/${username}/events`)
         const events = await response.json()
+
+        console.log('전체 이벤트 수:', events.length)
 
         // 오늘 날짜의 PushEvent만 필터링
         const todayPushEvents = events.filter(event => {
           if (event.type !== 'PushEvent') return false
           const eventDate = new Date(event.created_at).toISOString().split('T')[0]
+          console.log('이벤트 날짜:', eventDate, '타입:', event.type)
           return eventDate === today
         })
 
+        console.log('오늘의 PushEvent:', todayPushEvents.length)
+
         // 총 커밋 수 계산
         const totalCommits = todayPushEvents.reduce((sum, event) => {
-          return sum + (event.payload.commits?.length || 0)
+          const commits = event.payload.commits?.length || 0
+          console.log('이벤트 커밋 수:', commits)
+          return sum + commits
         }, 0)
+
+        console.log('총 커밋 수:', totalCommits)
 
         setTodayCommits(totalCommits)
 
@@ -115,6 +126,8 @@ function Desktop({ onLogout }) {
         } else {
           percent = 10 // 그 이상이면 10%
         }
+
+        console.log('배터리 퍼센트:', percent)
 
         setBatteryPercent(percent)
       } catch (error) {
