@@ -51,6 +51,32 @@ function Desktop({ onLogout }) {
     upload: 80
   })
 
+  // 시간대별 배경 필터 상태
+  const [timeOfDay, setTimeOfDay] = useState('day')
+
+  // 시간대 감지 및 업데이트 (일출/일몰 기준)
+  useEffect(() => {
+    const updateTimeOfDay = () => {
+      const hour = new Date().getHours()
+
+      // 일출: 6-7시, 일몰: 17-19시 (한국 기준 대략적인 시간)
+      if (hour >= 6 && hour < 7) {
+        setTimeOfDay('sunrise') // 일출 (노을 이미지)
+      } else if (hour >= 7 && hour < 17) {
+        setTimeOfDay('day') // 낮 (낮 이미지)
+      } else if (hour >= 17 && hour < 19) {
+        setTimeOfDay('sunset') // 일몰 (노을 이미지)
+      } else {
+        setTimeOfDay('night') // 밤 (밤 이미지)
+      }
+    }
+
+    updateTimeOfDay()
+    // 1분마다 시간대 체크
+    const interval = setInterval(updateTimeOfDay, 60 * 1000)
+    return () => clearInterval(interval)
+  }, [])
+
   // GitHub 오늘의 커밋 수 가져오기
   useEffect(() => {
     const fetchTodayCommits = async () => {
@@ -802,9 +828,26 @@ function Desktop({ onLogout }) {
     }
   }
 
+  // 시간대별 배경 이미지 스타일 계산
+  const getBackgroundStyle = () => {
+    const images = {
+      sunrise: '/portfolio-dev/wallpaper-sunset.jpg', // 일출 (노을 이미지)
+      day: '/portfolio-dev/wallpaper-day.jpg', // 낮
+      sunset: '/portfolio-dev/wallpaper-sunset.jpg', // 일몰 (노을 이미지)
+      night: '/portfolio-dev/wallpaper-night.jpg' // 밤
+    }
+
+    return {
+      backgroundImage: `url(${images[timeOfDay]})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      transition: 'background-image 1s ease-in-out'
+    }
+  }
+
   return (
     <div className="desktop">
-      <div className="desktop-background" onClick={() => {
+      <div className="desktop-background" style={getBackgroundStyle()} onClick={() => {
         setActiveWindow(null)
         setOpenMenu(null)
       }}>
