@@ -52,7 +52,18 @@ function Desktop({ onLogout }) {
   })
 
   // 시간대별 배경 필터 상태
-  const [timeOfDay, setTimeOfDay] = useState('day')
+  const [timeOfDay, setTimeOfDay] = useState(() => {
+    const hour = new Date().getHours()
+    if (hour >= 6 && hour < 7) {
+      return 'sunrise'
+    } else if (hour >= 7 && hour < 17) {
+      return 'day'
+    } else if (hour >= 17 && hour < 19) {
+      return 'sunset'
+    } else {
+      return 'night'
+    }
+  })
 
   // 시간대 감지 및 업데이트 (일출/일몰 기준)
   useEffect(() => {
@@ -979,8 +990,11 @@ function Desktop({ onLogout }) {
         <div className="desktop-icons">
           <div
             className="desktop-icon"
-            onClick={() => handleDoubleClick('projects')}
             onDoubleClick={() => handleDoubleClick('projects')}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              handleDoubleClick('projects');
+            }}
           >
             <div className="icon-image folder-icon-desktop">
               <div className="folder-tab-desktop"></div>
@@ -991,8 +1005,11 @@ function Desktop({ onLogout }) {
 
           <div
             className="desktop-icon"
-            onClick={() => handleDoubleClick('techStack')}
             onDoubleClick={() => handleDoubleClick('techStack')}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              handleDoubleClick('techStack');
+            }}
           >
             <div className="icon-image app-icon-desktop tech-memo-icon">
               <svg viewBox="0 0 100 100" width="60" height="60">
@@ -1018,8 +1035,11 @@ function Desktop({ onLogout }) {
 
           <div
             className="desktop-icon"
-            onClick={() => handleDoubleClick('velog')}
             onDoubleClick={() => handleDoubleClick('velog')}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              handleDoubleClick('velog');
+            }}
           >
             <div className="icon-image app-icon-desktop velog-icon">
               <svg viewBox="0 0 100 100" width="60" height="60">
@@ -1032,8 +1052,11 @@ function Desktop({ onLogout }) {
 
           <div
             className="desktop-icon"
-            onClick={() => handleDoubleClick('github')}
             onDoubleClick={() => handleDoubleClick('github')}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              handleDoubleClick('github');
+            }}
           >
             <div className="icon-image app-icon-desktop github-icon">
               <svg viewBox="0 0 100 100" width="60" height="60">
@@ -1046,8 +1069,11 @@ function Desktop({ onLogout }) {
 
           <div
             className="desktop-icon"
-            onClick={() => handleDoubleClick('mail')}
             onDoubleClick={() => handleDoubleClick('mail')}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              handleDoubleClick('mail');
+            }}
           >
             <div className="icon-image app-icon-desktop">
               <svg viewBox="0 0 100 100" width="60" height="60">

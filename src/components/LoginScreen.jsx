@@ -3,7 +3,18 @@ import './LoginScreen.css'
 
 function LoginScreen({ onLogin }) {
   const [currentTime, setCurrentTime] = useState(new Date())
-  const [timeOfDay, setTimeOfDay] = useState('day')
+  const [timeOfDay, setTimeOfDay] = useState(() => {
+    const hour = new Date().getHours()
+    if (hour >= 6 && hour < 7) {
+      return 'sunrise'
+    } else if (hour >= 7 && hour < 17) {
+      return 'day'
+    } else if (hour >= 17 && hour < 19) {
+      return 'sunset'
+    } else {
+      return 'night'
+    }
+  })
 
   useEffect(() => {
     const timer = setInterval(() => {
