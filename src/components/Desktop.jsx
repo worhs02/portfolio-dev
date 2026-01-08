@@ -979,6 +979,7 @@ function Desktop({ onLogout }) {
         <div className="desktop-icons">
           <div
             className="desktop-icon"
+            onClick={() => handleDoubleClick('projects')}
             onDoubleClick={() => handleDoubleClick('projects')}
           >
             <div className="icon-image folder-icon-desktop">
@@ -990,6 +991,7 @@ function Desktop({ onLogout }) {
 
           <div
             className="desktop-icon"
+            onClick={() => handleDoubleClick('techStack')}
             onDoubleClick={() => handleDoubleClick('techStack')}
           >
             <div className="icon-image app-icon-desktop tech-memo-icon">
@@ -1016,6 +1018,7 @@ function Desktop({ onLogout }) {
 
           <div
             className="desktop-icon"
+            onClick={() => handleDoubleClick('velog')}
             onDoubleClick={() => handleDoubleClick('velog')}
           >
             <div className="icon-image app-icon-desktop velog-icon">
@@ -1029,6 +1032,7 @@ function Desktop({ onLogout }) {
 
           <div
             className="desktop-icon"
+            onClick={() => handleDoubleClick('github')}
             onDoubleClick={() => handleDoubleClick('github')}
           >
             <div className="icon-image app-icon-desktop github-icon">
@@ -1042,6 +1046,7 @@ function Desktop({ onLogout }) {
 
           <div
             className="desktop-icon"
+            onClick={() => handleDoubleClick('mail')}
             onDoubleClick={() => handleDoubleClick('mail')}
           >
             <div className="icon-image app-icon-desktop">
