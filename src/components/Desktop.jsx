@@ -7,6 +7,7 @@ import GitHub from './GitHub'
 import Mail from './Mail'
 import Modal from './Modal'
 import { portfolioItems } from '../data/portfolioData'
+import { getDeviceType, isMobile } from '../utils/deviceDetect'
 
 function Desktop({ onLogout }) {
   const [openWindows, setOpenWindows] = useState({
@@ -51,6 +52,9 @@ function Desktop({ onLogout }) {
     upload: 80
   })
 
+  // 디바이스 타입 감지
+  const [deviceType, setDeviceType] = useState(() => getDeviceType())
+
   // 시간대별 배경 필터 상태
   const [timeOfDay, setTimeOfDay] = useState(() => {
     const hour = new Date().getHours()
@@ -64,6 +68,16 @@ function Desktop({ onLogout }) {
       return 'night'
     }
   })
+
+  // 디바이스 타입 감지 및 업데이트
+  useEffect(() => {
+    const handleResize = () => {
+      setDeviceType(getDeviceType())
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // 시간대 감지 및 업데이트 (일출/일몰 기준)
   useEffect(() => {
@@ -875,8 +889,9 @@ function Desktop({ onLogout }) {
         setActiveWindow(null)
         setOpenMenu(null)
       }}>
-        {/* macOS Menu Bar */}
-        <div className="macos-menubar" onClick={(e) => e.stopPropagation()}>
+        {/* macOS Menu Bar - 모바일에서는 숨김 */}
+        {deviceType !== 'mobile' && (
+          <div className="macos-menubar" onClick={(e) => e.stopPropagation()}>
           <div className="menubar-left">
             <div className="menu-item-wrapper">
               <span
@@ -984,7 +999,8 @@ function Desktop({ onLogout }) {
             </span>
             <span className="menu-time">{new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>
           </div>
-        </div>
+          </div>
+        )}
 
         {/* Desktop Icons */}
         <div className="desktop-icons">
@@ -1104,6 +1120,7 @@ function Desktop({ onLogout }) {
             onClick={(e) => bringToFront('projects', e)}
             zIndex={windowZIndex.projects}
             onMinimize={() => handleMinimize('projects')}
+            deviceType={deviceType}
           />
         )}
 
@@ -1113,6 +1130,7 @@ function Desktop({ onLogout }) {
             onClick={(e) => bringToFront('techStack', e)}
             zIndex={windowZIndex.techStack}
             onMinimize={() => handleMinimize('techStack')}
+            deviceType={deviceType}
           />
         )}
 
@@ -1122,6 +1140,7 @@ function Desktop({ onLogout }) {
             onClick={(e) => bringToFront('velog', e)}
             zIndex={windowZIndex.velog}
             onMinimize={() => handleMinimize('velog')}
+            deviceType={deviceType}
           />
         )}
 
@@ -1131,6 +1150,7 @@ function Desktop({ onLogout }) {
             onClick={(e) => bringToFront('github', e)}
             zIndex={windowZIndex.github}
             onMinimize={() => handleMinimize('github')}
+            deviceType={deviceType}
           />
         )}
 
@@ -1140,6 +1160,7 @@ function Desktop({ onLogout }) {
             onClick={(e) => bringToFront('mail', e)}
             zIndex={windowZIndex.mail}
             onMinimize={() => handleMinimize('mail')}
+            deviceType={deviceType}
           />
         )}
 
