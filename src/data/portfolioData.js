@@ -13,7 +13,8 @@ export const portfolioItems = [
       '반응형 디자인 구현 시 다양한 디바이스에서의 레이아웃 깨짐 현상 → CSS Grid와 Flexbox를 조합하여 해결',
       'GitHub Pages 배포 시 라우팅 문제 → base path 설정 및 HashRouter 적용'
     ],
-    github: 'https://github.com/username/portfolio'
+    github: 'https://github.com/username/portfolio',
+    contribution: '• 프로젝트 기획 및 디자인 (100%)\n• React 컴포넌트 개발 (100%)\n• 네오브루탈리즘 UI/UX 디자인 구현\n• GitHub Pages 배포 및 CI/CD 구축\n• 반응형 웹 디자인 최적화'
   },
   {
     id: 2,
@@ -29,7 +30,8 @@ export const portfolioItems = [
       'API 호출 제한으로 인한 서비스 중단 → Redis 캐싱 적용으로 API 호출 횟수 80% 감소',
       '대용량 데이터 처리 시 성능 저하 → 페이징 처리 및 인덱스 최적화로 쿼리 속도 5배 향상'
     ],
-    github: 'https://github.com/username/public-data-service'
+    github: 'https://github.com/username/public-data-service',
+    contribution: '• 백엔드 API 설계 및 개발 (50%)\n• Redis 캐싱 시스템 구축\n• MySQL 데이터베이스 설계 및 최적화\n• REST API 문서화 (Swagger)\n• 성능 테스트 및 튜닝'
   },
   {
     id: 3,
@@ -44,7 +46,8 @@ export const portfolioItems = [
       'N+1 쿼리 문제로 인한 성능 저하 → Fetch Join 및 @EntityGraph 적용',
       '동시성 이슈로 인한 댓글 중복 저장 → 낙관적 락(Optimistic Lock) 적용'
     ],
-    github: 'https://github.com/username/community-platform'
+    github: 'https://github.com/username/community-platform',
+    contribution: '• JPA 엔티티 설계 및 연관관계 매핑 (70%)\n• 게시판 CRUD API 개발\n• 댓글 시스템 구현\n• N+1 쿼리 최적화\n• 동시성 제어 구현'
   },
   {
     id: 4,

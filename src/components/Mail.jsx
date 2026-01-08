@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import emailjs from '@emailjs/browser'
 import './Mail.css'
 
-function Mail({ onClose, onClick, zIndex, onMinimize }) {
+function Mail({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }) {
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [size, setSize] = useState({ width: 900, height: 650 })
   const [isDragging, setIsDragging] = useState(false)
@@ -16,8 +16,10 @@ function Mail({ onClose, onClick, zIndex, onMinimize }) {
   const resizeStartSize = useRef({ width: 0, height: 0 })
   const resizeStartWindowPos = useRef({ x: 0, y: 0 })
   const windowRef = useRef(null)
+  const isMobile = deviceType === 'mobile'
 
   const [viewMode, setViewMode] = useState('inbox') // 'inbox' or 'compose'
+  const [mobileView, setMobileView] = useState('list') // 'list' or 'detail' for mobile
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -96,6 +98,9 @@ Song Jaegon`
   const handleSelectMessage = (message) => {
     setSelectedMessage(message)
     setReadMessages(prev => new Set([...prev, message.id]))
+    if (isMobile) {
+      setMobileView('detail')
+    }
   }
 
   // 초기 중앙 배치
@@ -312,6 +317,156 @@ Song Jaegon`
     }
   }
 
+  // Mobile UI
+  if (isMobile) {
+    return (
+      <div className="mail-mobile-container" style={{ zIndex }} onClick={onClick}>
+        {viewMode === 'compose' ? (
+          // Mobile Compose View
+          sendSuccess ? (
+            <div className="mobile-mail-success">
+              <div className="mobile-mail-header">
+                <h2>Mail</h2>
+                <button className="mobile-close-btn" onClick={onClose}>✕</button>
+              </div>
+              <div className="mobile-success-content">
+                <div className="success-icon">✓</div>
+                <h2>소중한 메시지 잘 받았습니다!</h2>
+                <p>빠른 시일 내에 답변드리겠습니다.</p>
+              </div>
+            </div>
+          ) : (
+            <div className="mobile-compose-view">
+              <div className="mobile-mail-header">
+                <button className="mobile-back-btn" onClick={() => setViewMode('inbox')}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                  </svg>
+                </button>
+                <h2>새 메시지</h2>
+                <button className="mobile-close-btn" onClick={onClose}>✕</button>
+              </div>
+              <form className="mobile-mail-form" onSubmit={handleSend}>
+                {sendError && (
+                  <div className="mobile-error-message">
+                    <strong>⚠️ {sendError}</strong>
+                  </div>
+                )}
+                <div className="mobile-form-field">
+                  <label>받는 사람</label>
+                  <input type="text" value="setiguy@gachon.ac.kr" readOnly className="readonly-input" />
+                </div>
+                <div className="mobile-form-field">
+                  <label>성함</label>
+                  <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="성함을 입력해주세요" required />
+                </div>
+                <div className="mobile-form-field">
+                  <label>이메일 주소</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="이메일 주소를 입력해주세요" required />
+                </div>
+                <div className="mobile-form-field">
+                  <label>문의 제목</label>
+                  <input type="text" name="subject" value={formData.subject} onChange={handleInputChange} placeholder="문의하실 내용의 제목을 입력해주세요" required />
+                </div>
+                <div className="mobile-form-field message-field">
+                  <label>문의 내용</label>
+                  <textarea name="message" value={formData.message} onChange={handleInputChange} placeholder="문의하실 내용을 자세히 작성해주세요" required />
+                </div>
+                <div className="mobile-form-actions">
+                  <button type="submit" className="mobile-send-btn" disabled={isSending}>
+                    {isSending ? (
+                      <>
+                        <span className="spinner"></span>
+                        전송 중...
+                      </>
+                    ) : (
+                      <>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <line x1="22" y1="2" x2="11" y2="13"/>
+                          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                        </svg>
+                        전송
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          )
+        ) : mobileView === 'list' ? (
+          // Mobile Inbox List View
+          <div className="mobile-inbox-view">
+            <div className="mobile-mail-header">
+              <h2>받은편지함</h2>
+              <button className="mobile-close-btn" onClick={onClose}>✕</button>
+            </div>
+            <button className="mobile-compose-btn" onClick={() => setViewMode('compose')}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              메시지 작성
+            </button>
+            <div className="mobile-message-list">
+              {inboxMessages.map(message => {
+                const isUnread = !readMessages.has(message.id)
+                return (
+                  <div key={message.id} className={`mobile-inbox-item ${isUnread ? 'unread' : ''}`} onClick={() => handleSelectMessage(message)}>
+                    <div className="mobile-inbox-header">
+                      <div className="mobile-from-wrapper">
+                        {isUnread && <span className="mobile-unread-dot"></span>}
+                        <span className="mobile-inbox-from">{message.from}</span>
+                      </div>
+                      <span className="mobile-inbox-date">{message.date}</span>
+                    </div>
+                    <div className="mobile-inbox-subject">{message.subject}</div>
+                    <div className="mobile-inbox-preview">{message.preview}</div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        ) : (
+          // Mobile Message Detail View
+          <div className="mobile-detail-view">
+            <div className="mobile-mail-header">
+              <button className="mobile-back-btn" onClick={() => setMobileView('list')}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+              </button>
+              <h2>메시지</h2>
+              <button className="mobile-close-btn" onClick={onClose}>✕</button>
+            </div>
+            {selectedMessage && (
+              <div className="mobile-message-detail">
+                <div className="mobile-message-header">
+                  <h3>{selectedMessage.subject}</h3>
+                  <div className="mobile-message-meta">
+                    <div className="mobile-from-info">
+                      <div className="mobile-avatar">{selectedMessage.from.charAt(0)}</div>
+                      <div>
+                        <div className="mobile-from-name">{selectedMessage.from}</div>
+                        <div className="mobile-from-email">setiguy@gachon.ac.kr</div>
+                      </div>
+                    </div>
+                    <span className="mobile-date">{selectedMessage.date}</span>
+                  </div>
+                </div>
+                <div className="mobile-message-body">
+                  {selectedMessage.content.split('\n').map((line, i) => (
+                    <p key={i}>{line}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // Desktop UI
   return (
     <div
       ref={windowRef}

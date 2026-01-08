@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from 'react'
 import './Portfolio.css'
 import { portfolioItems } from '../data/portfolioData'
 
-function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
+function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'desktop' }) {
   const [selectedProject, setSelectedProject] = useState(null)
-  const [expandedFolders, setExpandedFolders] = useState(['root'])
+  const [expandedFolders, setExpandedFolders] = useState(['root', 'docs'])
   const [selectedFile, setSelectedFile] = useState(null)
+  const isMobile = deviceType === 'mobile'
 
   // Window drag/resize states
   const [position, setPosition] = useState({ x: 0, y: 0 })
@@ -33,7 +34,7 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
   useEffect(() => {
     if (selectedProject) {
       document.body.style.overflow = 'hidden'
-      setExpandedFolders(['root'])
+      setExpandedFolders(['root', 'docs'])
       setSelectedFile('overview')
     } else {
       document.body.style.overflow = 'unset'
@@ -196,43 +197,77 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
     onClose()
   }
 
-  // VS Code Tree Structure
+  // VS Code Tree Structure with folders
   const treeFiles = selectedProject ? [
     {
-      id: 'overview',
-      name: 'README.md',
-      icon: '📄',
-      type: 'file'
+      id: 'docs',
+      name: 'docs',
+      type: 'folder',
+      children: [
+        {
+          id: 'overview',
+          name: 'README.md',
+          icon: '📄',
+          type: 'file'
+        },
+        {
+          id: 'team',
+          name: 'TEAM.md',
+          icon: '👥',
+          type: 'file'
+        },
+        {
+          id: 'troubleshooting',
+          name: 'TROUBLESHOOTING.md',
+          icon: '🔧',
+          type: 'file'
+        }
+      ]
     },
     {
-      id: 'team',
-      name: 'TEAM.md',
-      icon: '👥',
-      type: 'file'
-    },
-    {
-      id: 'skills',
-      name: 'package.json',
-      icon: '📦',
-      type: 'file'
-    },
-    {
-      id: 'troubleshooting',
-      name: 'TROUBLESHOOTING.md',
-      icon: '🔧',
-      type: 'file'
+      id: 'config',
+      name: 'config',
+      type: 'folder',
+      children: [
+        {
+          id: 'skills',
+          name: 'package.json',
+          icon: '📦',
+          type: 'file'
+        }
+      ]
     },
     ...(selectedProject.github ? [{
-      id: 'github',
-      name: '.git',
-      icon: '🔗',
-      type: 'folder'
+      id: 'github-folder',
+      name: 'repository',
+      type: 'folder',
+      children: [
+        {
+          id: 'github',
+          name: '.git',
+          icon: '🔗',
+          type: 'file'
+        },
+        {
+          id: 'contribution',
+          name: 'CONTRIBUTION.md',
+          icon: '✍️',
+          type: 'file'
+        }
+      ]
     }] : []),
     ...(selectedProject.award ? [{
-      id: 'award',
-      name: 'AWARD.txt',
-      icon: '🏆',
-      type: 'file'
+      id: 'awards-folder',
+      name: 'awards',
+      type: 'folder',
+      children: [
+        {
+          id: 'award',
+          name: 'AWARD.txt',
+          icon: '🏆',
+          type: 'file'
+        }
+      ]
     }] : [])
   ] : []
 
@@ -245,7 +280,6 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
         return (
           <div className="file-content">
             <div className="file-header">
-              <span className="file-icon">📄</span>
               <span className="file-name">README.md</span>
             </div>
             <div className="file-body">
@@ -258,7 +292,6 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
         return (
           <div className="file-content">
             <div className="file-header">
-              <span className="file-icon">👥</span>
               <span className="file-name">TEAM.md</span>
             </div>
             <div className="file-body">
@@ -271,7 +304,6 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
         return (
           <div className="file-content">
             <div className="file-header">
-              <span className="file-icon">📦</span>
               <span className="file-name">package.json</span>
             </div>
             <div className="file-body">
@@ -284,7 +316,6 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
         return (
           <div className="file-content">
             <div className="file-header">
-              <span className="file-icon">🔧</span>
               <span className="file-name">TROUBLESHOOTING.md</span>
             </div>
             <div className="file-body">
@@ -297,7 +328,6 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
         return (
           <div className="file-content">
             <div className="file-header">
-              <span className="file-icon">🔗</span>
               <span className="file-name">.git</span>
             </div>
             <div className="file-body">
@@ -314,11 +344,22 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
         return (
           <div className="file-content">
             <div className="file-header">
-              <span className="file-icon">🏆</span>
               <span className="file-name">AWARD.txt</span>
             </div>
             <div className="file-body">
               <pre>{selectedProject.award}</pre>
+            </div>
+          </div>
+        )
+
+      case 'contribution':
+        return (
+          <div className="file-content">
+            <div className="file-header">
+              <span className="file-name">CONTRIBUTION.md</span>
+            </div>
+            <div className="file-body">
+              <pre>{selectedProject.contribution || '담당 업무 및 기여도:\n\n프로젝트에서 수행한 작업과 기여한 내용을 작성합니다.'}</pre>
             </div>
           </div>
         )
@@ -329,10 +370,11 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
   }
 
   // TreeItem component
-  const TreeItem = ({ file, isSelected, onClick }) => {
+  const TreeItem = ({ file, isSelected, onClick, level = 0 }) => {
     const isFolderExpanded = file.type === 'folder' && expandedFolders.includes(file.id)
 
-    const handleClick = () => {
+    const handleClick = (e) => {
+      e.stopPropagation()
       if (file.type === 'folder') {
         setExpandedFolders(prev =>
           prev.includes(file.id)
@@ -345,15 +387,38 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
     }
 
     return (
-      <div
-        className={`tree-item ${isSelected ? 'tree-item-selected' : ''}`}
-        onClick={handleClick}
-      >
-        <span className="tree-item-icon">
-          {file.type === 'folder' ? (isFolderExpanded ? '📂' : '📁') : file.icon}
-        </span>
-        <span className="tree-item-name">{file.name}</span>
-      </div>
+      <>
+        <div
+          className={`tree-item ${isSelected ? 'tree-item-selected' : ''} ${file.type === 'folder' ? 'tree-item-folder' : ''}`}
+          onClick={handleClick}
+          style={{ paddingLeft: `${8 + level * 16}px` }}
+        >
+          {file.type === 'folder' && (
+            <>
+              <span className="tree-item-arrow">
+                {isFolderExpanded ? '▼' : '▶'}
+              </span>
+              <span className="tree-item-icon">
+                {isFolderExpanded ? '📂' : '📁'}
+              </span>
+            </>
+          )}
+          <span className="tree-item-name">{file.name}</span>
+        </div>
+        {file.type === 'folder' && isFolderExpanded && file.children && (
+          <div className="tree-folder-children">
+            {file.children.map((child) => (
+              <TreeItem
+                key={child.id}
+                file={child}
+                isSelected={selectedFile === child.id}
+                onClick={() => setSelectedFile(child.id)}
+                level={level + 1}
+              />
+            ))}
+          </div>
+        )}
+      </>
     )
   }
 
@@ -440,7 +505,7 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
         </div>
       </div>
 
-      {selectedProject && (
+      {selectedProject && !isMobile && (
         <div
           className="vscode-modal"
           onClick={() => setSelectedProject(null)}
@@ -482,6 +547,7 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
                         file={file}
                         isSelected={selectedFile === file.id}
                         onClick={() => setSelectedFile(file.id)}
+                        level={0}
                       />
                     ))}
                   </div>
@@ -500,6 +566,79 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex }) {
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedProject && isMobile && (
+        <div className="mobile-project-modal" onClick={() => setSelectedProject(null)}>
+          <div className="mobile-project-content" onClick={(e) => e.stopPropagation()}>
+            {/* Mobile Header */}
+            <div className="mobile-project-header">
+              <h2>{selectedProject.title}</h2>
+              <button className="mobile-close-btn" onClick={() => setSelectedProject(null)}>
+                ✕
+              </button>
+            </div>
+
+            {/* Mobile Scrollable Content */}
+            <div className="mobile-project-body">
+              <div className="mobile-project-period">{selectedProject.period}</div>
+
+              {/* Overview Section */}
+              <section className="mobile-section">
+                <h3 className="mobile-section-title">📄 프로젝트 개요</h3>
+                <div className="mobile-section-content">
+                  <pre>{selectedProject.overview}</pre>
+                </div>
+              </section>
+
+              {/* Team Section */}
+              <section className="mobile-section">
+                <h3 className="mobile-section-title">👥 팀 구성</h3>
+                <div className="mobile-section-content">
+                  <pre>{selectedProject.team}</pre>
+                </div>
+              </section>
+
+              {/* Skills Section */}
+              <section className="mobile-section">
+                <h3 className="mobile-section-title">📦 기술 스택</h3>
+                <div className="mobile-section-content">
+                  <pre>{JSON.stringify({ dependencies: selectedProject.skills }, null, 2)}</pre>
+                </div>
+              </section>
+
+              {/* Troubleshooting Section */}
+              <section className="mobile-section">
+                <h3 className="mobile-section-title">🔧 트러블슈팅</h3>
+                <div className="mobile-section-content">
+                  <pre>{selectedProject.troubleshooting.map((item, idx) => `${idx + 1}. ${item}`).join('\n\n')}</pre>
+                </div>
+              </section>
+
+              {/* GitHub Section */}
+              {selectedProject.github && (
+                <section className="mobile-section">
+                  <h3 className="mobile-section-title">🔗 GitHub</h3>
+                  <div className="mobile-section-content">
+                    <a href={selectedProject.github} target="_blank" rel="noopener noreferrer" className="mobile-github-link">
+                      {selectedProject.github}
+                    </a>
+                  </div>
+                </section>
+              )}
+
+              {/* Award Section */}
+              {selectedProject.award && (
+                <section className="mobile-section">
+                  <h3 className="mobile-section-title">🏆 수상</h3>
+                  <div className="mobile-section-content">
+                    <pre>{selectedProject.award}</pre>
+                  </div>
+                </section>
+              )}
             </div>
           </div>
         </div>

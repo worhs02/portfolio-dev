@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from 'react'
 import './GitHub.css'
 import { portfolioItems } from '../data/portfolioData'
 
-function GitHub({ onClose, onClick, zIndex, onMinimize }) {
+function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }) {
   const [userData, setUserData] = useState(null)
   const [repos, setRepos] = useState([])
   const [loading, setLoading] = useState(true)
+  const isMobile = deviceType === 'mobile'
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [size, setSize] = useState({ width: 1000, height: 700 })
   const [isDragging, setIsDragging] = useState(false)
@@ -252,6 +253,91 @@ function GitHub({ onClose, onClick, zIndex, onMinimize }) {
     }
   }
 
+  // Mobile UI
+  if (isMobile) {
+    return (
+      <div className="github-mobile-container" style={{ zIndex }} onClick={onClick}>
+        {/* Mobile Header */}
+        <div className="mobile-github-header">
+          <h2>GitHub</h2>
+          <button className="mobile-close-btn" onClick={onClose}>✕</button>
+        </div>
+
+        {/* Mobile Content */}
+        <div className="mobile-github-content">
+          {loading ? (
+            <div className="mobile-loading">데이터 로딩 중...</div>
+          ) : !userData ? (
+            <div className="mobile-error">
+              GitHub 데이터를 불러올 수 없습니다.<br/>
+              브라우저 콘솔을 확인해주세요.
+            </div>
+          ) : (
+            <div className="mobile-github-profile">
+              {/* Mobile Profile Header */}
+              <div className="mobile-profile-header">
+                <img src={userData.avatar_url} alt={userData.name} className="mobile-avatar" />
+                <h1>{userData.name || userData.login}</h1>
+                <p className="mobile-username">@{userData.login}</p>
+                {userData.bio && <p className="mobile-bio">{userData.bio}</p>}
+              </div>
+
+              {/* Mobile Stats */}
+              <div className="mobile-stats-container">
+                <div className="mobile-stat-item">
+                  <strong>{userData.public_repos}</strong>
+                  <span>repositories</span>
+                </div>
+                <div className="mobile-stat-item">
+                  <strong>{userData.followers}</strong>
+                  <span>followers</span>
+                </div>
+                <div className="mobile-stat-item">
+                  <strong>{userData.following}</strong>
+                  <span>following</span>
+                </div>
+              </div>
+
+              {/* Mobile Contributions */}
+              <div className="mobile-contributions">
+                <h2>Contribution Graph</h2>
+                <img
+                  src={`https://ghchart.rshah.org/20C997/worhs02?v=${new Date().toISOString().split('T')[0]}`}
+                  alt="GitHub Contributions"
+                  className="mobile-contribution-graph"
+                  key={new Date().toISOString().split('T')[0]}
+                />
+              </div>
+
+              {/* Mobile Repositories */}
+              <div className="mobile-repositories">
+                <h2>My Projects</h2>
+                <div className="mobile-repo-list">
+                  {repos.map(repo => (
+                    <div
+                      key={repo.id}
+                      className="mobile-repo-card"
+                      onClick={() => window.open(repo.html_url, '_blank', 'noopener,noreferrer')}
+                    >
+                      <h3>{repo.name}</h3>
+                      <p className="mobile-repo-description">{repo.description || 'No description'}</p>
+                      <div className="mobile-repo-stats">
+                        {repo.language && <span className="mobile-language">● {repo.language}</span>}
+                        <span className="mobile-stars">⭐ {repo.stargazers_count}</span>
+                        <span className="mobile-forks">🔀 {repo.forks_count}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // Desktop UI
   return (
     <div
       ref={windowRef}
