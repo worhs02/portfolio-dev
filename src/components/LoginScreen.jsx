@@ -87,7 +87,7 @@ function LoginScreen({ onLogin }) {
         <div className="login-profile">
           <div className="profile-avatar" onClick={handleLogin}>
             <div className="avatar-circle">
-              <span className="avatar-emoji">👨‍💻</span>
+              <img src="/portfolio-dev/profile.png" alt="Profile" className="avatar-image" />
             </div>
           </div>
 
