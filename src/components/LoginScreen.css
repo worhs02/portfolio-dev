@@ -232,6 +232,45 @@
   transform: scale(0.98);
 }
 
+/* 반응형 - 노트북 (1025px ~ 1440px) */
+@media (max-width: 1440px) and (min-width: 1025px) {
+  .login-clock {
+    top: 85px;
+  }
+
+  .clock-time {
+    font-size: 100px;
+    letter-spacing: -3px;
+  }
+
+  .clock-date {
+    font-size: 20px;
+  }
+
+  .login-profile {
+    min-width: 380px;
+  }
+
+  .avatar-circle {
+    width: 145px;
+    height: 145px;
+  }
+
+  .profile-name {
+    font-size: 30px;
+  }
+
+  .profile-info {
+    gap: 11px;
+    max-width: 480px;
+  }
+
+  .profile-hint {
+    font-size: 14px;
+    padding: 13px 44px;
+  }
+}
+
 /* 반응형 - 태블릿 (768px ~ 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
   .login-clock {

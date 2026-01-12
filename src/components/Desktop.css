@@ -147,10 +147,11 @@
 .desktop-icons {
   position: absolute;
   top: 40px;
-  right: 40px;
+  right: 15px;
   display: flex;
   flex-direction: column;
   gap: 40px;
+  max-width: 120px;
 }
 
 .desktop-icon {
@@ -351,6 +352,113 @@
 }
 
 /* Responsive */
+
+/* 대형 데스크탑 (1441px 이상) */
+@media (min-width: 1441px) {
+  .desktop-icons {
+    right: 40px;
+  }
+}
+
+/* 노트북 화면 (1024px ~ 1440px) */
+@media (max-width: 1440px) and (min-width: 1025px) {
+  .desktop-icons {
+    top: 35px;
+    right: 10px;
+    gap: 25px;
+  }
+
+  .desktop-icon {
+    padding: 6px;
+  }
+
+  .icon-image {
+    width: 58px;
+    height: 58px;
+  }
+
+  .folder-body-desktop {
+    width: 48px;
+    height: 36px;
+    left: 5px;
+    top: 13px;
+  }
+
+  .folder-tab-desktop {
+    width: 24px;
+    height: 6px;
+    left: 5px;
+    top: 7px;
+  }
+
+  .app-icon-desktop svg {
+    width: 50px;
+    height: 50px;
+  }
+
+  .icon-label {
+    font-size: 11px;
+    max-width: 75px;
+  }
+
+  .dock {
+    bottom: 15px;
+    padding: 10px 14px;
+    gap: 10px;
+  }
+
+  .dock-item {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+/* 작은 노트북 / 태블릿 (769px ~ 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .desktop-icons {
+    top: 30px;
+    right: 15px;
+    gap: 25px;
+  }
+
+  .desktop-icon {
+    padding: 6px;
+  }
+
+  .icon-image {
+    width: 65px;
+    height: 65px;
+  }
+
+  .folder-body-desktop {
+    width: 55px;
+    height: 42px;
+  }
+
+  .folder-tab-desktop {
+    width: 28px;
+    height: 6px;
+  }
+
+  .icon-label {
+    font-size: 11px;
+    max-width: 85px;
+  }
+
+  .dock {
+    bottom: 12px;
+    padding: 8px 12px;
+    gap: 9px;
+  }
+
+  .dock-item {
+    width: 42px;
+    height: 42px;
+    font-size: 28px;
+  }
+}
+
+/* 모바일 (~ 768px) */
 @media (max-width: 768px) {
   .desktop-icons {
     top: 20px;
