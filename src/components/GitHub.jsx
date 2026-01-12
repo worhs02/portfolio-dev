@@ -39,17 +39,20 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
           .filter(item => item.github)
           .map(item => item.github)
 
-        // URL에서 레포지토리 이름 추출 (예: https://github.com/worhs02/repo-name -> repo-name)
-        const repoNames = githubUrls.map(url => {
+        // URL에서 owner와 repository 추출 (예: https://github.com/owner/repo-name -> owner/repo-name)
+        const repoFullNames = githubUrls.map(url => {
           const parts = url.split('/')
-          return parts[parts.length - 1]
+          // GitHub URL 형식: https://github.com/owner/repo
+          const owner = parts[parts.length - 2]
+          const repo = parts[parts.length - 1]
+          return `${owner}/${repo}`
         })
 
-        // 각 레포지토리 정보 가져오기
-        const repoPromises = repoNames.map(name =>
-          fetch(`https://api.github.com/repos/worhs02/${name}`)
+        // 각 레포지토리 정보 가져오기 (개인 레포 + 팀 레포 모두 지원)
+        const repoPromises = repoFullNames.map(fullName =>
+          fetch(`https://api.github.com/repos/${fullName}`)
             .then(res => res.json())
-            .catch(err => ({ error: true, name }))
+            .catch(err => ({ error: true, fullName }))
         )
 
         const reposData = await Promise.all(repoPromises)
@@ -193,15 +196,18 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
         .filter(item => item.github)
         .map(item => item.github)
 
-      const repoNames = githubUrls.map(url => {
+      // URL에서 owner와 repository 추출
+      const repoFullNames = githubUrls.map(url => {
         const parts = url.split('/')
-        return parts[parts.length - 1]
+        const owner = parts[parts.length - 2]
+        const repo = parts[parts.length - 1]
+        return `${owner}/${repo}`
       })
 
-      const repoPromises = repoNames.map(name =>
-        fetch(`https://api.github.com/repos/worhs02/${name}`)
+      const repoPromises = repoFullNames.map(fullName =>
+        fetch(`https://api.github.com/repos/${fullName}`)
           .then(res => res.json())
-          .catch(err => ({ error: true, name }))
+          .catch(err => ({ error: true, fullName }))
       )
 
       const reposData = await Promise.all(repoPromises)
@@ -323,6 +329,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                       <p className="mobile-repo-description">{repo.description || 'No description'}</p>
                       <div className="mobile-repo-stats">
                         {repo.language && <span className="mobile-language">● {repo.language}</span>}
+                        <span className="mobile-commits">💻 {repo.userCommits || 0} commits</span>
                         <span className="mobile-stars">⭐ {repo.stargazers_count}</span>
                         <span className="mobile-forks">🔀 {repo.forks_count}</span>
                       </div>
@@ -456,6 +463,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                     <p className="repo-description">{repo.description || 'No description'}</p>
                     <div className="repo-stats">
                       {repo.language && <span className="language">● {repo.language}</span>}
+                      <span className="commits">💻 {repo.userCommits || 0} commits</span>
                       <span className="stars">⭐ {repo.stargazers_count}</span>
                       <span className="forks">🔀 {repo.forks_count}</span>
                     </div>
