@@ -129,7 +129,8 @@ function Desktop({ onLogout }) {
 
         // 총 커밋 수 계산
         const totalCommits = todayPushEvents.reduce((sum, event) => {
-          const commits = event.payload.commits?.length || 0
+          console.log('이벤트 페이로드:', event.payload)
+          const commits = event.payload.size || event.payload.commits?.length || 0
           console.log('이벤트 커밋 수:', commits)
           return sum + commits
         }, 0)

@@ -4,6 +4,7 @@ import './GitHub.css'
 function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }) {
   const [userData, setUserData] = useState(null)
   const [repos, setRepos] = useState([])
+  const [contributions, setContributions] = useState([])
   const [loading, setLoading] = useState(true)
   const isMobile = deviceType === 'mobile'
   const [position, setPosition] = useState({ x: 0, y: 0 })
@@ -24,8 +25,10 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
   useEffect(() => {
     const fetchGitHubData = async () => {
       try {
+        const username = 'worhs02'
+
         // 사용자 정보 가져오기
-        const userResponse = await fetch('https://api.github.com/users/worhs02')
+        const userResponse = await fetch(`https://api.github.com/users/${username}`)
         if (!userResponse.ok) {
           throw new Error(`GitHub API Error: ${userResponse.status}`)
         }
@@ -33,22 +36,29 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
         console.log('User Data:', userData)
         setUserData(userData)
 
-        // worhs02의 실제 레포지토리 가져오기 (최근 업데이트순)
-        const reposResponse = await fetch('https://api.github.com/users/worhs02/repos?sort=updated&per_page=6')
+        // 레포지토리 가져오기
+        const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
         if (!reposResponse.ok) {
           throw new Error(`GitHub API Error: ${reposResponse.status}`)
         }
         const reposData = await reposResponse.json()
-
-        // 최대 6개만 표시
         setRepos(reposData.slice(0, 6))
+
+        // GitHub Contributions API로 기여도 데이터 가져오기
+        // 파라미터 없음 = 현재 연도의 모든 기여도
+        const contributionsResponse = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}`)
+        if (contributionsResponse.ok) {
+          const contributionsData = await contributionsResponse.json()
+          console.log('Contributions Data:', contributionsData)
+          setContributions(contributionsData.contributions || [])
+        }
 
         setLoading(false)
       } catch (error) {
         console.error('GitHub 데이터 가져오기 실패:', error)
-        // 에러 시에도 로딩 상태 해제하고 빈 데이터 설정
         setUserData(null)
         setRepos([])
+        setContributions([])
         setLoading(false)
       }
     }
@@ -169,23 +179,30 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
   const handleRefresh = async () => {
     setLoading(true)
     try {
-      // GitHub 데이터 다시 가져오기
-      const userResponse = await fetch('https://api.github.com/users/worhs02')
+      const username = 'worhs02'
+
+      // 사용자 정보 가져오기
+      const userResponse = await fetch(`https://api.github.com/users/${username}`)
       if (!userResponse.ok) {
         throw new Error(`GitHub API Error: ${userResponse.status}`)
       }
       const userData = await userResponse.json()
       setUserData(userData)
 
-      // worhs02의 실제 레포지토리 가져오기 (최근 업데이트순)
-      const reposResponse = await fetch('https://api.github.com/users/worhs02/repos?sort=updated&per_page=6')
+      // 레포지토리 가져오기
+      const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
       if (!reposResponse.ok) {
         throw new Error(`GitHub API Error: ${reposResponse.status}`)
       }
       const reposData = await reposResponse.json()
-
-      // 최대 6개만 표시
       setRepos(reposData.slice(0, 6))
+
+      // 기여도 데이터 가져오기
+      const contributionsResponse = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}`)
+      if (contributionsResponse.ok) {
+        const contributionsData = await contributionsResponse.json()
+        setContributions(contributionsData.contributions || [])
+      }
 
       setLoading(false)
     } catch (error) {
@@ -280,12 +297,22 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
               {/* Mobile Contributions */}
               <div className="mobile-contributions">
                 <h2>Contribution Graph</h2>
-                <img
-                  src={`https://ghchart.rshah.org/20C997/worhs02?v=${new Date().toISOString().split('T')[0]}`}
-                  alt="GitHub Contributions"
-                  className="mobile-contribution-graph"
-                  key={new Date().toISOString().split('T')[0]}
-                />
+                {contributions.length > 0 ? (
+                  <div className="mobile-contribution-calendar">
+                    {contributions.map((day, index) => {
+                      const level = day.count === 0 ? 0 : day.count < 5 ? 1 : day.count < 10 ? 2 : day.count < 15 ? 3 : 4
+                      return (
+                        <div
+                          key={index}
+                          className={`mobile-contribution-day level-${level}`}
+                          title={`${day.date}: ${day.count} contributions`}
+                        />
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <div className="contribution-loading">Loading contributions...</div>
+                )}
               </div>
 
               {/* Mobile Repositories */}
@@ -413,12 +440,22 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
             {/* 잔디 (Contribution Graph) */}
             <div className="contributions">
               <h2>Contribution Graph</h2>
-              <img
-                src={`https://ghchart.rshah.org/20C997/worhs02?v=${new Date().toISOString().split('T')[0]}`}
-                alt="GitHub Contributions"
-                className="contribution-graph"
-                key={new Date().toISOString().split('T')[0]}
-              />
+              {contributions.length > 0 ? (
+                <div className="contribution-calendar">
+                  {contributions.map((day, index) => {
+                    const level = day.count === 0 ? 0 : day.count < 5 ? 1 : day.count < 10 ? 2 : day.count < 15 ? 3 : 4
+                    return (
+                      <div
+                        key={index}
+                        className={`contribution-day level-${level}`}
+                        title={`${day.date}: ${day.count} contributions`}
+                      />
+                    )
+                  })}
+                </div>
+              ) : (
+                <div className="contribution-loading">Loading contributions...</div>
+              )}
             </div>
 
             {/* 최근 레포지토리 */}

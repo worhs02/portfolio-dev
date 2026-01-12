@@ -1,4 +1,7 @@
 // 기술 스택 데이터
+// level: 숙련도 퍼센트 (0-100)
+// proficiency: 1=Beginner, 2=Intermediate, 3=Advanced
+// proficiencyLevel: 1=공부해본적 있음, 2=사용해본적 있음, 3=프로젝트 1회 경험, 4=프로젝트 2회 경험, 5=프로젝트 3회 이상 경험
 export const techStackData = [
   {
     id: 1,
@@ -6,8 +9,9 @@ export const techStackData = [
     description: 'Object-oriented programming language',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
     color: '#007396',
-    proficiency: 'Advanced',
-    level: 90
+    proficiency: 2,
+    proficiencyLevel: 5,
+    level: 50
   },
   {
     id: 2,
@@ -15,8 +19,9 @@ export const techStackData = [
     description: 'Java-based framework for backend development',
     image: 'https://cdn.simpleicons.org/springboot/6DB33F',
     color: '#6DB33F',
-    proficiency: 'Advanced',
-    level: 85
+    proficiency: 2,
+    proficiencyLevel: 4,
+    level: 60
   },
   {
     id: 3,
@@ -24,8 +29,9 @@ export const techStackData = [
     description: 'Relational database management system',
     image: 'https://cdn.simpleicons.org/mysql/4479A1',
     color: '#4479A1',
-    proficiency: 'Intermediate',
-    level: 75
+    proficiency: 2,
+    proficiencyLevel: 4,
+    level: 45
   },
   {
     id: 4,
@@ -33,8 +39,9 @@ export const techStackData = [
     description: 'Frontend UI framework',
     image: 'https://cdn.simpleicons.org/uikit/2396F3',
     color: '#2396F3',
-    proficiency: 'Intermediate',
-    level: 70
+    proficiency: 2,
+    proficiencyLevel: 4,
+    level: 50
   },
   {
     id: 5,
@@ -42,8 +49,9 @@ export const techStackData = [
     description: 'Mobile app development with Java',
     image: 'https://cdn.simpleicons.org/android/3DDC84',
     color: '#3DDC84',
-    proficiency: 'Intermediate',
-    level: 65
+    proficiency: 2,
+    proficiencyLevel: 3,
+    level: 40
   },
   {
     id: 6,
@@ -51,8 +59,9 @@ export const techStackData = [
     description: 'Amazon Web Services cloud platform',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
     color: '#FF9900',
-    proficiency: 'Beginner',
-    level: 50
+    proficiency: 1,
+    proficiencyLevel: 3,
+    level: 25
   },
   {
     id: 7,
@@ -60,8 +69,9 @@ export const techStackData = [
     description: 'Google Cloud Platform services',
     image: 'https://cdn.simpleicons.org/googlecloud/4285F4',
     color: '#4285F4',
-    proficiency: 'Beginner',
-    level: 45
+    proficiency: 1,
+    proficiencyLevel: 3,
+    level: 35
   },
   {
     id: 8,
@@ -69,8 +79,9 @@ export const techStackData = [
     description: 'Containerization platform',
     image: 'https://cdn.simpleicons.org/docker/2496ED',
     color: '#2496ED',
-    proficiency: 'Intermediate',
-    level: 60
+    proficiency: 1,
+    proficiencyLevel: 2,
+    level: 20
   }
 ]
 
@@ -80,12 +91,11 @@ export const portfolioItems = [
     id: 1,
     color: '#FFF5E6',
     emoji: '✏️📝',
-    title: '포트폴리오 웹사이트',
-    period: '2024.11 - 2024.12',
-    award: '우수상 🏆',
+    title: 'BLISM',
+    period: '2024.12.05 - 2024.12.22',
     overview: 'React와 Vite를 활용한 개인 포트폴리오 웹사이트 제작. 네오브루탈리즘 디자인을 적용하여 독창적이고 인상적인 UI/UX 구현',
     team: '1명 (개인 프로젝트)',
-    skills: ['React', 'Vite', 'CSS3', 'GitHub Pages'],
+    skills: ['Swift', 'UIKIT', 'GitHub'],
     troubleshooting: [
       '반응형 디자인 구현 시 다양한 디바이스에서의 레이아웃 깨짐 현상 → CSS Grid와 Flexbox를 조합하여 해결',
       'GitHub Pages 배포 시 라우팅 문제 → base path 설정 및 HashRouter 적용'
@@ -98,7 +108,11 @@ export const portfolioItems = [
     emoji: '💻🖥️',
     title: '공공데이터 활용 서비스',
     period: '2023.08 - 2023.09',
-    award: '최우수상 🥇',
+    award: {
+      name: '최우수상 🥇',
+      from: '공공데이터 활용 공모전',
+      certificateUrl: '' // 증명서 링크 (선택사항)
+    },
     overview: '공공 API를 활용한 실시간 정보 제공 웹 애플리케이션. Spring Boot 기반 백엔드와 React 프론트엔드로 구성',
     team: '4명 (백엔드 2명, 프론트엔드 2명)',
     skills: ['Spring Boot', 'MySQL', 'React', 'REST API'],

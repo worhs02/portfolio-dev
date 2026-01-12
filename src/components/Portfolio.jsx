@@ -341,13 +341,17 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
         )
 
       case 'award':
+        const awardData = selectedProject.award
+        const awardText = typeof awardData === 'string' ? awardData :
+          `${awardData.name}\n\n수여 기관: ${awardData.from}${awardData.certificateUrl ? `\n\n증명서: ${awardData.certificateUrl}` : ''}`
+
         return (
           <div className="file-content">
             <div className="file-header">
               <span className="file-name">AWARD.txt</span>
             </div>
             <div className="file-body">
-              <pre>{selectedProject.award}</pre>
+              <pre>{awardText}</pre>
             </div>
           </div>
         )
@@ -487,7 +491,7 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
             >
               {item.award && (
                 <div className="award-sticker">
-                  {item.award}
+                  {typeof item.award === 'string' ? item.award : item.award.name}
                 </div>
               )}
               <div className="portfolio-info">
@@ -635,7 +639,9 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
                 <section className="mobile-section">
                   <h3 className="mobile-section-title">🏆 수상</h3>
                   <div className="mobile-section-content">
-                    <pre>{selectedProject.award}</pre>
+                    <pre>{typeof selectedProject.award === 'string' ? selectedProject.award :
+                      `${selectedProject.award.name}\n\n수여 기관: ${selectedProject.award.from}${selectedProject.award.certificateUrl ? `\n\n증명서: ${selectedProject.award.certificateUrl}` : ''}`
+                    }</pre>
                   </div>
                 </section>
               )}

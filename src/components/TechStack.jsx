@@ -10,6 +10,24 @@ function TechStack({ onClose, onClick, zIndex }) {
   const [isDragging, setIsDragging] = useState(false)
   const [showSplash, setShowSplash] = useState(true)
 
+  // proficiency 숫자를 영어로 변환
+  const getProficiencyText = (num) => {
+    const map = { 1: 'Beginner', 2: 'Intermediate', 3: 'Advanced' }
+    return map[num] || 'Unknown'
+  }
+
+  // proficiencyLevel 숫자를 한글로 변환
+  const getProficiencyLevelText = (num) => {
+    const map = {
+      1: '공부해본적 있음',
+      2: '사용해본적 있음',
+      3: '프로젝트 1회 경험',
+      4: '프로젝트 2회 경험',
+      5: '프로젝트 3회 이상 경험'
+    }
+    return map[num] || '알 수 없음'
+  }
+
   const windowRef = useRef(null)
   const dragStartPos = useRef({ x: 0, y: 0 })
 
@@ -151,14 +169,21 @@ function TechStack({ onClose, onClick, zIndex }) {
         <div className="container">
           <div className="skills-showcase">
           <div className="window-header">
-            <div className="window-dots">
-              <span className="dot" onClick={onClose} style={{ cursor: 'pointer', background: '#FF5F57' }}></span>
-              <span className="dot" style={{ background: '#FFBD2E' }}></span>
-              <span className="dot" style={{ background: '#28CA42' }}></span>
+            <div className="header-left">
+              <div className="window-dots">
+                <span className="dot" onClick={onClose} style={{ cursor: 'pointer', background: '#FF5F57' }}></span>
+                <span className="dot" style={{ background: '#FFBD2E' }}></span>
+                <span className="dot" style={{ background: '#28CA42' }}></span>
+              </div>
+              <div className="url-bar">
+                <span className="url-icon">🔒</span>
+                <span className="url-text">Tech Stack & Skills ☺</span>
+              </div>
             </div>
-            <div className="url-bar">
-              <span className="url-icon">🔒</span>
-              <span className="url-text">Tech Stack & Skills ☺</span>
+            <div className="header-right">
+              <span className="skill-name-badge">{selectedSkill.name}</span>
+              <span className="skill-divider">-</span>
+              <span className="skill-proficiency-badge">{getProficiencyLevelText(selectedSkill.proficiencyLevel)}</span>
             </div>
           </div>
           <div className="window-content">
@@ -173,7 +198,7 @@ function TechStack({ onClose, onClick, zIndex }) {
               </div>
               <div className="skill-memo">
                 <div className="memo-header">Proficiency</div>
-                <div className="memo-level">{selectedSkill.proficiency}</div>
+                <div className="memo-level">{getProficiencyText(selectedSkill.proficiency)}</div>
                 <div className="memo-bar">
                   <div className="memo-bar-fill" style={{ width: `${selectedSkill.level}%` }}></div>
                 </div>
