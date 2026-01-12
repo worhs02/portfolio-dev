@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './GitHub.css'
-import { portfolioItems } from '../data/portfolioData'
 
 function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }) {
   const [userData, setUserData] = useState(null)
@@ -34,31 +33,15 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
         console.log('User Data:', userData)
         setUserData(userData)
 
-        // portfolioData에서 GitHub 링크 추출
-        const githubUrls = portfolioItems
-          .filter(item => item.github)
-          .map(item => item.github)
+        // worhs02의 실제 레포지토리 가져오기 (최근 업데이트순)
+        const reposResponse = await fetch('https://api.github.com/users/worhs02/repos?sort=updated&per_page=6')
+        if (!reposResponse.ok) {
+          throw new Error(`GitHub API Error: ${reposResponse.status}`)
+        }
+        const reposData = await reposResponse.json()
 
-        // URL에서 owner와 repository 추출 (예: https://github.com/owner/repo-name -> owner/repo-name)
-        const repoFullNames = githubUrls.map(url => {
-          const parts = url.split('/')
-          // GitHub URL 형식: https://github.com/owner/repo
-          const owner = parts[parts.length - 2]
-          const repo = parts[parts.length - 1]
-          return `${owner}/${repo}`
-        })
-
-        // 각 레포지토리 정보 가져오기 (개인 레포 + 팀 레포 모두 지원)
-        const repoPromises = repoFullNames.map(fullName =>
-          fetch(`https://api.github.com/repos/${fullName}`)
-            .then(res => res.json())
-            .catch(err => ({ error: true, fullName }))
-        )
-
-        const reposData = await Promise.all(repoPromises)
-        // 에러가 없고 실제로 존재하는 레포만 필터링
-        const validRepos = reposData.filter(repo => !repo.message && !repo.error)
-        setRepos(validRepos.slice(0, 6)) // 최대 6개만 표시
+        // 최대 6개만 표시
+        setRepos(reposData.slice(0, 6))
 
         setLoading(false)
       } catch (error) {
@@ -188,31 +171,21 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
     try {
       // GitHub 데이터 다시 가져오기
       const userResponse = await fetch('https://api.github.com/users/worhs02')
+      if (!userResponse.ok) {
+        throw new Error(`GitHub API Error: ${userResponse.status}`)
+      }
       const userData = await userResponse.json()
       setUserData(userData)
 
-      // portfolioData에서 GitHub 링크 추출
-      const githubUrls = portfolioItems
-        .filter(item => item.github)
-        .map(item => item.github)
+      // worhs02의 실제 레포지토리 가져오기 (최근 업데이트순)
+      const reposResponse = await fetch('https://api.github.com/users/worhs02/repos?sort=updated&per_page=6')
+      if (!reposResponse.ok) {
+        throw new Error(`GitHub API Error: ${reposResponse.status}`)
+      }
+      const reposData = await reposResponse.json()
 
-      // URL에서 owner와 repository 추출
-      const repoFullNames = githubUrls.map(url => {
-        const parts = url.split('/')
-        const owner = parts[parts.length - 2]
-        const repo = parts[parts.length - 1]
-        return `${owner}/${repo}`
-      })
-
-      const repoPromises = repoFullNames.map(fullName =>
-        fetch(`https://api.github.com/repos/${fullName}`)
-          .then(res => res.json())
-          .catch(err => ({ error: true, fullName }))
-      )
-
-      const reposData = await Promise.all(repoPromises)
-      const validRepos = reposData.filter(repo => !repo.message && !repo.error)
-      setRepos(validRepos.slice(0, 6))
+      // 최대 6개만 표시
+      setRepos(reposData.slice(0, 6))
 
       setLoading(false)
     } catch (error) {
@@ -329,7 +302,6 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                       <p className="mobile-repo-description">{repo.description || 'No description'}</p>
                       <div className="mobile-repo-stats">
                         {repo.language && <span className="mobile-language">● {repo.language}</span>}
-                        <span className="mobile-commits">💻 {repo.userCommits || 0} commits</span>
                         <span className="mobile-stars">⭐ {repo.stargazers_count}</span>
                         <span className="mobile-forks">🔀 {repo.forks_count}</span>
                       </div>
@@ -463,7 +435,6 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                     <p className="repo-description">{repo.description || 'No description'}</p>
                     <div className="repo-stats">
                       {repo.language && <span className="language">● {repo.language}</span>}
-                      <span className="commits">💻 {repo.userCommits || 0} commits</span>
                       <span className="stars">⭐ {repo.stargazers_count}</span>
                       <span className="forks">🔀 {repo.forks_count}</span>
                     </div>
