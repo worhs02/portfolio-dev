@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { GitHubCalendar } from 'react-github-calendar'
 import './GitHub.css'
 
 function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }) {
@@ -9,12 +10,12 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const isMobile = deviceType === 'mobile'
   const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [size, setSize] = useState({ width: 1000, height: 700 })
+  const [size, setSize] = useState({ width: 1040, height: 700 })
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
   const [resizeDirection, setResizeDirection] = useState(null)
   const [isMaximized, setIsMaximized] = useState(false)
-  const [prevSize, setPrevSize] = useState({ width: 1000, height: 700 })
+  const [prevSize, setPrevSize] = useState({ width: 1040, height: 700 })
   const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 })
   const dragStartPos = useRef({ x: 0, y: 0 })
   const resizeStartPos = useRef({ x: 0, y: 0 })
@@ -253,7 +254,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
             <div className="mobile-github-profile">
               {/* Mobile Profile Header */}
               <div className="mobile-profile-header">
-                <img src={userData.avatar_url} alt={userData.name} className="mobile-avatar" />
+                <img src={userData.avatar_url} alt={userData.name} className="mobile-github-avatar" />
                 <h1>{userData.name || userData.login}</h1>
                 <p className="mobile-username">@{userData.login}</p>
                 {userData.bio && <p className="mobile-bio">{userData.bio}</p>}
@@ -295,77 +296,17 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                     })()}
                   </div>
                 </div>
-                {contributions.length > 0 ? (
-                  <div className="mobile-contribution-graph">
-                    {/* Mobile Month labels */}
-                    <div className="mobile-graph-months">
-                      <div className="mobile-graph-month-spacer"></div>
-                      {(() => {
-                        const months = []
-                        let currentMonth = null
-                        let weekIndex = 0
-
-                        for (let i = 0; i < contributions.length; i += 7) {
-                          const week = contributions.slice(i, i + 7)
-                          if (week.length === 0) continue
-
-                          const date = new Date(week[0].date)
-                          const month = date.getMonth()
-
-                          if (month !== currentMonth) {
-                            months.push(
-                              <div key={`${weekIndex}-${month}`} className="mobile-graph-month" style={{ gridColumn: weekIndex + 2 }}>
-                                {date.toLocaleDateString('en-US', { month: 'short' })}
-                              </div>
-                            )
-                            currentMonth = month
-                          }
-                          weekIndex++
-                        }
-                        return months
-                      })()}
-                    </div>
-
-                    {/* Mobile Weekday labels and contribution grid */}
-                    <div className="mobile-graph-body">
-                      <div className="mobile-graph-weekdays">
-                        <div className="mobile-graph-weekday"></div>
-                        <div className="mobile-graph-weekday">Mon</div>
-                        <div className="mobile-graph-weekday"></div>
-                        <div className="mobile-graph-weekday">Wed</div>
-                        <div className="mobile-graph-weekday"></div>
-                        <div className="mobile-graph-weekday">Fri</div>
-                        <div className="mobile-graph-weekday"></div>
-                      </div>
-
-                      <div className="mobile-graph-grid">
-                        {(() => {
-                          const weeks = []
-                          for (let i = 0; i < contributions.length; i += 7) {
-                            const week = contributions.slice(i, i + 7)
-                            weeks.push(
-                              <div key={i} className="mobile-graph-week">
-                                {week.map((day, dayIndex) => {
-                                  const level = day.count === 0 ? 0 : day.count < 5 ? 1 : day.count < 10 ? 2 : day.count < 15 ? 3 : 4
-                                  return (
-                                    <div
-                                      key={dayIndex}
-                                      className={`mobile-contribution-day level-${level}`}
-                                      title={`${day.date}: ${day.count} contributions`}
-                                    />
-                                  )
-                                })}
-                              </div>
-                            )
-                          }
-                          return weeks
-                        })()}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="contribution-loading">Loading contributions...</div>
-                )}
+                <div className="mobile-github-calendar">
+                  <GitHubCalendar
+                    username="worhs02"
+                    year={selectedYear}
+                    showWeekdayLabels
+                    theme={{
+                      light: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
+                      dark: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
+                    }}
+                  />
+                </div>
               </div>
 
               {/* Mobile Repositories */}
@@ -462,7 +403,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
             <div className="profile-header">
               {/* 프로필 사진 */}
               <div className="avatar-container">
-                <img src={userData.avatar_url} alt={userData.name} className="avatar" />
+                <img src={userData.avatar_url} alt={userData.name} className="github-profile-avatar" />
               </div>
 
               {/* 이름/아이디 */}
@@ -511,77 +452,17 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                   })()}
                 </div>
               </div>
-              {contributions.length > 0 ? (
-                <div className="contribution-graph">
-                  {/* Month labels */}
-                  <div className="graph-months">
-                    <div className="graph-month-spacer"></div>
-                    {(() => {
-                      const months = []
-                      let currentMonth = null
-                      let weekIndex = 0
-
-                      for (let i = 0; i < contributions.length; i += 7) {
-                        const week = contributions.slice(i, i + 7)
-                        if (week.length === 0) continue
-
-                        const date = new Date(week[0].date)
-                        const month = date.getMonth()
-
-                        if (month !== currentMonth) {
-                          months.push(
-                            <div key={`${weekIndex}-${month}`} className="graph-month" style={{ gridColumn: weekIndex + 2 }}>
-                              {date.toLocaleDateString('en-US', { month: 'short' })}
-                            </div>
-                          )
-                          currentMonth = month
-                        }
-                        weekIndex++
-                      }
-                      return months
-                    })()}
-                  </div>
-
-                  {/* Weekday labels and contribution grid */}
-                  <div className="graph-body">
-                    <div className="graph-weekdays">
-                      <div className="graph-weekday"></div>
-                      <div className="graph-weekday">Mon</div>
-                      <div className="graph-weekday"></div>
-                      <div className="graph-weekday">Wed</div>
-                      <div className="graph-weekday"></div>
-                      <div className="graph-weekday">Fri</div>
-                      <div className="graph-weekday"></div>
-                    </div>
-
-                    <div className="graph-grid">
-                      {(() => {
-                        const weeks = []
-                        for (let i = 0; i < contributions.length; i += 7) {
-                          const week = contributions.slice(i, i + 7)
-                          weeks.push(
-                            <div key={i} className="graph-week">
-                              {week.map((day, dayIndex) => {
-                                const level = day.count === 0 ? 0 : day.count < 5 ? 1 : day.count < 10 ? 2 : day.count < 15 ? 3 : 4
-                                return (
-                                  <div
-                                    key={dayIndex}
-                                    className={`contribution-day level-${level}`}
-                                    title={`${day.date}: ${day.count} contributions`}
-                                  />
-                                )
-                              })}
-                            </div>
-                          )
-                        }
-                        return weeks
-                      })()}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="contribution-loading">Loading contributions...</div>
-              )}
+              <div className="github-calendar-wrapper">
+                <GitHubCalendar
+                  username="worhs02"
+                  year={selectedYear}
+                  showWeekdayLabels
+                  theme={{
+                    light: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
+                    dark: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
+                  }}
+                />
+              </div>
             </div>
 
             {/* 최근 레포지토리 */}
