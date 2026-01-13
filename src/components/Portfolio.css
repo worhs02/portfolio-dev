@@ -1115,3 +1115,12 @@
 .markdown-content table tr:nth-child(even) {
   background-color: #fafafa;
 }
+
+.markdown-content img {
+  max-width: 100%; /* 부모 너비를 넘지 않음 */
+  height: auto;    /* 비율 유지 */
+  display: block;  /* 블록 요소로 변경하여 마진 적용 가능하게 함 */
+  margin: 20px auto; /* 상하 20px 여백, 좌우 중앙 정렬 */
+  border-radius: 8px; /* 이미지 모서리 둥글게 (선택사항) */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 (선택사항) */
+}
