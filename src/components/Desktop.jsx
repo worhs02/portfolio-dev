@@ -102,71 +102,57 @@ function Desktop({ onLogout }) {
     return () => clearInterval(interval)
   }, [])
 
-  // GitHub 오늘의 커밋 수 가져오기
+  // GitHub 오늘의 기여도 가져오기 (Static JSON에서)
   useEffect(() => {
-    const fetchTodayCommits = async () => {
+    const fetchTodayContributions = async () => {
       try {
         const today = new Date().toISOString().split('T')[0]
-        const username = 'worhs02'
-
         console.log('오늘 날짜:', today)
 
-        // GitHub Events API로 오늘의 이벤트 가져오기
-        const response = await fetch(`https://api.github.com/users/${username}/events`)
-        const events = await response.json()
+        // github-data.json에서 데이터 가져오기
+        const response = await fetch(`${import.meta.env.BASE_URL}github-data.json?t=${Date.now()}`)
+        if (!response.ok) {
+          throw new Error('Failed to fetch github-data.json')
+        }
 
-        console.log('전체 이벤트 수:', events.length)
+        const data = await response.json()
+        const currentYear = new Date().getFullYear()
+        const contributions = data.contributions[currentYear] || []
 
-        // 오늘 날짜의 PushEvent만 필터링
-        const todayPushEvents = events.filter(event => {
-          if (event.type !== 'PushEvent') return false
-          const eventDate = new Date(event.created_at).toISOString().split('T')[0]
-          console.log('이벤트 날짜:', eventDate, '타입:', event.type)
-          return eventDate === today
-        })
+        // 오늘 날짜의 기여도 찾기
+        const todayContribution = contributions.find(day => day.date === today)
+        const todayCount = todayContribution?.count || 0
 
-        console.log('오늘의 PushEvent:', todayPushEvents.length)
+        console.log('오늘의 기여도:', todayCount)
+        setTodayCommits(todayCount)
 
-        // 총 커밋 수 계산
-        const totalCommits = todayPushEvents.reduce((sum, event) => {
-          console.log('이벤트 페이로드:', event.payload)
-          const commits = event.payload.size || event.payload.commits?.length || 0
-          console.log('이벤트 커밋 수:', commits)
-          return sum + commits
-        }, 0)
-
-        console.log('총 커밋 수:', totalCommits)
-
-        setTodayCommits(totalCommits)
-
-        // 커밋 수에 따라 배터리 퍼센트 설정
+        // 기여도에 따라 배터리 퍼센트 설정
         let percent = 100
-        if (totalCommits === 0) {
-          percent = 100 // 커밋이 없으면 100%
-        } else if (totalCommits <= 5) {
+        if (todayCount === 0) {
+          percent = 100 // 기여가 없으면 100%
+        } else if (todayCount <= 5) {
           percent = 70 // 5개 이하면 70%
-        } else if (totalCommits <= 10) {
+        } else if (todayCount <= 10) {
           percent = 50 // 10개 이하면 50%
-        } else if (totalCommits <= 15) {
+        } else if (todayCount <= 15) {
           percent = 30 // 15개 이하면 30%
         } else {
           percent = 10 // 그 이상이면 10%
         }
 
         console.log('배터리 퍼센트:', percent)
-
         setBatteryPercent(percent)
       } catch (error) {
-        console.error('GitHub 커밋 가져오기 실패:', error)
+        console.error('GitHub 기여도 가져오기 실패:', error)
         setTodayCommits(0)
         setBatteryPercent(100)
       }
     }
 
-    fetchTodayCommits()
+    fetchTodayContributions()
 
     // 10분마다 업데이트
-    const interval = setInterval(fetchTodayCommits, 10 * 60 * 1000)
+    const interval = setInterval(fetchTodayContributions, 10 * 60 * 1000)
     return () => clearInterval(interval)
   }, [])
 
@@ -977,7 +963,7 @@ function Desktop({ onLogout }) {
                 </svg>
               </span>
             </div>
-            <span className="menu-icon" onClick={handleBatteryClick} title={`배터리: ${batteryPercent}% (오늘 ${todayCommits}개 커밋)`}>
+            <span className="menu-icon" onClick={handleBatteryClick} title={`배터리: ${batteryPercent}% (오늘 ${todayCommits}개 기여)`}>
               <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
                 <rect x="1" y="2" width="16" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
                 <rect x="17.5" y="4.5" width="1.5" height="3" rx="0.5" fill="currentColor"/>

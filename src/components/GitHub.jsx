@@ -29,7 +29,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
         console.log('Fetching GitHub data from static JSON...')
 
         // public/github-data.json에서 데이터 가져오기
-        const response = await fetch('/github-data.json')
+        const response = await fetch(`${import.meta.env.BASE_URL}github-data.json`)
         if (!response.ok) {
           throw new Error(`Failed to fetch github-data.json: ${response.status}`)
         }
@@ -173,7 +173,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
       console.log('Refreshing GitHub data...')
 
       // cache를 무시하고 다시 가져오기 (timestamp 추가)
-      const response = await fetch(`/github-data.json?t=${Date.now()}`)
+      const response = await fetch(`${import.meta.env.BASE_URL}github-data.json?t=${Date.now()}`)
       if (!response.ok) {
         throw new Error(`Failed to fetch github-data.json: ${response.status}`)
       }
@@ -303,11 +303,14 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                       {(() => {
                         const months = []
                         let currentMonth = null
+                        let weekIndex = 0
 
-                        for (let i = 0; i < contributions.length; i++) {
-                          const date = new Date(contributions[i].date)
+                        for (let i = 0; i < contributions.length; i += 7) {
+                          const week = contributions.slice(i, i + 7)
+                          if (week.length === 0) continue
+
+                          const date = new Date(week[0].date)
                           const month = date.getMonth()
-                          const weekIndex = Math.floor(i / 7)
 
                           if (month !== currentMonth) {
                             months.push(
@@ -317,6 +320,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                             )
                             currentMonth = month
                           }
+                          weekIndex++
                         }
                         return months
                       })()}
@@ -515,11 +519,14 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                     {(() => {
                       const months = []
                       let currentMonth = null
+                      let weekIndex = 0
 
-                      for (let i = 0; i < contributions.length; i++) {
-                        const date = new Date(contributions[i].date)
+                      for (let i = 0; i < contributions.length; i += 7) {
+                        const week = contributions.slice(i, i + 7)
+                        if (week.length === 0) continue
+
+                        const date = new Date(week[0].date)
                         const month = date.getMonth()
-                        const weekIndex = Math.floor(i / 7)
 
                         if (month !== currentMonth) {
                           months.push(
@@ -529,6 +536,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                           )
                           currentMonth = month
                         }
+                        weekIndex++
                       }
                       return months
                     })()}
