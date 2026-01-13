@@ -1,0 +1,32 @@
+name: Update Repositories Data
+
+on:
+  schedule:
+    # 10분마다 실행
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Fetch repositories data
+        run: node scripts/fetch-repos.cjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add public/github-data.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update repositories data" && git push)

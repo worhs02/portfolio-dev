@@ -1,0 +1,32 @@
+name: Update Past Years Contributions
+
+on:
+  schedule:
+    # 매일 자정(UTC) 실행
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Fetch past years data
+        run: node scripts/fetch-past-years.cjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add public/github-data.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update past years contributions data" && git push)

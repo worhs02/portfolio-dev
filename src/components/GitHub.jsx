@@ -6,6 +6,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
   const [repos, setRepos] = useState([])
   const [contributions, setContributions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const isMobile = deviceType === 'mobile'
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [size, setSize] = useState({ width: 1000, height: 700 })
@@ -21,41 +22,31 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
   const resizeStartWindowPos = useRef({ x: 0, y: 0 })
   const windowRef = useRef(null)
 
-  // GitHub 데이터 가져오기
+  // GitHub 데이터 가져오기 (static JSON에서)
   useEffect(() => {
     const fetchGitHubData = async () => {
       try {
-        const username = 'worhs02'
+        console.log('Fetching GitHub data from static JSON...')
 
-        // 사용자 정보 가져오기
-        const userResponse = await fetch(`https://api.github.com/users/${username}`)
-        if (!userResponse.ok) {
-          throw new Error(`GitHub API Error: ${userResponse.status}`)
-        }
-        const userData = await userResponse.json()
-        console.log('User Data:', userData)
-        setUserData(userData)
-
-        // 레포지토리 가져오기
-        const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
-        if (!reposResponse.ok) {
-          throw new Error(`GitHub API Error: ${reposResponse.status}`)
-        }
-        const reposData = await reposResponse.json()
-        setRepos(reposData.slice(0, 6))
-
-        // GitHub Contributions API로 기여도 데이터 가져오기
-        // 파라미터 없음 = 현재 연도의 모든 기여도
-        const contributionsResponse = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}`)
-        if (contributionsResponse.ok) {
-          const contributionsData = await contributionsResponse.json()
-          console.log('Contributions Data:', contributionsData)
-          setContributions(contributionsData.contributions || [])
+        // public/github-data.json에서 데이터 가져오기
+        const response = await fetch('/github-data.json')
+        if (!response.ok) {
+          throw new Error(`Failed to fetch github-data.json: ${response.status}`)
         }
 
+        const data = await response.json()
+
+        // 데이터 설정
+        setUserData(data.user)
+        setRepos(data.repos || [])
+
+        // 선택된 연도의 contributions 설정
+        setContributions(data.contributions[selectedYear] || [])
+
+        console.log('✅ GitHub data loaded from static JSON')
         setLoading(false)
       } catch (error) {
-        console.error('GitHub 데이터 가져오기 실패:', error)
+        console.error('❌ GitHub 데이터 가져오기 실패:', error)
         setUserData(null)
         setRepos([])
         setContributions([])
@@ -64,7 +55,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
     }
 
     fetchGitHubData()
-  }, [])
+  }, [selectedYear])
 
   // 초기 중앙 배치
   useEffect(() => {
@@ -179,34 +170,24 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
   const handleRefresh = async () => {
     setLoading(true)
     try {
-      const username = 'worhs02'
+      console.log('Refreshing GitHub data...')
 
-      // 사용자 정보 가져오기
-      const userResponse = await fetch(`https://api.github.com/users/${username}`)
-      if (!userResponse.ok) {
-        throw new Error(`GitHub API Error: ${userResponse.status}`)
-      }
-      const userData = await userResponse.json()
-      setUserData(userData)
-
-      // 레포지토리 가져오기
-      const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`)
-      if (!reposResponse.ok) {
-        throw new Error(`GitHub API Error: ${reposResponse.status}`)
-      }
-      const reposData = await reposResponse.json()
-      setRepos(reposData.slice(0, 6))
-
-      // 기여도 데이터 가져오기
-      const contributionsResponse = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}`)
-      if (contributionsResponse.ok) {
-        const contributionsData = await contributionsResponse.json()
-        setContributions(contributionsData.contributions || [])
+      // cache를 무시하고 다시 가져오기 (timestamp 추가)
+      const response = await fetch(`/github-data.json?t=${Date.now()}`)
+      if (!response.ok) {
+        throw new Error(`Failed to fetch github-data.json: ${response.status}`)
       }
 
+      const data = await response.json()
+
+      setUserData(data.user)
+      setRepos(data.repos || [])
+      setContributions(data.contributions[selectedYear] || [])
+
+      console.log('✅ GitHub data refreshed')
       setLoading(false)
     } catch (error) {
-      console.error('새로고침 실패:', error)
+      console.error('❌ 새로고침 실패:', error)
       setLoading(false)
     }
   }
@@ -296,19 +277,87 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
 
               {/* Mobile Contributions */}
               <div className="mobile-contributions">
-                <h2>Contribution Graph</h2>
+                <div className="mobile-contributions-header">
+                  <h2>Contribution Graph</h2>
+                  <div className="mobile-year-selector">
+                    {(() => {
+                      const currentYear = new Date().getFullYear()
+                      const years = Array.from({ length: 5 }, (_, i) => currentYear - i)
+                      return years.map(year => (
+                        <button
+                          key={year}
+                          className={`mobile-year-btn ${selectedYear === year ? 'active' : ''}`}
+                          onClick={() => setSelectedYear(year)}
+                        >
+                          {year}
+                        </button>
+                      ))
+                    })()}
+                  </div>
+                </div>
                 {contributions.length > 0 ? (
-                  <div className="mobile-contribution-calendar">
-                    {contributions.map((day, index) => {
-                      const level = day.count === 0 ? 0 : day.count < 5 ? 1 : day.count < 10 ? 2 : day.count < 15 ? 3 : 4
-                      return (
-                        <div
-                          key={index}
-                          className={`mobile-contribution-day level-${level}`}
-                          title={`${day.date}: ${day.count} contributions`}
-                        />
-                      )
-                    })}
+                  <div className="mobile-contribution-graph">
+                    {/* Mobile Month labels */}
+                    <div className="mobile-graph-months">
+                      <div className="mobile-graph-month-spacer"></div>
+                      {(() => {
+                        const months = []
+                        let currentMonth = null
+
+                        for (let i = 0; i < contributions.length; i++) {
+                          const date = new Date(contributions[i].date)
+                          const month = date.getMonth()
+                          const weekIndex = Math.floor(i / 7)
+
+                          if (month !== currentMonth) {
+                            months.push(
+                              <div key={`${weekIndex}-${month}`} className="mobile-graph-month" style={{ gridColumn: weekIndex + 2 }}>
+                                {date.toLocaleDateString('en-US', { month: 'short' })}
+                              </div>
+                            )
+                            currentMonth = month
+                          }
+                        }
+                        return months
+                      })()}
+                    </div>
+
+                    {/* Mobile Weekday labels and contribution grid */}
+                    <div className="mobile-graph-body">
+                      <div className="mobile-graph-weekdays">
+                        <div className="mobile-graph-weekday"></div>
+                        <div className="mobile-graph-weekday">Mon</div>
+                        <div className="mobile-graph-weekday"></div>
+                        <div className="mobile-graph-weekday">Wed</div>
+                        <div className="mobile-graph-weekday"></div>
+                        <div className="mobile-graph-weekday">Fri</div>
+                        <div className="mobile-graph-weekday"></div>
+                      </div>
+
+                      <div className="mobile-graph-grid">
+                        {(() => {
+                          const weeks = []
+                          for (let i = 0; i < contributions.length; i += 7) {
+                            const week = contributions.slice(i, i + 7)
+                            weeks.push(
+                              <div key={i} className="mobile-graph-week">
+                                {week.map((day, dayIndex) => {
+                                  const level = day.count === 0 ? 0 : day.count < 5 ? 1 : day.count < 10 ? 2 : day.count < 15 ? 3 : 4
+                                  return (
+                                    <div
+                                      key={dayIndex}
+                                      className={`mobile-contribution-day level-${level}`}
+                                      title={`${day.date}: ${day.count} contributions`}
+                                    />
+                                  )
+                                })}
+                              </div>
+                            )
+                          }
+                          return weeks
+                        })()}
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   <div className="contribution-loading">Loading contributions...</div>
@@ -329,8 +378,8 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                       <p className="mobile-repo-description">{repo.description || 'No description'}</p>
                       <div className="mobile-repo-stats">
                         {repo.language && <span className="mobile-language">● {repo.language}</span>}
+                        <span className="mobile-pushes">📤 {repo.push_count || 0} pushes</span>
                         <span className="mobile-stars">⭐ {repo.stargazers_count}</span>
-                        <span className="mobile-forks">🔀 {repo.forks_count}</span>
                       </div>
                     </div>
                   ))}
@@ -339,6 +388,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
             </div>
           )}
         </div>
+
       </div>
     )
   }
@@ -439,19 +489,87 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
 
             {/* 잔디 (Contribution Graph) */}
             <div className="contributions">
-              <h2>Contribution Graph</h2>
+              <div className="contributions-header">
+                <h2>Contribution Graph</h2>
+                <div className="year-selector">
+                  {(() => {
+                    const currentYear = new Date().getFullYear()
+                    const years = Array.from({ length: 5 }, (_, i) => currentYear - i)
+                    return years.map(year => (
+                      <button
+                        key={year}
+                        className={`year-btn ${selectedYear === year ? 'active' : ''}`}
+                        onClick={() => setSelectedYear(year)}
+                      >
+                        {year}
+                      </button>
+                    ))
+                  })()}
+                </div>
+              </div>
               {contributions.length > 0 ? (
-                <div className="contribution-calendar">
-                  {contributions.map((day, index) => {
-                    const level = day.count === 0 ? 0 : day.count < 5 ? 1 : day.count < 10 ? 2 : day.count < 15 ? 3 : 4
-                    return (
-                      <div
-                        key={index}
-                        className={`contribution-day level-${level}`}
-                        title={`${day.date}: ${day.count} contributions`}
-                      />
-                    )
-                  })}
+                <div className="contribution-graph">
+                  {/* Month labels */}
+                  <div className="graph-months">
+                    <div className="graph-month-spacer"></div>
+                    {(() => {
+                      const months = []
+                      let currentMonth = null
+
+                      for (let i = 0; i < contributions.length; i++) {
+                        const date = new Date(contributions[i].date)
+                        const month = date.getMonth()
+                        const weekIndex = Math.floor(i / 7)
+
+                        if (month !== currentMonth) {
+                          months.push(
+                            <div key={`${weekIndex}-${month}`} className="graph-month" style={{ gridColumn: weekIndex + 2 }}>
+                              {date.toLocaleDateString('en-US', { month: 'short' })}
+                            </div>
+                          )
+                          currentMonth = month
+                        }
+                      }
+                      return months
+                    })()}
+                  </div>
+
+                  {/* Weekday labels and contribution grid */}
+                  <div className="graph-body">
+                    <div className="graph-weekdays">
+                      <div className="graph-weekday"></div>
+                      <div className="graph-weekday">Mon</div>
+                      <div className="graph-weekday"></div>
+                      <div className="graph-weekday">Wed</div>
+                      <div className="graph-weekday"></div>
+                      <div className="graph-weekday">Fri</div>
+                      <div className="graph-weekday"></div>
+                    </div>
+
+                    <div className="graph-grid">
+                      {(() => {
+                        const weeks = []
+                        for (let i = 0; i < contributions.length; i += 7) {
+                          const week = contributions.slice(i, i + 7)
+                          weeks.push(
+                            <div key={i} className="graph-week">
+                              {week.map((day, dayIndex) => {
+                                const level = day.count === 0 ? 0 : day.count < 5 ? 1 : day.count < 10 ? 2 : day.count < 15 ? 3 : 4
+                                return (
+                                  <div
+                                    key={dayIndex}
+                                    className={`contribution-day level-${level}`}
+                                    title={`${day.date}: ${day.count} contributions`}
+                                  />
+                                )
+                              })}
+                            </div>
+                          )
+                        }
+                        return weeks
+                      })()}
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="contribution-loading">Loading contributions...</div>
@@ -472,8 +590,8 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
                     <p className="repo-description">{repo.description || 'No description'}</p>
                     <div className="repo-stats">
                       {repo.language && <span className="language">● {repo.language}</span>}
+                      <span className="pushes">📤 {repo.push_count || 0} pushes</span>
                       <span className="stars">⭐ {repo.stargazers_count}</span>
-                      <span className="forks">🔀 {repo.forks_count}</span>
                     </div>
                   </div>
                 ))}
@@ -482,6 +600,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
           </div>
         )}
       </div>
+
     </div>
   )
 }

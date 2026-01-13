@@ -111,16 +111,76 @@ export const portfolioItems = [
     award: {
       name: '최우수상 🥇',
       from: '공공데이터 활용 공모전',
-      certificateUrl: '' // 증명서 링크 (선택사항)
+      certificateUrl: ''
     },
-    overview: '공공 API를 활용한 실시간 정보 제공 웹 애플리케이션. Spring Boot 기반 백엔드와 React 프론트엔드로 구성',
+    overview: `공공 API를 활용한 실시간 정보 제공 웹 애플리케이션.
+
+## 기술 스택
+- **Backend**: Spring Boot, MySQL
+- **Frontend**: React
+- **API**: REST API
+
+## 주요 기능
+- 공공 데이터 실시간 조회
+- 데이터 시각화 및 분석
+- 사용자 맞춤형 알림`,
     team: '4명 (백엔드 2명, 프론트엔드 2명)',
     skills: ['Spring Boot', 'MySQL', 'React', 'REST API'],
-    troubleshooting: [
-      'API 호출 제한으로 인한 서비스 중단 → Redis 캐싱 적용으로 API 호출 횟수 80% 감소',
-      '대용량 데이터 처리 시 성능 저하 → 페이징 처리 및 인덱스 최적화로 쿼리 속도 5배 향상'
-    ],
-    contribution: '• 백엔드 API 설계 및 개발 (50%)\n• Redis 캐싱 시스템 구축\n• MySQL 데이터베이스 설계 및 최적화\n• REST API 문서화 (Swagger)\n• 성능 테스트 및 튜닝'
+    troubleshooting: `### 문제 1: API 호출 제한으로 인한 서비스 중단
+**문제점**: 공공 API의 호출 제한으로 인해 서비스가 자주 중단됨
+
+**해결방법**: Redis 캐싱 시스템 도입
+- API 응답 데이터를 Redis에 캐싱
+- 캐시 만료 시간 설정 (5분)
+- API 호출 횟수 **80% 감소**
+
+### 문제 2: 대용량 데이터 처리 시 성능 저하
+**문제점**: 수천 건의 데이터 조회 시 응답 시간 지연
+
+**해결방법**: 페이징 및 인덱스 최적화
+- 페이지네이션 구현 (한 페이지당 20건)
+- MySQL 인덱스 최적화
+- 쿼리 속도 **5배 향상**`,
+    contribution: `## 담당 역할 및 기여도
+
+### 백엔드 API 설계 및 개발 (50%)
+- RESTful API 설계 및 구현
+- Controller, Service, Repository 계층 구조 설계
+- 공공 API 연동 모듈 개발
+
+### Redis 캐싱 시스템 구축
+- Redis 서버 구축 및 설정
+- Spring Data Redis 연동
+- 캐시 전략 수립 및 구현
+
+### 데이터베이스 설계 및 최적화
+- MySQL 데이터베이스 스키마 설계
+- 인덱스 최적화 및 쿼리 튜닝
+- 성능 테스트 및 모니터링
+
+### REST API 문서화
+- Swagger를 이용한 API 문서 자동화
+- API 사용 가이드 작성`,
+    retrospective: `## 프로젝트 회고
+
+### 잘한 점 ✅
+- Redis 캐싱을 통해 API 호출 비용을 크게 절감할 수 있었습니다
+- 체계적인 API 문서화로 팀원들과의 협업이 원활했습니다
+- 성능 최적화를 통해 사용자 경험을 크게 개선했습니다
+
+### 아쉬운 점 📝
+- 초기 설계 단계에서 성능 테스트를 진행하지 않아 후반부에 많은 시간을 할애했습니다
+- 캐시 무효화 전략을 더 정교하게 설계했다면 좋았을 것 같습니다
+
+### 배운 점 💡
+- 대용량 트래픽 처리를 위한 캐싱 전략의 중요성을 깨달았습니다
+- 데이터베이스 인덱스 설계의 중요성을 체감했습니다
+- API 문서화가 협업 효율성에 미치는 영향이 크다는 것을 배웠습니다
+
+### 다음에 시도해볼 것 🚀
+- Redis Cluster를 활용한 분산 캐싱 시스템 구축
+- Spring Boot Actuator를 이용한 실시간 모니터링
+- GraphQL 도입을 통한 API 효율성 개선`
   },
   {
     id: 3,
@@ -128,209 +188,69 @@ export const portfolioItems = [
     emoji: '🎨🖌️',
     title: '커뮤니티 플랫폼',
     period: '2023.03 - 2023.06',
-    overview: 'Spring Boot와 JPA를 활용한 게시판 및 댓글 기능이 포함된 커뮤니티 웹사이트',
+    overview: `Spring Boot와 JPA를 활용한 게시판 및 댓글 기능이 포함된 커뮤니티 웹사이트.
+
+## 기술 스택
+- **Backend**: Spring Boot, JPA, MySQL
+- **Frontend**: UIkit
+
+## 주요 기능
+- 게시판 CRUD 기능
+- 댓글 및 대댓글 시스템
+- 사용자 인증 및 권한 관리`,
     team: '3명 (백엔드 2명, 프론트엔드 1명)',
     skills: ['Spring Boot', 'JPA', 'MySQL', 'UIkit'],
-    troubleshooting: [
-      'N+1 쿼리 문제로 인한 성능 저하 → Fetch Join 및 @EntityGraph 적용',
-      '동시성 이슈로 인한 댓글 중복 저장 → 낙관적 락(Optimistic Lock) 적용'
-    ],
-    github: 'https://github.com/username/community-platform',
-    contribution: '• JPA 엔티티 설계 및 연관관계 매핑 (70%)\n• 게시판 CRUD API 개발\n• 댓글 시스템 구현\n• N+1 쿼리 최적화\n• 동시성 제어 구현'
-  },
-  {
-    id: 4,
-    color: '#FFF8DC',
-    emoji: '🔍✨',
-    title: '맛집 추천 앱',
-    period: '2022.11 - 2023.02',
-    overview: 'Android 네이티브로 개발한 위치 기반 맛집 추천 모바일 애플리케이션',
-    team: '2명 (Android 개발)',
-    skills: ['Java', 'Android', 'Google Maps API', 'Firebase'],
-    troubleshooting: [
-      '위치 권한 거부 시 앱 크래시 → 권한 체크 로직 개선 및 fallback UI 구현',
-      'Firebase 실시간 데이터 동기화 지연 → 로컬 캐싱 및 optimistic update 적용'
-    ],
-    github: 'https://github.com/username/restaurant-app'
-  },
-  {
-    id: 5,
-    color: '#E8F5E9',
-    emoji: '🛒💳',
-    title: '이커머스 플랫폼',
-    period: '2022.06 - 2022.10',
-    overview: 'Spring Boot 기반 쇼핑몰 웹사이트. 결제 모듈 연동 및 관리자 페이지 구현',
-    team: '5명 (풀스택 개발)',
-    skills: ['Spring Boot', 'MySQL', 'Thymeleaf', 'BootPay API'],
-    troubleshooting: [
-      '결제 취소 시 재고 복구 트랜잭션 문제 → @Transactional 격리 수준 조정',
-      '주문 폭주 시 DB 커넥션 부족 → HikariCP 설정 최적화'
-    ],
-    github: 'https://github.com/username/ecommerce'
-  },
-  {
-    id: 6,
-    color: '#F3E5F5',
-    emoji: '📱🔥',
-    title: '실시간 채팅 앱',
-    period: '2022.03 - 2022.05',
-    overview: 'Firebase를 활용한 실시간 채팅 Android 애플리케이션',
-    team: '2명 (Android 개발)',
-    skills: ['Java', 'Android', 'Firebase Realtime Database', 'FCM'],
-    troubleshooting: [
-      '메시지 순서 보장 문제 → Firebase Transaction 활용',
-      '푸시 알림 미수신 이슈 → FCM 토큰 갱신 로직 구현'
-    ],
-    github: 'https://github.com/username/chat-app'
-  },
-  {
-    id: 7,
-    color: '#FFE4E1',
-    emoji: '🎮🕹️',
-    title: '게임 커뮤니티',
-    period: '2021.09 - 2021.12',
-    overview: 'Node.js와 MongoDB를 활용한 게임 정보 공유 커뮤니티 플랫폼',
-    team: '3명 (풀스택 개발)',
-    skills: ['Node.js', 'Express', 'MongoDB', 'React'],
-    troubleshooting: [
-      'MongoDB 쿼리 최적화 → 인덱스 생성 및 aggregation pipeline 활용',
-      '이미지 업로드 속도 개선 → AWS S3 연동 및 CDN 적용'
-    ],
-    github: 'https://github.com/username/game-community'
-  },
-  {
-    id: 8,
-    color: '#E0F7FA',
-    emoji: '📊📈',
-    title: '데이터 시각화 대시보드',
-    period: '2021.06 - 2021.08',
-    overview: 'Python과 React를 활용한 데이터 분석 및 시각화 웹 애플리케이션',
-    team: '2명 (백엔드 1명, 프론트엔드 1명)',
-    skills: ['Python', 'Flask', 'Pandas', 'Chart.js', 'React'],
-    troubleshooting: [
-      '대용량 CSV 파일 처리 시간 단축 → Pandas 청크 처리 적용',
-      '실시간 차트 업데이트 성능 → WebSocket 적용'
-    ],
-    github: 'https://github.com/username/data-dashboard'
-  },
-  {
-    id: 9,
-    color: '#FFF9C4',
-    emoji: '🎓📚',
-    title: '온라인 강의 플랫폼',
-    period: '2021.03 - 2021.05',
-    overview: 'Spring Boot 기반 동영상 강의 플랫폼. 비디오 스트리밍 및 진도율 관리 기능',
-    team: '4명 (백엔드 2명, 프론트엔드 2명)',
-    skills: ['Spring Boot', 'MySQL', 'AWS S3', 'HLS'],
-    troubleshooting: [
-      '동영상 재생 끊김 현상 → HLS 프로토콜 적용 및 adaptive bitrate streaming',
-      '진도율 저장 동시성 문제 → Redis를 이용한 분산 락 구현'
-    ],
-    github: 'https://github.com/username/online-lecture'
-  },
-  {
-    id: 10,
-    color: '#F0F4C3',
-    emoji: '🏋️💪',
-    title: '운동 기록 앱',
-    period: '2020.11 - 2021.02',
-    overview: 'React Native로 개발한 크로스 플랫폼 운동 기록 및 분석 모바일 앱',
-    team: '2명 (앱 개발)',
-    skills: ['React Native', 'SQLite', 'Redux', 'Victory Charts'],
-    troubleshooting: [
-      'iOS/Android 플랫폼별 UI 차이 → Platform API 활용',
-      '로컬 데이터 동기화 → AsyncStorage와 SQLite 조합'
-    ],
-    github: 'https://github.com/username/workout-tracker'
-  },
-  {
-    id: 11,
-    color: '#E1F5FE',
-    emoji: '🌤️🌧️',
-    title: '날씨 정보 앱',
-    period: '2020.08 - 2020.10',
-    overview: 'OpenWeather API를 활용한 날씨 정보 제공 웹 애플리케이션',
-    team: '1명 (개인 프로젝트)',
-    skills: ['Vue.js', 'Vuex', 'OpenWeather API', 'Chart.js'],
-    troubleshooting: [
-      'API 호출 횟수 제한 → LocalStorage 캐싱 적용',
-      '위치 정보 정확도 개선 → Geolocation API 정밀도 설정'
-    ],
-    github: 'https://github.com/username/weather-app'
-  },
-  {
-    id: 12,
-    color: '#FCE4EC',
-    emoji: '📝✅',
-    title: 'Todo 관리 앱',
-    period: '2020.06 - 2020.07',
-    overview: 'TypeScript와 React를 활용한 할 일 관리 웹 애플리케이션',
-    team: '1명 (개인 프로젝트)',
-    skills: ['TypeScript', 'React', 'Context API', 'LocalStorage'],
-    troubleshooting: [
-      '타입 안정성 확보 → TypeScript strict mode 적용',
-      '상태 관리 복잡도 → Context API와 useReducer 조합'
-    ],
-    github: 'https://github.com/username/todo-app'
-  },
-  {
-    id: 13,
-    color: '#E8EAF6',
-    emoji: '🎵🎶',
-    title: '음악 스트리밍 앱',
-    period: '2020.03 - 2020.05',
-    overview: 'Android 기반 음악 재생 및 플레이리스트 관리 애플리케이션',
-    team: '2명 (Android 개발)',
-    skills: ['Kotlin', 'Android', 'MediaPlayer', 'Room DB'],
-    troubleshooting: [
-      '백그라운드 재생 중단 문제 → Foreground Service 적용',
-      '메모리 누수 이슈 → ViewModel과 LiveData 활용'
-    ],
-    github: 'https://github.com/username/music-player'
-  },
-  {
-    id: 14,
-    color: '#F1F8E9',
-    emoji: '🍕🍔',
-    title: '음식 배달 플랫폼',
-    period: '2019.11 - 2020.02',
-    overview: 'Spring Boot와 React Native를 활용한 음식 주문 배달 서비스',
-    team: '6명 (백엔드 3명, 앱 3명)',
-    skills: ['Spring Boot', 'MySQL', 'React Native', 'Kakao Map API'],
-    troubleshooting: [
-      '주문 처리 동시성 문제 → 비관적 락(Pessimistic Lock) 적용',
-      '실시간 배달 상태 추적 → Server-Sent Events 활용'
-    ],
-    github: 'https://github.com/username/food-delivery'
-  },
-  {
-    id: 15,
-    color: '#FBE9E7',
-    emoji: '📖📚',
-    title: '도서 관리 시스템',
-    period: '2019.08 - 2019.10',
-    overview: 'Java Swing을 활용한 도서관 대출/반납 관리 데스크톱 애플리케이션',
-    team: '3명 (데스크톱 개발)',
-    skills: ['Java', 'Swing', 'MySQL', 'JDBC'],
-    troubleshooting: [
-      'UI 응답 지연 → SwingWorker를 이용한 비동기 처리',
-      'DB 연결 풀 부족 → HikariCP 도입'
-    ],
-    github: 'https://github.com/username/library-system'
-  },
-  {
-    id: 16,
-    color: '#E3F2FD',
-    emoji: '🚗🅿️',
-    title: '주차장 관리 시스템',
-    period: '2019.05 - 2019.07',
-    overview: 'IoT 센서와 연동된 스마트 주차장 관리 웹 애플리케이션',
-    team: '4명 (IoT 2명, 웹 2명)',
-    skills: ['Node.js', 'Express', 'MQTT', 'React', 'Raspberry Pi'],
-    troubleshooting: [
-      'IoT 센서 데이터 손실 → MQTT QoS 레벨 조정',
-      '실시간 주차 현황 업데이트 → Socket.io 적용'
-    ],
-    github: 'https://github.com/username/parking-system'
+    troubleshooting: `### 문제 1: N+1 쿼리 문제로 인한 성능 저하
+**문제점**: 게시글 목록 조회 시 각 게시글마다 추가 쿼리가 발생하여 성능 저하
+
+**해결방법**: Fetch Join 및 @EntityGraph 적용
+- Fetch Join을 통한 연관 엔티티 한 번에 조회
+- @EntityGraph로 필요한 연관관계만 선택적 로딩
+- 쿼리 수 **95% 감소**
+
+### 문제 2: 동시성 이슈로 인한 댓글 중복 저장
+**문제점**: 동시에 댓글 작성 시 중복 저장되는 문제 발생
+
+**해결방법**: 낙관적 락(Optimistic Lock) 적용
+- @Version 어노테이션을 통한 버전 관리
+- 충돌 감지 및 재시도 로직 구현`,
+    contribution: `## 담당 역할 및 기여도
+
+### JPA 엔티티 설계 및 연관관계 매핑 (70%)
+- 엔티티 클래스 설계
+- 양방향 연관관계 매핑
+- 영속성 컨텍스트 관리
+
+### 게시판 CRUD API 개발
+- 게시글 생성, 조회, 수정, 삭제 API
+- 페이징 및 정렬 기능 구현
+
+### 댓글 시스템 구현
+- 댓글 및 대댓글 계층 구조 설계
+- 댓글 작성, 수정, 삭제 기능
+
+### 성능 최적화
+- N+1 쿼리 문제 해결
+- 동시성 제어 구현`,
+    retrospective: `## 프로젝트 회고
+
+### 잘한 점 ✅
+- JPA의 다양한 기능을 실전에서 활용할 수 있었습니다
+- 성능 문제를 적극적으로 찾아 해결했습니다
+- 동시성 문제를 사전에 예방할 수 있었습니다
+
+### 아쉬운 점 📝
+- 초기 설계 시 성능을 고려하지 않아 리팩토링이 많았습니다
+- 테스트 코드 작성이 부족했습니다
+
+### 배운 점 💡
+- JPA의 영속성 컨텍스트와 지연 로딩의 중요성
+- 데이터베이스 락의 종류와 활용 방법
+- 연관관계 매핑의 장단점
+
+### 다음에 시도해볼 것 🚀
+- QueryDSL을 활용한 동적 쿼리 작성
+- Spring Data JPA Specification 활용
+- 통합 테스트 코드 작성`
   }
 ]

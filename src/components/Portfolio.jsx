@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import ReactMarkdown from 'react-markdown'
 import './Portfolio.css'
 import { portfolioItems } from '../data/portfolioData'
 
@@ -221,7 +222,13 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
           name: 'TROUBLESHOOTING.md',
           icon: '🔧',
           type: 'file'
-        }
+        },
+        ...(selectedProject.retrospective ? [{
+          id: 'retrospective',
+          name: 'RETROSPECTIVE.md',
+          icon: '📝',
+          type: 'file'
+        }] : [])
       ]
     },
     {
@@ -282,8 +289,8 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
             <div className="file-header">
               <span className="file-name">README.md</span>
             </div>
-            <div className="file-body">
-              <pre>{selectedProject.overview}</pre>
+            <div className="file-body markdown-content">
+              <ReactMarkdown>{selectedProject.overview}</ReactMarkdown>
             </div>
           </div>
         )
@@ -313,13 +320,17 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
         )
 
       case 'troubleshooting':
+        const troubleshootingContent = typeof selectedProject.troubleshooting === 'string'
+          ? selectedProject.troubleshooting
+          : selectedProject.troubleshooting.map((item, idx) => `${idx + 1}. ${item}`).join('\n\n')
+
         return (
           <div className="file-content">
             <div className="file-header">
               <span className="file-name">TROUBLESHOOTING.md</span>
             </div>
-            <div className="file-body">
-              <pre>{selectedProject.troubleshooting.map((item, idx) => `${idx + 1}. ${item}`).join('\n\n')}</pre>
+            <div className="file-body markdown-content">
+              <ReactMarkdown>{troubleshootingContent}</ReactMarkdown>
             </div>
           </div>
         )
@@ -362,8 +373,20 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
             <div className="file-header">
               <span className="file-name">CONTRIBUTION.md</span>
             </div>
-            <div className="file-body">
-              <pre>{selectedProject.contribution || '담당 업무 및 기여도:\n\n프로젝트에서 수행한 작업과 기여한 내용을 작성합니다.'}</pre>
+            <div className="file-body markdown-content">
+              <ReactMarkdown>{selectedProject.contribution || '담당 업무 및 기여도:\n\n프로젝트에서 수행한 작업과 기여한 내용을 작성합니다.'}</ReactMarkdown>
+            </div>
+          </div>
+        )
+
+      case 'retrospective':
+        return (
+          <div className="file-content">
+            <div className="file-header">
+              <span className="file-name">RETROSPECTIVE.md</span>
+            </div>
+            <div className="file-body markdown-content">
+              <ReactMarkdown>{selectedProject.retrospective || '프로젝트 회고록을 작성해주세요.'}</ReactMarkdown>
             </div>
           </div>
         )
