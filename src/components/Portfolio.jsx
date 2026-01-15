@@ -1,12 +1,75 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import './Portfolio.css'
+import './Mail.css'
 import { portfolioItems } from '../data/portfolioData'
+
+// 이미지 종횡비 기준 (세로/가로 비율이 이 값보다 크면 접기)
+// 다이버리: 1080/1920 = 0.56, ARCHEIVE: 32768/2675 = 12.25
+const ASPECT_RATIO_THRESHOLD = 1.0
+
+// 접힌 상태에서 보여줄 최대 높이
+const COLLAPSED_HEIGHT = 650
+
+// 로딩 스피너 컴포넌트
+const LoadingSpinner = () => (
+  <span className="img-loader">
+    <span className="spinner"></span>
+  </span>
+)
+
+// 확장 가능한 이미지 컴포넌트
+const ExpandableImage = ({ src, alt }) => {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [needsExpand, setNeedsExpand] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const imgRef = useRef(null)
+
+  const handleLoad = () => {
+    setIsLoading(false)
+    if (imgRef.current) {
+      const { naturalWidth, naturalHeight } = imgRef.current
+      const aspectRatio = naturalHeight / naturalWidth
+      // 세로가 가로보다 긴 이미지만 접기
+      if (aspectRatio > ASPECT_RATIO_THRESHOLD) {
+        setNeedsExpand(true)
+      }
+    }
+  }
+
+  return (
+    <span className={`expandable-image-container ${needsExpand && !isExpanded ? 'collapsed' : ''}`}>
+      {isLoading && <LoadingSpinner />}
+      <img
+        ref={imgRef}
+        src={src}
+        alt={alt}
+        onLoad={handleLoad}
+        style={{
+          ...(needsExpand && !isExpanded ? { maxHeight: `${COLLAPSED_HEIGHT}px` } : {}),
+          display: isLoading ? 'none' : 'block'
+        }}
+      />
+      {needsExpand && !isExpanded && !isLoading && (
+        <span className="image-expand-overlay">
+          <button className="image-expand-btn" onClick={() => setIsExpanded(true)}>
+            더보기
+          </button>
+        </span>
+      )}
+      {needsExpand && isExpanded && (
+        <button className="image-collapse-btn" onClick={() => setIsExpanded(false)}>
+          접기
+        </button>
+      )}
+    </span>
+  )
+}
 
 function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'desktop' }) {
   const [selectedProject, setSelectedProject] = useState(null)
   const [expandedFolders, setExpandedFolders] = useState(['root', 'docs'])
-  const [selectedFile, setSelectedFile] = useState(null)
+  const [selectedFile, setSelectedFile] = useState('overview')
   const isMobile = deviceType === 'mobile'
 
   // Window drag/resize states
@@ -290,7 +353,11 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
               <span className="file-name">README.md</span>
             </div>
             <div className="file-body markdown-content">
-              <ReactMarkdown>{selectedProject.overview}</ReactMarkdown>
+              <ReactMarkdown
+                components={{
+                  img: ({ src, alt }) => <ExpandableImage src={src} alt={alt} />
+                }}
+              >{selectedProject.overview}</ReactMarkdown>
             </div>
           </div>
         )

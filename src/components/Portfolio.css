@@ -1124,3 +1124,101 @@
   border-radius: 8px; /* 이미지 모서리 둥글게 (선택사항) */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 (선택사항) */
 }
+
+/* ========== Expandable Image Styles ========== */
+.expandable-image-container {
+  display: block;
+  position: relative;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.expandable-image-container.collapsed {
+  overflow: hidden;
+}
+
+.expandable-image-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  object-position: top;
+  transition: max-height 0.3s ease;
+  margin: 0;
+}
+
+.image-expand-overlay {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 1) 100%);
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 16px;
+}
+
+.image-expand-btn {
+  background-color: #0071e3;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.3);
+}
+
+.image-expand-btn:hover {
+  background-color: #0077ed;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.4);
+}
+
+.image-collapse-btn {
+  display: block;
+  margin: 12px auto;
+  background-color: #f5f5f7;
+  color: #1d1d1f;
+  border: 1px solid #d2d2d7;
+  padding: 8px 20px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.image-collapse-btn:hover {
+  background-color: #e8e8ed;
+}
+
+/* 이미지 로딩 스피너 */
+.img-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  width: 100%;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+.img-loader .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #ddd;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
