@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
+import { Spinner } from 'basic-loading'
 import './Portfolio.css'
-import './Mail.css'
 import { portfolioItems } from '../data/portfolioData'
 
 // 이미지 종횡비 기준 (세로/가로 비율이 이 값보다 크면 접기)
@@ -14,7 +14,7 @@ const COLLAPSED_HEIGHT = 650
 // 로딩 스피너 컴포넌트
 const LoadingSpinner = () => (
   <span className="img-loader">
-    <span className="spinner"></span>
+    <Spinner option={{ size: 40, barColor: '#333', bgColor: '#ddd', thickness: 3 }} />
   </span>
 )
 
@@ -23,14 +23,17 @@ const ExpandableImage = ({ src, alt }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [needsExpand, setNeedsExpand] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [imageReady, setImageReady] = useState(false)
   const imgRef = useRef(null)
 
   const handleLoad = () => {
-    setIsLoading(false)
+    setImageReady(true)
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 2000)
     if (imgRef.current) {
       const { naturalWidth, naturalHeight } = imgRef.current
       const aspectRatio = naturalHeight / naturalWidth
-      // 세로가 가로보다 긴 이미지만 접기
       if (aspectRatio > ASPECT_RATIO_THRESHOLD) {
         setNeedsExpand(true)
       }
