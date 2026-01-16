@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Spinner } from 'basic-loading'
 import './Portfolio.css'
 import { portfolioItems } from '../data/portfolioData'
 
@@ -11,26 +10,14 @@ const ASPECT_RATIO_THRESHOLD = 1.0
 // 접힌 상태에서 보여줄 최대 높이
 const COLLAPSED_HEIGHT = 650
 
-// 로딩 스피너 컴포넌트
-const LoadingSpinner = () => (
-  <span className="img-loader">
-    <Spinner option={{ size: 40, barColor: '#333', bgColor: '#ddd', thickness: 3 }} />
-  </span>
-)
-
 // 확장 가능한 이미지 컴포넌트
 const ExpandableImage = ({ src, alt }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [needsExpand, setNeedsExpand] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [imageReady, setImageReady] = useState(false)
   const imgRef = useRef(null)
 
   const handleLoad = () => {
-    setImageReady(true)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
     if (imgRef.current) {
       const { naturalWidth, naturalHeight } = imgRef.current
       const aspectRatio = naturalHeight / naturalWidth
@@ -38,11 +25,14 @@ const ExpandableImage = ({ src, alt }) => {
         setNeedsExpand(true)
       }
     }
+    setIsLoading(false)
   }
 
   return (
     <span className={`expandable-image-container ${needsExpand && !isExpanded ? 'collapsed' : ''}`}>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && (
+        <span className="image-loading-container"></span>
+      )}
       <img
         ref={imgRef}
         src={src}
@@ -50,7 +40,7 @@ const ExpandableImage = ({ src, alt }) => {
         onLoad={handleLoad}
         style={{
           ...(needsExpand && !isExpanded ? { maxHeight: `${COLLAPSED_HEIGHT}px` } : {}),
-          display: isLoading ? 'none' : 'block'
+          ...(isLoading ? { opacity: 0, position: 'absolute' } : { opacity: 1 })
         }}
       />
       {needsExpand && !isExpanded && !isLoading && (
@@ -423,6 +413,7 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
 
       case 'award':
         const awardData = selectedProject.award
+        if (!awardData) return null
         const awardText = typeof awardData === 'string' ? awardData :
           `${awardData.name}\n\n수여 기관: ${awardData.from}${awardData.certificateUrl ? `\n\n증명서: ${awardData.certificateUrl}` : ''}`
 

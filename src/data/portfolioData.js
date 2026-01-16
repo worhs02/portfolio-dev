@@ -91,13 +91,16 @@ export const portfolioItems = [
     id: 1,
     color: '#E8F5FF',
     emoji: '🐳🌊',
-    title: '다이버리 (Divary)',
+    title: 'Divary',
+    award: { name: 'UMC 데모데이 대상', from: 'UMC' },
     period: '',
     overview: `![Divary Banner](/portfolio-dev/images/divary.jpg)
 
 **"바다를 기록하고, 추억을 꾸미다"**
 
 스쿠버다이빙을 사랑하는 사람들을 위한 감성 다이빙 로그 앱
+
+**진행 기간**: 2025년 8월 20일 - 2025년 11월 30일
 
 ## 프로젝트 배경
 
@@ -219,8 +222,11 @@ export const portfolioItems = [
     color: '#FFE5F5',
     emoji: '🎵🎧',
     title: 'ARCHEIVE',
+    award: { name: 'UMC 데모데이 우수상', from: 'UMC' },
     period: '',
     overview: `![ARCHEIVE Banner](/portfolio-dev/images/Archeive.png)
+
+**진행 기간**: 2025년 1월 1일 - 2025년 2월 20일
 
 ## 기술 스택
 - **Frontend**: iOS, UIKit
@@ -245,40 +251,30 @@ export const portfolioItems = [
 ### 📅 DatePicker
 - Carousel View를 응용한 커스텀 DatePicker
 - 화면 중심 기준 거리 계산
-- 거리에 따른 색상 opacity 조절`,
-    team: '',
-    skills: ['iOS', 'UIKit', 'MVC', 'REST API', 'Git'],
-    troubleshooting: `### Carousel View 구현
+- 거리에 따른 색상 opacity 조절
 
-**요구사항**
+## 구현 내용
+
+### Carousel View 구현
 - 2등-1등-3등 순서로 아이템 배치
-- 스크롤 종료 시 자동으로 가장 가까운 아이템으로 이동
-- 중심에서 멀어질수록 크기 감소
-
-**구현 방법**
-- 각 아이템과 화면 중심 사이의 거리를 계산
-- 거리 기반으로 scale 비율 조정
+- 각 아이템과 화면 중심 사이의 거리를 계산하여 scale 비율 조정
 - \`scrollViewDidEndDecelerating\` 및 \`scrollViewWillEndDragging\`에서 snap 효과 구현
 - 가장 가까운 아이템의 인덱스를 계산하여 자동 스크롤
 
-**결과**
-- 자연스러운 스크롤 애니메이션
-- 사용자 친화적인 UI/UX
-
 ### DatePicker의 Carousel 응용
-
-**요구사항**
-- 날짜 리스트를 Carousel 형태로 표시
-- 중심에서 멀어질수록 투명도 감소
-
-**구현 방법**
 - Carousel View의 거리 계산 로직 재사용
 - 거리 기반으로 alpha 값 조정
-- 중심 날짜 강조를 위한 폰트 크기 조절
+- 중심 날짜 강조를 위한 폰트 크기 조절`,
+    team: '',
+    skills: ['iOS', 'UIKit', 'MVC', 'REST API', 'Git'],
+    troubleshooting: `### Carousel View snap 효과 구현 문제
 
-**결과**
-- 코드 재사용성 향상
-- 일관된 UX 제공`,
+**문제점**
+- 스크롤 종료 시 아이템이 중앙에 정렬되지 않는 문제
+
+**해결방법**
+- \`scrollViewDidEndDecelerating\` 및 \`scrollViewWillEndDragging\`에서 가장 가까운 아이템 인덱스 계산
+- 해당 인덱스로 자동 스크롤 적용`,
     contribution: `## 담당 역할 및 기여도
 
 ### Library 화면 구현
@@ -328,73 +324,139 @@ export const portfolioItems = [
   },
   {
     id: 3,
-    color: '#FFFACD',
-    emoji: '🎨🖌️',
-    title: '커뮤니티 플랫폼',
-    period: '2023.03 - 2023.06',
-    overview: `Spring Boot와 JPA를 활용한 게시판 및 댓글 기능이 포함된 커뮤니티 웹사이트.
+    color: '#E3F2FD',
+    emoji: '',
+    title: 'Blism',
+    period: '',
+    overview: `![Blism Banner](/portfolio-dev/images/blism.png)
+
+**"진심 어린 마음, 디지털로 전달하세요."**
+
+Blism은 단순한 디지털 메시지 서비스가 아닙니다. 매일의 설렘과 감동을 통해 친구, 연인, 가족과의 관계를 더 깊게 연결합니다. 바쁜 일상 속에서도 감성을 담아 소통할 수 있는 특별한 플랫폼, Blism으로 추억을 선물하세요.
+
+## 프로젝트 설명
+
+Blism은 디지털 시대의 감성을 되살리고 연말 시즌에 감동을 전하기 위해 설계된 온라인 우체통 서비스입니다.
+
+- 사용자가 자신만의 우체통을 만들고, 친구, 가족, 연인 등 소중한 사람들과 공유하면, 상대방이 해당 우체통에 사진과 메시지를 남길 수 있는 공간입니다.
+- 편지들은 연말 기간(12/1~25일) 동안 하루에 하나씩 확인할 수 있도록 설계되었습니다.
+- 편지와 메시지는 추억을 생생히 전달할 수 있도록 커스터마이징 템플릿과 애니메이션, 감성적 요소를 담고 있습니다.
+
+## 주요 특징
+
+### 디지털 우체통
+사용자는 본인만의 우체통을 만들고, 지인들에게 공유할 수 있습니다.
+
+### 12월 1일부터 열리는 둥지
+메시지가 작성된 둥지는 12월 1일부터 25일까지 하루에 하나씩 열려 사용자에게 설렘과 감동을 선사합니다.
+
+### 정성 가득한 선물의 전환
+기존 물질적 선물에서 벗어나 디지털로 간편하게 추억을 공유하고 선물할 수 있는 새로운 경험을 제공합니다.
+
+### 감성 소통 강화
+비어 있는 둥지와 채워진 둥지의 상태를 직관적으로 보여주고, 수집한 메시지를 연말 이후에도 우체통으로 보관 가능합니다.
 
 ## 기술 스택
-- **Backend**: Spring Boot, JPA, MySQL
-- **Frontend**: UIkit
+- **Platform**: iOS
+- **Frontend**: UIKit, CollectionView
+- **API**: REST API
 
-## 주요 기능
-- 게시판 CRUD 기능
-- 댓글 및 대댓글 시스템
-- 사용자 인증 및 권한 관리`,
-    team: '3명 (백엔드 2명, 프론트엔드 1명)',
-    skills: ['Spring Boot', 'JPA', 'MySQL', 'UIkit'],
-    troubleshooting: `### 문제 1: N+1 쿼리 문제로 인한 성능 저하
-**문제점**: 게시글 목록 조회 시 각 게시글마다 추가 쿼리가 발생하여 성능 저하
+## 구현 내용
 
-**해결방법**: Fetch Join 및 @EntityGraph 적용
-- Fetch Join을 통한 연관 엔티티 한 번에 조회
-- @EntityGraph로 필요한 연관관계만 선택적 로딩
-- 쿼리 수 **95% 감소**
+### CollectionView를 활용한 홈화면 구현
+- UICollectionView를 사용하여 25개의 둥지(문)를 그리드 형태로 배치
+- 현재 날짜를 기준으로 클릭 가능한 셀 개수 조정하는 로직 구현
+- isUserInteractionEnabled를 활용하여 미래 날짜의 둥지 비활성화
+- 빈 둥지와 채워진 둥지 시각적 구분
 
-### 문제 2: 동시성 이슈로 인한 댓글 중복 저장
-**문제점**: 동시에 댓글 작성 시 중복 저장되는 문제 발생
+### 메시지 확인 및 답장 Modal 구현
+- UIViewController를 모달로 present
+- 커스텀 트랜지션 애니메이션 적용
+- 답장 작성 후 API 연동
 
-**해결방법**: 낙관적 락(Optimistic Lock) 적용
-- @Version 어노테이션을 통한 버전 관리
-- 충돌 감지 및 재시도 로직 구현`,
+### 메시지 공개여부 설정
+- Alert을 이용한 메시지 공개여부 설정
+- 토글을 활용한 변경 기능`,
+    team: '10명 (PM 2명, Designer 2명, iOS 3명, Backend 3명)',
+    skills: ['iOS', 'UIKit', 'CollectionView', 'REST API'],
+    troubleshooting: `### API 연동 시 에러 처리
+
+**문제점**
+- 네트워크 에러 발생 시 사용자에게 피드백 없음
+
+**해결방법**
+- Alert을 이용한 에러 메시지 표시
+- 재시도 로직 구현
+
+### iPhone 13 mini 레이아웃 문제
+
+**문제점**
+- 특정 기기로만 시뮬레이터를 사용하다가 마감 하루 전 iPhone 13 mini에서 레이아웃이 맞지 않는 문제 발생
+
+**해결방법**
+- 화면의 height을 가져오는 코드를 활용
+- 화면 간의 비율을 곱해 동적으로 레이아웃 조정`,
     contribution: `## 담당 역할 및 기여도
 
-### JPA 엔티티 설계 및 연관관계 매핑 (70%)
-- 엔티티 클래스 설계
-- 양방향 연관관계 매핑
-- 영속성 컨텍스트 관리
+### UI 구현
+- CollectionView를 활용한 홈화면 구현
+- 메시지 확인, 답장 modal 구현
+- 날짜에 따라 열 수 있는 문 갯수 구현 (CollectionView에서 클릭 가능한 문 갯수 조정 로직)
+- Alert을 이용한 메시지 공개여부 설정 및 토글을 활용한 변경
 
-### 게시판 CRUD API 개발
-- 게시글 생성, 조회, 수정, 삭제 API
-- 페이징 및 정렬 기능 구현
-
-### 댓글 시스템 구현
-- 댓글 및 대댓글 계층 구조 설계
-- 댓글 작성, 수정, 삭제 기능
-
-### 성능 최적화
-- N+1 쿼리 문제 해결
-- 동시성 제어 구현`,
+### API 연결
+- 우체통 조회 API
+- 내 과거 우체통 전체 조회 API
+- 특정 년도의 과거 우체통 조회 API
+- 우체통 공개 여부 설정 API`,
     retrospective: `## 프로젝트 회고
 
-### 잘한 점 ✅
-- JPA의 다양한 기능을 실전에서 활용할 수 있었습니다
-- 성능 문제를 적극적으로 찾아 해결했습니다
-- 동시성 문제를 사전에 예방할 수 있었습니다
+PM, 디자인, FE, BE로 구성된 첫 프로젝트였습니다.
 
-### 아쉬운 점 📝
-- 초기 설계 시 성능을 고려하지 않아 리팩토링이 많았습니다
-- 테스트 코드 작성이 부족했습니다
+### 배운 점
+- API 연결이 서툴다보니 시간이 오래 걸렸지만 Swagger와 명세서를 활용하는 방법을 배웠습니다.
+- KingFisher를 활용하여 URL을 통해 이미지를 활용하는 방법을 배웠습니다.
+- AutoLayout의 중요성을 깨달았습니다.
 
-### 배운 점 💡
-- JPA의 영속성 컨텍스트와 지연 로딩의 중요성
-- 데이터베이스 락의 종류와 활용 방법
-- 연관관계 매핑의 장단점
+### 협업에서 느낀 점
+View 연결의 분업은 볼륨에 맞게 잘 진행되었지만, 시간이 지나 추가되는 기능이 생기면서 API를 연결하는 부분에서 각자 맡은 파트의 볼륨이 달라지게 되었습니다. 마감 시간에 맞추기 위해 API 연결을 재분배해야 하는 상황을 맞이하였고, 그 결과 본인이 작업하지 않은 View, ViewController에서 작업을 해야 하는 상황이 발생하였습니다.
 
-### 다음에 시도해볼 것 🚀
-- QueryDSL을 활용한 동적 쿼리 작성
-- Spring Data JPA Specification 활용
-- 통합 테스트 코드 작성`
+### 다음에 개선할 점
+- 초기 분업 시 API 연결 볼륨까지 고려한 계획 수립
+- 다양한 기기에서의 레이아웃 테스트를 초기부터 진행
+- 코드 컨벤션 통일로 타인의 코드 이해도 향상`
+  },
+  {
+    id: 4,
+    color: '#E0F2F1',
+    emoji: '',
+    title: '경도팟',
+    award: { name: 'UMC 해커톤 최우수상', from: 'UMC' },
+    period: '',
+    overview: `![경도팟 Banner](/portfolio-dev/images/gyungdopat.png)
+
+**위치 기반 경찰과 도둑 매칭 서비스**
+
+## 프로젝트 설명
+
+(내용 작성 예정)
+
+## 기술 스택
+- **Platform**:
+- **Frontend**:
+- **Backend**:
+
+## 구현 내용
+
+(내용 작성 예정)`,
+    team: '7명 (PM 1명, Designer 1명, Frontend 2명, Backend 3명)',
+    skills: [],
+    troubleshooting: `(내용 작성 예정)`,
+    contribution: `## 담당 역할 및 기여도
+
+(내용 작성 예정)`,
+    retrospective: `## 프로젝트 회고
+
+(내용 작성 예정)`
   }
 ]

@@ -1198,6 +1198,15 @@
   background-color: #e8e8ed;
 }
 
+/* 이미지 로딩 배경 */
+.image-loading-container {
+  display: block;
+  min-height: 200px;
+  width: 100%;
+  background-color: #e5e5e5;
+  border-radius: 8px;
+}
+
 /* 이미지 로딩 스피너 */
 .img-loader {
   display: flex;
@@ -1209,16 +1218,44 @@
   border-radius: 8px;
 }
 
-.img-loader .spinner {
+.img-loader-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  width: 100%;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.portfolio-spinner {
+  display: inline-block;
   width: 40px;
   height: 40px;
   border: 3px solid #ddd;
   border-top-color: #333;
   border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+  animation: portfolio-spin 0.6s linear infinite;
 }
 
-@keyframes spin {
+@keyframes portfolio-spin {
   to { transform: rotate(360deg); }
+}
+
+.expandable-img {
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.expandable-img.loaded {
+  opacity: 1;
 }
 
