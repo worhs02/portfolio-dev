@@ -3,6 +3,24 @@
   position: relative;
 }
 
+/* Tech Stack Window */
+.tech-stack-window {
+  position: absolute;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tech-stack-window .container {
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Splash Screen */
 .splash-screen {
   width: 100%;
@@ -431,5 +449,68 @@
   .skills-grid {
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     gap: 12px;
+  }
+
+  /* 모바일에서 Tech Stack Window 전체 화면 */
+  .tech-stack-window {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+
+  .tech-stack-window .container {
+    padding: 20px;
+  }
+
+  .skills-showcase {
+    border-radius: 0;
+    border-width: 0;
+    box-shadow: none;
+    height: 100%;
+  }
+
+  .window-header {
+    padding: 15px 20px;
+  }
+
+  .header-left {
+    gap: 20px;
+  }
+
+  .header-right {
+    font-size: 11px;
+  }
+
+  .window-content {
+    padding: 20px;
+  }
+}
+
+/* 태블릿 (769px ~ 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tech-stack-window .container {
+    padding: 30px;
+  }
+
+  .skills-showcase {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .main-skill-display {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .main-skill-image {
+    width: 200px;
+    height: 200px;
+  }
+
+  .skill-memo {
+    width: 100%;
+    transform: rotate(0deg);
   }
 }
