@@ -552,6 +552,178 @@
   }
 }
 
+/* 높이가 작은 화면 (예: 노트북, 태블릿 등) */
+@media (max-height: 900px) {
+  .login-clock {
+    top: 60px;
+  }
+
+  .clock-time {
+    font-size: 90px;
+    letter-spacing: -3px;
+    margin-bottom: 8px;
+  }
+
+  .clock-date {
+    font-size: 18px;
+  }
+
+  .login-container {
+    top: 55%;
+    transform: translate(-50%, -8%);
+  }
+
+  .login-profile {
+    gap: 8px;
+  }
+
+  .avatar-circle {
+    width: 140px;
+    height: 140px;
+  }
+
+  .profile-name {
+    font-size: 28px;
+    margin: 4px 0 2px 0;
+  }
+
+  .profile-subtitle {
+    font-size: 15px;
+    margin: 0 0 10px 0;
+  }
+
+  .profile-info {
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .info-item {
+    font-size: 12px;
+    padding: 7px 14px;
+  }
+
+  .profile-hint {
+    font-size: 14px;
+    padding: 12px 40px;
+    margin-top: 16px;
+  }
+}
+
+/* 높이가 매우 작은 화면 */
+@media (max-height: 800px) {
+  .login-clock {
+    top: 50px;
+  }
+
+  .clock-time {
+    font-size: 80px;
+    letter-spacing: -2px;
+    margin-bottom: 6px;
+  }
+
+  .clock-date {
+    font-size: 16px;
+  }
+
+  .login-container {
+    top: 52%;
+    transform: translate(-50%, -6%);
+  }
+
+  .login-profile {
+    gap: 6px;
+  }
+
+  .avatar-circle {
+    width: 130px;
+    height: 130px;
+  }
+
+  .profile-name {
+    font-size: 26px;
+    margin: 3px 0 2px 0;
+  }
+
+  .profile-subtitle {
+    font-size: 14px;
+    margin: 0 0 8px 0;
+  }
+
+  .profile-info {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .info-item {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+
+  .profile-hint {
+    font-size: 13px;
+    padding: 10px 36px;
+    margin-top: 12px;
+  }
+}
+
+/* 높이가 아주 작은 화면 */
+@media (max-height: 700px) {
+  .login-clock {
+    top: 35px;
+  }
+
+  .clock-time {
+    font-size: 70px;
+    letter-spacing: -2px;
+    margin-bottom: 4px;
+  }
+
+  .clock-date {
+    font-size: 15px;
+  }
+
+  .login-container {
+    top: 50%;
+    transform: translate(-50%, -5%);
+  }
+
+  .login-profile {
+    gap: 5px;
+    min-width: 360px;
+  }
+
+  .avatar-circle {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-name {
+    font-size: 24px;
+    margin: 2px 0;
+  }
+
+  .profile-subtitle {
+    font-size: 13px;
+    margin: 0 0 6px 0;
+  }
+
+  .profile-info {
+    gap: 7px;
+    margin-bottom: 6px;
+  }
+
+  .info-item {
+    font-size: 11px;
+    padding: 5px 11px;
+  }
+
+  .profile-hint {
+    font-size: 12px;
+    padding: 9px 32px;
+    margin-top: 10px;
+  }
+}
+
 /* 매우 큰 화면 (4K 등) */
 @media (min-width: 1920px) {
   .clock-time {
