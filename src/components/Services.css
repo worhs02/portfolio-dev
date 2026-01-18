@@ -459,26 +459,32 @@
     width: 100vw !important;
     height: 100vh !important;
     overflow: hidden;
+    padding: 0;
+    margin: 0;
   }
 
   .tech-stack-window .container {
-    padding: 0;
+    padding: 0 !important;
     display: flex;
     flex-direction: column;
+    width: 100vw;
+    height: 100vh;
   }
 
   .skills-showcase {
-    border-radius: 0;
-    border-width: 0;
-    box-shadow: none;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
     height: 100%;
     display: flex;
     flex-direction: column;
+    width: 100%;
   }
 
   .window-header {
     padding: 15px 20px;
     flex-shrink: 0;
+    border-radius: 0;
   }
 
   .header-left {
@@ -498,53 +504,92 @@
   }
 
   /* 모바일 스플래시 화면 */
-  .splash-screen {
-    padding: 20px;
-    height: 100%;
+  .tech-stack-window .splash-screen {
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
   }
 
-  .splash-screen-inner {
+  .tech-stack-window .splash-screen-inner {
     height: 100%;
+    border-radius: 0 !important;
   }
 
-  .splash-content {
+  .tech-stack-window .splash-content {
     padding: 40px 20px;
     gap: 30px;
   }
 
-  .splash-icon {
+  .tech-stack-window .splash-icon {
     width: 100px;
     height: 100px;
   }
 
-  .splash-title {
+  .tech-stack-window .splash-title {
     font-size: 24px;
   }
 }
 
 /* 태블릿 (769px ~ 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
+  .tech-stack-window {
+    width: 744px !important;
+    height: 420px !important;
+  }
+
   .tech-stack-window .container {
-    padding: 30px;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
   }
 
   .skills-showcase {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
+  }
+
+  .window-header {
+    padding: 12px 20px;
+    font-size: 13px;
+  }
+
+  .header-left {
+    gap: 25px;
+  }
+
+  .header-right {
+    font-size: 12px;
+  }
+
+  .window-content {
+    padding: 15px;
   }
 
   .main-skill-display {
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
   }
 
   .main-skill-image {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
+  }
+
+  .skill-name {
+    font-size: 24px;
+  }
+
+  .skill-description {
+    font-size: 14px;
   }
 
   .skill-memo {
     width: 100%;
     transform: rotate(0deg);
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
   }
 }

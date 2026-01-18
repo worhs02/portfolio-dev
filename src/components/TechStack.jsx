@@ -48,12 +48,15 @@ function TechStack({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop
     let windowWidth, windowHeight
     const aspectRatio = 1240 / 700 // 기본 가로세로 비율 유지
 
+    console.log('TechStack deviceType:', deviceType, 'isMobile:', isMobile, 'isTablet:', isTablet)
+
     if (isMobile) {
       // 모바일: 전체 화면
       windowWidth = window.innerWidth
       windowHeight = window.innerHeight
       setSize({ width: windowWidth, height: windowHeight })
       setPosition({ x: 0, y: 0 })
+      console.log('Mobile size:', windowWidth, 'x', windowHeight)
     } else if (isTablet) {
       // 태블릿: 60% 크기, 가로세로 비율 유지
       windowWidth = 1240 * 0.6 // 744px
@@ -73,6 +76,7 @@ function TechStack({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop
       const centerX = (window.innerWidth - windowWidth) / 2
       const centerY = (window.innerHeight - windowHeight) / 2
       setPosition({ x: Math.max(0, centerX), y: Math.max(0, centerY) })
+      console.log('Tablet size:', windowWidth, 'x', windowHeight)
     } else {
       // 데스크톱: 기본 크기
       windowWidth = 1240
@@ -81,8 +85,9 @@ function TechStack({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop
       const centerX = (window.innerWidth - windowWidth) / 2
       const centerY = (window.innerHeight - windowHeight) / 2
       setPosition({ x: Math.max(0, centerX), y: Math.max(0, centerY) })
+      console.log('Desktop size:', windowWidth, 'x', windowHeight)
     }
-  }, [isMobile, isTablet])
+  }, [isMobile, isTablet, deviceType])
 
   // Auto-rotate skill display
   useEffect(() => {
