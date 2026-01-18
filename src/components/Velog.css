@@ -256,3 +256,52 @@
   height: 16px;
   cursor: nesw-resize;
 }
+
+/* 모바일 (~ 768px) */
+@media (max-width: 768px) {
+  .velog-window {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    border-radius: 0 !important;
+  }
+
+  .velog-titlebar,
+  .velog-toolbar {
+    border-radius: 0 !important;
+  }
+
+  .velog-content iframe {
+    border-radius: 0 !important;
+  }
+}
+
+/* 태블릿 (769px ~ 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .velog-titlebar {
+    padding: 8px 10px;
+  }
+
+  .velog-btn {
+    width: 10px;
+    height: 10px;
+  }
+
+  .velog-toolbar {
+    height: 40px;
+    padding: 0 10px;
+  }
+
+  .nav-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+
+  .url-input {
+    height: 28px;
+    font-size: 12px;
+  }
+}

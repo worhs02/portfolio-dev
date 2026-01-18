@@ -538,7 +538,7 @@
   }
 
   .tech-stack-window .container {
-    padding: 20px;
+    padding: 15px;
     width: 100%;
     height: 100%;
   }
@@ -549,47 +549,115 @@
   }
 
   .window-header {
-    padding: 12px 20px;
-    font-size: 13px;
+    padding: 10px 15px;
+    font-size: 11px;
+  }
+
+  .window-dots .dot {
+    width: 12px;
+    height: 12px;
   }
 
   .header-left {
-    gap: 25px;
+    gap: 20px;
   }
 
   .header-right {
+    font-size: 10px;
+  }
+
+  .url-bar {
     font-size: 12px;
   }
 
   .window-content {
-    padding: 15px;
+    padding: 12px;
   }
 
   .main-skill-display {
-    flex-direction: column;
-    gap: 15px;
+    flex-direction: row;
+    gap: 12px;
+    padding: 12px;
   }
 
   .main-skill-image {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
+    padding: 20px;
+  }
+
+  .main-skill-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .skill-label {
+    font-size: 9px;
+    margin-bottom: 4px;
   }
 
   .skill-name {
-    font-size: 24px;
+    font-size: 20px;
+    margin-bottom: 6px;
   }
 
   .skill-description {
-    font-size: 14px;
+    font-size: 12px;
+    line-height: 1.4;
   }
 
   .skill-memo {
-    width: 100%;
-    transform: rotate(0deg);
+    width: 140px;
+    padding: 10px;
+    transform: rotate(2deg);
+  }
+
+  .memo-header {
+    font-size: 10px;
+    margin-bottom: 6px;
+  }
+
+  .memo-level {
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .memo-bar {
+    height: 8px;
+    margin-bottom: 6px;
+  }
+
+  .memo-percentage {
+    font-size: 12px;
   }
 
   .skills-grid {
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .skill-card {
+    padding: 6px;
+  }
+
+  .skill-card img {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 스플래시 화면 */
+  .splash-content {
+    padding: 40px 20px;
+    gap: 25px;
+  }
+
+  .splash-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .splash-title {
+    font-size: 20px;
   }
 }

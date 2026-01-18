@@ -9,6 +9,7 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
   const [loading, setLoading] = useState(true)
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const isMobile = deviceType === 'mobile'
+  const isTablet = deviceType === 'tablet'
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [size, setSize] = useState({ width: 1040, height: 700 })
   const [isDragging, setIsDragging] = useState(false)
@@ -60,10 +61,33 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
 
   // 초기 중앙 배치
   useEffect(() => {
-    const centerX = (window.innerWidth - 1000) / 2
-    const centerY = (window.innerHeight - 700) / 2
+    let windowWidth, windowHeight
+    const aspectRatio = 1040 / 700
+
+    if (isTablet) {
+      // 태블릿: 60% 크기
+      windowWidth = 1040 * 0.6 // 624px
+      windowHeight = 700 * 0.6 // 420px
+
+      if (windowWidth > window.innerWidth * 0.9) {
+        windowWidth = window.innerWidth * 0.9
+        windowHeight = windowWidth / aspectRatio
+      }
+      if (windowHeight > window.innerHeight * 0.85) {
+        windowHeight = window.innerHeight * 0.85
+        windowWidth = windowHeight * aspectRatio
+      }
+    } else {
+      windowWidth = 1040
+      windowHeight = 700
+    }
+
+    setSize({ width: windowWidth, height: windowHeight })
+    setPrevSize({ width: windowWidth, height: windowHeight })
+    const centerX = (window.innerWidth - windowWidth) / 2
+    const centerY = (window.innerHeight - windowHeight) / 2
     setPosition({ x: Math.max(0, centerX), y: Math.max(0, centerY) })
-  }, [])
+  }, [isTablet])
 
   // 타이틀바 드래그
   useEffect(() => {

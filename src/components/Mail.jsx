@@ -17,6 +17,7 @@ function Mail({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }) 
   const resizeStartWindowPos = useRef({ x: 0, y: 0 })
   const windowRef = useRef(null)
   const isMobile = deviceType === 'mobile'
+  const isTablet = deviceType === 'tablet'
 
   const [viewMode, setViewMode] = useState('inbox') // 'inbox' or 'compose'
   const [mobileView, setMobileView] = useState('list') // 'list' or 'detail' for mobile
@@ -105,10 +106,33 @@ Song Jaegon`
 
   // 초기 중앙 배치
   useEffect(() => {
-    const centerX = (window.innerWidth - 900) / 2
-    const centerY = (window.innerHeight - 650) / 2
+    let windowWidth, windowHeight
+    const aspectRatio = 900 / 650
+
+    if (isTablet) {
+      // 태블릿: 60% 크기
+      windowWidth = 900 * 0.6 // 540px
+      windowHeight = 650 * 0.6 // 390px
+
+      if (windowWidth > window.innerWidth * 0.9) {
+        windowWidth = window.innerWidth * 0.9
+        windowHeight = windowWidth / aspectRatio
+      }
+      if (windowHeight > window.innerHeight * 0.85) {
+        windowHeight = window.innerHeight * 0.85
+        windowWidth = windowHeight * aspectRatio
+      }
+    } else {
+      windowWidth = 900
+      windowHeight = 650
+    }
+
+    setSize({ width: windowWidth, height: windowHeight })
+    setPrevSize({ width: windowWidth, height: windowHeight })
+    const centerX = (window.innerWidth - windowWidth) / 2
+    const centerY = (window.innerHeight - windowHeight) / 2
     setPosition({ x: Math.max(0, centerX), y: Math.max(0, centerY) })
-  }, [])
+  }, [isTablet])
 
   // 타이틀바 드래그
   useEffect(() => {
