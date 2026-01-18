@@ -46,6 +46,7 @@ function TechStack({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop
   // 초기 크기 및 위치 설정
   useEffect(() => {
     let windowWidth, windowHeight
+    const aspectRatio = 1240 / 700 // 기본 가로세로 비율 유지
 
     if (isMobile) {
       // 모바일: 전체 화면
@@ -54,9 +55,20 @@ function TechStack({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop
       setSize({ width: windowWidth, height: windowHeight })
       setPosition({ x: 0, y: 0 })
     } else if (isTablet) {
-      // 태블릿: 화면의 90% 크기
-      windowWidth = Math.min(900, window.innerWidth * 0.9)
-      windowHeight = Math.min(650, window.innerHeight * 0.85)
+      // 태블릿: 60% 크기, 가로세로 비율 유지
+      windowWidth = 1240 * 0.6 // 744px
+      windowHeight = 700 * 0.6 // 420px
+
+      // 화면에 맞게 조정
+      if (windowWidth > window.innerWidth * 0.9) {
+        windowWidth = window.innerWidth * 0.9
+        windowHeight = windowWidth / aspectRatio
+      }
+      if (windowHeight > window.innerHeight * 0.85) {
+        windowHeight = window.innerHeight * 0.85
+        windowWidth = windowHeight * aspectRatio
+      }
+
       setSize({ width: windowWidth, height: windowHeight })
       const centerX = (window.innerWidth - windowWidth) / 2
       const centerY = (window.innerHeight - windowHeight) / 2
