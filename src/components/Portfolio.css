@@ -659,6 +659,43 @@
   text-decoration: none;
 }
 
+/* Award Content */
+.award-content {
+  background-color: #F5F5F5;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #E0E0E0;
+}
+
+.award-content .award-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin: 0 0 12px 0;
+}
+
+.award-content .award-from {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 16px 0;
+}
+
+.award-link {
+  display: inline-block;
+  color: #0066CC;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 16px;
+  background-color: #E3F2FD;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.award-link:hover {
+  background-color: #0066CC;
+  color: #FFF;
+}
+
 /* Scrollbar Styling */
 .vscode-sidebar::-webkit-scrollbar,
 .vscode-editor::-webkit-scrollbar,

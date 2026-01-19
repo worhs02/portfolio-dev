@@ -92,7 +92,7 @@ export const portfolioItems = [
     color: '#E8F5FF',
     emoji: '🐳🌊',
     title: 'Divary',
-    award: { name: 'UMC 데모데이 대상', from: 'UMC' },
+    award: { name: 'UMC 데모데이 대상', from: 'UMC', url: 'https://www.kolleges.net/ko/neordinary/achievement/9725' },
     period: '',
     overview: `![Divary Banner](/portfolio-dev/images/divary.jpg)
 
@@ -222,7 +222,7 @@ export const portfolioItems = [
     color: '#FFE5F5',
     emoji: '🎵🎧',
     title: 'ARCHEIVE',
-    award: { name: 'UMC 데모데이 우수상', from: 'UMC' },
+    award: { name: 'UMC 데모데이 우수상', from: 'UMC', url: 'https://www.kolleges.net/ko/neordinary/achievement/2775' },
     period: '',
     overview: `![ARCHEIVE Banner](/portfolio-dev/images/Archeive.png)
 
@@ -445,9 +445,9 @@ View 연결의 분업은 볼륨에 맞게 잘 진행되었지만, 시간이 지�
 런닝은 지루하고 헬스장은 가기 싫은 대학생들, 동네 친구들과 특별한 액티비티를 즐기고 싶은 20대를 위해 기획되었습니다. 어릴 적 즐기던 '경찰과 도둑' 놀이를 모바일 기술과 접목하여 오프라인에서 생동감 있게 즐길 수 있는 플랫폼입니다.
 
 ## 기술 스택
-- **Backend**: Spring Boot, MySQL,
+- **Backend**: Spring Boot, MySQL
 - **Protocol**: WebSocket (STOMP)
-- **Frontend**: Flutter (또는 React Native)
+- **Frontend**: React, Tailwind CSS, Vitest
 - **Infra**: AWS EC2
 
 ## 주요 게임 규칙
@@ -472,7 +472,7 @@ View 연결의 분업은 볼륨에 맞게 잘 진행되었지만, 시간이 지�
 ###  실시간 상태 동기화
 - 생존/감옥 상태, 남은 시간, 게임 종료 여부 등을 지연 없이 전파`,
     team: '7명 (PM 1명, Designer 1명, Frontend 2명, Backend 3명)',
-    skills: ['Spring Boot', 'WebSocket', 'Redis', 'MySQL'],
+    skills: ['Spring Boot', 'WebSocket', 'Redis', 'MySQL', 'React', 'Tailwind CSS', 'Vitest'],
     troubleshooting: `### 문제 1: 실시간 게임 상태 동기화 지연 해결
 
 **상황**
@@ -513,5 +513,130 @@ View 연결의 분업은 볼륨에 맞게 잘 진행되었지만, 시간이 지�
 ### 배운 점 
 - **Stateful 서버의 관리**: 상태를 유지해야 하는 소켓 서버의 스케일 아웃 이슈와 세션 관리에 대해 깊이 고민해보는 계기가 되었습니다.
 - **이벤트 기반 아키텍처**: 클라이언트의 요청에 대한 응답뿐만 아니라, 서버가 주도적으로 메시지를 발행하는 구조에 익숙해졌습니다.`
+  },
+  {
+    id: 5,
+    color: '#F3E5F5',
+    emoji: '',
+    title: 'Portfolio',
+    period: '',
+    overview: `![Portfolio Banner](/portfolio-dev/images/portfolio.png)
+
+**"macOS를 닮은 인터랙티브 포트폴리오"**
+
+macOS 데스크톱 환경을 웹으로 구현한 개인 포트폴리오 사이트입니다. Vibe Coding(AI 페어 프로그래밍)을 통해 개발하였으며, 실제 macOS와 유사한 사용자 경험을 제공합니다.
+
+**진행 기간**: 2026년 1월 15일 - 2026년 1월 19일
+
+## 프로젝트 배경
+
+최근 AI를 활용한 Vibe Coding이 개발 업계의 큰 화두로 떠올랐습니다. 자연어로 요구사항을 전달하고 AI가 코드를 생성하는 새로운 개발 패러다임을 직접 경험해보고자 이 프로젝트를 시작했습니다.
+
+기존의 정적인 포트폴리오 사이트에서 벗어나, 방문자에게 인터랙티브한 경험을 제공하고자 했습니다. macOS의 직관적인 UI/UX를 웹으로 재현하여 개발자로서의 기술력과 디자인 감각을 동시에 보여줄 수 있는 포트폴리오를 목표로 했습니다.
+
+## 기술 스택
+- **Frontend**: React, JavaScript (ES6+)
+- **Styling**: CSS3 (Flexbox, Grid, Animation)
+- **Deployment**: GitHub Pages
+- **CI/CD**: GitHub Actions (자동 데이터 수집)
+- **Development**: Vibe Coding with Claude Code
+
+## 디자인 포인트
+
+### Desktop 환경 재현
+- macOS 스타일의 메뉴바 (시계, 상태 아이콘)
+- Dock 애니메이션 (마우스 호버 시 아이콘 확대 효과)
+- 드래그 가능한 윈도우 시스템
+- 창 최소화/최대화/닫기 기능
+
+### 앱 시스템
+- **GitHub App**: 실제 GitHub 잔디 데이터 연동, Contribute 현황 표시
+- **Mail App**: 방문자가 직접 메일을 보낼 수 있는 폼 구현
+- **TechStack App**: 기술 스택 시각화, 스플래시 스크린 애니메이션
+- **Portfolio App**: 프로젝트 목록 및 상세 정보, Finder 스타일 UI
+
+### 반응형 디자인
+- Desktop: 전체 macOS 데스크톱 경험
+- Tablet: 최적화된 창 크기 및 레이아웃
+- Mobile: 전체 화면 앱 뷰, iOS 스타일 네비게이션
+
+### 세부 디테일
+- 로그인 화면: 프로필 이미지, 시간 표시, 애니메이션
+- 창 드래그 시 자연스러운 움직임
+- 앱 실행 시 Dock 아이콘 바운스 애니메이션
+- 프로젝트 이미지 확대/축소 기능 (긴 이미지 대응)
+- Markdown 렌더링 지원`,
+    team: '1명 (개인 프로젝트)',
+    skills: ['React', 'JavaScript', 'CSS3', 'GitHub Actions', 'Vibe Coding'],
+    troubleshooting: `### 모바일 터치 이벤트 처리
+
+**문제점**
+- 모바일에서 프로젝트 카드 클릭 시 상세 페이지로 이동하지 않는 문제 발생
+
+**원인**
+- onClick 이벤트가 모바일 터치에서 제대로 동작하지 않음
+
+**해결방법**
+- onTouchEnd 이벤트 핸들러 추가
+- preventDefault()를 통한 기본 동작 방지
+- 터치와 클릭 이벤트 동시 지원
+
+### 긴 이미지 처리
+
+**문제점**
+- README 이미지가 세로로 긴 경우 화면을 벗어나는 문제
+
+**해결방법**
+- ExpandableImage 컴포넌트 구현
+- 이미지 aspect ratio 감지 (1:3 이상이면 긴 이미지로 판단)
+- 클릭 시 전체 이미지 확대 모달 표시
+- 스크롤 가능한 이미지 뷰어 제공
+
+### GitHub 잔디 데이터 연동
+
+**문제점**
+- 클라이언트에서 직접 GitHub API 호출 시 CORS 및 rate limit 문제
+
+**해결방법**
+- GitHub Actions를 통한 자동 데이터 수집 워크플로우 구성
+- 매일 정해진 시간에 잔디 데이터를 JSON 파일로 저장
+- 정적 파일로 제공하여 API 호출 없이 데이터 표시`,
+    contribution: `## Vibe Coding 경험
+
+### AI 페어 프로그래밍
+- Claude Code를 활용한 개발 진행
+- 자연어로 요구사항 전달 후 코드 생성
+- 실시간 코드 리뷰 및 수정
+
+### 개발 과정
+- 전체 프로젝트 구조 설계 및 컴포넌트 분리
+- macOS UI/UX 분석 및 재현
+- 반응형 디자인 구현 (Desktop/Tablet/Mobile)
+- GitHub Actions 워크플로우 설정
+
+### 디자인 구현
+- CSS 애니메이션을 활용한 자연스러운 인터랙션
+- Dock 호버 효과 (fishEye 알고리즘 응용)
+- 창 드래그 시스템 구현
+- 모달 및 오버레이 처리`,
+    retrospective: `## 프로젝트 회고
+
+### Vibe Coding 경험
+AI와의 협업을 통해 빠른 프로토타이핑과 반복적인 개선이 가능했습니다. 자연어로 요구사항을 전달하고 즉시 결과물을 확인할 수 있어 개발 속도가 크게 향상되었습니다.
+
+### 잘한 점
+- **디테일에 대한 집착**: macOS의 세세한 애니메이션과 인터랙션을 최대한 재현하려 노력했습니다.
+- **반응형 설계**: 다양한 디바이스에서 일관된 경험을 제공하도록 설계했습니다.
+- **실제 데이터 연동**: GitHub 잔디 데이터를 실시간으로 반영하여 살아있는 포트폴리오를 만들었습니다.
+
+### 배운 점
+- **AI 도구 활용**: Vibe Coding을 통해 AI와 효과적으로 협업하는 방법을 익혔습니다.
+- **CSS 애니메이션**: 복잡한 인터랙션을 CSS만으로 구현하는 기법을 학습했습니다.
+- **사용자 경험 설계**: 데스크톱/태블릿/모바일 각각에 최적화된 UX를 고민했습니다.
+
+### 다음에 개선할 점
+- 다크 모드 지원
+- 더 많은 앱 추가 (메모, 캘린더 등)
+- 성능 최적화 (이미지 lazy loading, 코드 스플리팅)`
   }
 ]

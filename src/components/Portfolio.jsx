@@ -438,8 +438,6 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
       case 'award':
         const awardData = selectedProject.award
         if (!awardData) return null
-        const awardText = typeof awardData === 'string' ? awardData :
-          `${awardData.name}\n\n수여 기관: ${awardData.from}${awardData.certificateUrl ? `\n\n증명서: ${awardData.certificateUrl}` : ''}`
 
         return (
           <div className="file-content">
@@ -447,7 +445,19 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
               <span className="file-name">AWARD.txt</span>
             </div>
             <div className="file-body">
-              <pre>{awardText}</pre>
+              {typeof awardData === 'string' ? (
+                <pre>{awardData}</pre>
+              ) : (
+                <div className="award-content">
+                  <p className="award-name">{awardData.name}</p>
+                  <p className="award-from">수여 기관: {awardData.from}</p>
+                  {awardData.url && (
+                    <a href={awardData.url} target="_blank" rel="noopener noreferrer" className="award-link">
+                      증명서 확인하기
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )
@@ -759,9 +769,19 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
                 <section className="mobile-section">
                   <h3 className="mobile-section-title">수상</h3>
                   <div className="mobile-section-content">
-                    <pre>{typeof selectedProject.award === 'string' ? selectedProject.award :
-                      `${selectedProject.award.name}\n\n수여 기관: ${selectedProject.award.from}${selectedProject.award.certificateUrl ? `\n\n증명서: ${selectedProject.award.certificateUrl}` : ''}`
-                    }</pre>
+                    {typeof selectedProject.award === 'string' ? (
+                      <pre>{selectedProject.award}</pre>
+                    ) : (
+                      <div className="award-content">
+                        <p className="award-name">{selectedProject.award.name}</p>
+                        <p className="award-from">수여 기관: {selectedProject.award.from}</p>
+                        {selectedProject.award.url && (
+                          <a href={selectedProject.award.url} target="_blank" rel="noopener noreferrer" className="award-link">
+                            증명서 확인하기
+                          </a>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </section>
               )}
