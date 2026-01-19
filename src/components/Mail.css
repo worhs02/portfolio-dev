@@ -1162,3 +1162,112 @@
   color: #86868b;
   margin: 0;
 }
+
+/* 태블릿 (769px ~ 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .mail-titlebar {
+    padding: 8px 10px;
+  }
+
+  .mail-btn {
+    width: 10px;
+    height: 10px;
+  }
+
+  .mail-toolbar {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .toolbar-left,
+  .toolbar-right {
+    gap: 6px;
+  }
+
+  .toolbar-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .mail-sidebar {
+    width: 150px;
+    padding: 12px 8px;
+  }
+
+  .sidebar-item {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .mail-list {
+    width: 200px;
+  }
+
+  .mail-item {
+    padding: 10px 12px;
+  }
+
+  .mail-from {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .mail-subject {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .mail-preview {
+    font-size: 11px;
+  }
+
+  .mail-date {
+    font-size: 10px;
+  }
+
+  .mail-viewer {
+    padding: 15px;
+  }
+
+  .viewer-header h3 {
+    font-size: 18px;
+  }
+
+  .viewer-meta {
+    font-size: 11px;
+  }
+
+  .viewer-body {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* Compose */
+  .compose-form {
+    padding: 15px;
+  }
+
+  .form-group label {
+    font-size: 12px;
+  }
+
+  .form-control {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .form-textarea {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .compose-actions {
+    padding: 12px 15px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}

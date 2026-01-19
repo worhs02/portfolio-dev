@@ -309,6 +309,7 @@
   display: flex;
   gap: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  z-index: 50;
 }
 
 .dock-item {
@@ -492,15 +493,111 @@
     min-width: 100%;
   }
 
+  /* 모바일에서 Dock 숨김 */
   .dock {
-    bottom: 10px;
-    padding: 6px 12px;
-    gap: 8px;
+    display: none;
+  }
+}
+
+/* 태블릿 (769px ~ 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* 태블릿에서도 Dock 숨김 */
+  .dock {
+    display: none;
+  }
+}
+
+/* 높이 기반 반응형 - 세로가 작은 화면 */
+@media (max-height: 900px) {
+  .desktop-icons {
+    top: 30px;
+    gap: 24px;
   }
 
-  .dock-item {
+  .icon-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .folder-body-desktop {
+    width: 52px;
+    height: 38px;
+  }
+
+  .icon-label {
+    font-size: 11px;
+  }
+}
+
+@media (max-height: 800px) {
+  .desktop-icons {
+    top: 25px;
+    gap: 20px;
+  }
+
+  .icon-image {
+    width: 56px;
+    height: 56px;
+  }
+
+  .folder-body-desktop {
+    width: 48px;
+    height: 34px;
+  }
+
+  .icon-label {
+    font-size: 10px;
+  }
+}
+
+@media (max-height: 700px) {
+  .desktop-icons {
+    top: 20px;
+    gap: 16px;
+  }
+
+  .icon-image {
+    width: 52px;
+    height: 52px;
+  }
+
+  .folder-body-desktop {
+    width: 44px;
+    height: 30px;
+  }
+
+  .icon-label {
+    font-size: 10px;
+    margin-top: 2px;
+  }
+
+  .desktop-icon {
+    padding: 6px;
+  }
+}
+
+@media (max-height: 600px) {
+  .desktop-icons {
+    top: 15px;
+    gap: 12px;
+  }
+
+  .icon-image {
+    width: 48px;
+    height: 48px;
+  }
+
+  .folder-body-desktop {
     width: 40px;
-    height: 40px;
-    font-size: 24px;
+    height: 26px;
+  }
+
+  .icon-label {
+    font-size: 9px;
+    margin-top: 2px;
+  }
+
+  .desktop-icon {
+    padding: 5px;
   }
 }

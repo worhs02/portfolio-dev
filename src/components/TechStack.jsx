@@ -2,13 +2,16 @@ import React, { useState, useEffect, useRef } from 'react'
 import './Services.css'
 import { techStackData } from '../data/portfolioData'
 
-function TechStack({ onClose, onClick, zIndex }) {
+function TechStack({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }) {
   const skills = techStackData
 
   const [selectedSkill, setSelectedSkill] = useState(skills[0])
   const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [size, setSize] = useState({ width: 1240, height: 700 })
   const [isDragging, setIsDragging] = useState(false)
   const [showSplash, setShowSplash] = useState(true)
+  const isMobile = deviceType === 'mobile'
+  const isTablet = deviceType === 'tablet'
 
   // proficiency 숫자를 영어로 변환
   const getProficiencyText = (num) => {
@@ -40,12 +43,51 @@ function TechStack({ onClose, onClick, zIndex }) {
     return () => clearTimeout(timer)
   }, [])
 
-  // 초기 중앙 배치
+  // 초기 크기 및 위치 설정
   useEffect(() => {
-    const centerX = (window.innerWidth - 1240) / 2  // 1200px + padding 40px
-    const centerY = (window.innerHeight - 700) / 2
-    setPosition({ x: Math.max(0, centerX), y: Math.max(0, centerY) })
-  }, [])
+    let windowWidth, windowHeight
+    const aspectRatio = 1240 / 700 // 기본 가로세로 비율 유지
+
+    console.log('TechStack deviceType:', deviceType, 'isMobile:', isMobile, 'isTablet:', isTablet)
+
+    if (isMobile) {
+      // 모바일: 전체 화면
+      windowWidth = window.innerWidth
+      windowHeight = window.innerHeight
+      setSize({ width: windowWidth, height: windowHeight })
+      setPosition({ x: 0, y: 0 })
+      console.log('Mobile size:', windowWidth, 'x', windowHeight)
+    } else if (isTablet) {
+      // 태블릿: 60% 크기, 가로세로 비율 유지
+      windowWidth = 1240 * 0.6 // 744px
+      windowHeight = 700 * 0.6 // 420px
+
+      // 화면에 맞게 조정
+      if (windowWidth > window.innerWidth * 0.9) {
+        windowWidth = window.innerWidth * 0.9
+        windowHeight = windowWidth / aspectRatio
+      }
+      if (windowHeight > window.innerHeight * 0.85) {
+        windowHeight = window.innerHeight * 0.85
+        windowWidth = windowHeight * aspectRatio
+      }
+
+      setSize({ width: windowWidth, height: windowHeight })
+      const centerX = (window.innerWidth - windowWidth) / 2
+      const centerY = (window.innerHeight - windowHeight) / 2
+      setPosition({ x: Math.max(0, centerX), y: Math.max(0, centerY) })
+      console.log('Tablet size:', windowWidth, 'x', windowHeight)
+    } else {
+      // 데스크톱: 기본 크기
+      windowWidth = 1240
+      windowHeight = 700
+      setSize({ width: windowWidth, height: windowHeight })
+      const centerX = (window.innerWidth - windowWidth) / 2
+      const centerY = (window.innerHeight - windowHeight) / 2
+      setPosition({ x: Math.max(0, centerX), y: Math.max(0, centerY) })
+      console.log('Desktop size:', windowWidth, 'x', windowHeight)
+    }
+  }, [isMobile, isTablet, deviceType])
 
   // Auto-rotate skill display
   useEffect(() => {
@@ -132,9 +174,18 @@ function TechStack({ onClose, onClick, zIndex }) {
       className="tech-stack-window"
       onClick={onClick}
       style={{
+        position: isMobile ? 'fixed' : 'absolute',
         left: `${position.x}px`,
         top: `${position.y}px`,
-        zIndex: zIndex || 100
+        width: `${size.width}px`,
+        height: `${size.height}px`,
+        zIndex: zIndex || 100,
+        ...(isMobile && {
+          left: 0,
+          top: 0,
+          width: '100vw',
+          height: '100vh'
+        })
       }}
     >
       {showSplash ? (
@@ -172,7 +223,7 @@ function TechStack({ onClose, onClick, zIndex }) {
             <div className="header-left">
               <div className="window-dots">
                 <span className="dot" onClick={onClose} style={{ cursor: 'pointer', background: '#FF5F57' }}></span>
-                <span className="dot" style={{ background: '#FFBD2E' }}></span>
+                <span className="dot" onClick={onMinimize} style={{ cursor: 'pointer', background: '#FFBD2E' }}></span>
                 <span className="dot" style={{ background: '#28CA42' }}></span>
               </div>
               <div className="url-bar">

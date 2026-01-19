@@ -995,9 +995,28 @@ function Desktop({ onLogout }) {
               handleDoubleClick('projects');
             }}
           >
-            <div className="icon-image folder-icon-desktop">
-              <div className="folder-tab-desktop"></div>
-              <div className="folder-body-desktop"></div>
+            <div className="icon-image">
+              <svg viewBox="0 0 100 100" width="60" height="60">
+                <defs>
+                  <linearGradient id="folderGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#7CB9E8', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#5A9FD4', stopOpacity: 1 }} />
+                  </linearGradient>
+                </defs>
+                {/* 폴더 탭 */}
+                <path d="M 15 25 L 15 22 Q 15 18 19 18 L 35 18 Q 37 18 38 20 L 42 25 Z"
+                  fill="url(#folderGradient)"
+                  stroke="#4A8FB8"
+                  strokeWidth="1"/>
+                {/* 폴더 본체 */}
+                <rect x="15" y="25" width="70" height="55" rx="6"
+                  fill="url(#folderGradient)"
+                  stroke="#4A8FB8"
+                  strokeWidth="1.5"/>
+                {/* 하이라이트 */}
+                <rect x="17" y="27" width="66" height="3" rx="2"
+                  fill="rgba(255,255,255,0.3)"/>
+              </svg>
             </div>
             <div className="icon-label">Projects</div>
           </div>
@@ -1159,7 +1178,27 @@ function Desktop({ onLogout }) {
               }
             }}
           >
-            <div className="dock-folder-icon">📁</div>
+            <svg viewBox="0 0 100 100" width="40" height="40">
+              <defs>
+                <linearGradient id="folderGradientDock" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style={{ stopColor: '#7CB9E8', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#5A9FD4', stopOpacity: 1 }} />
+                </linearGradient>
+              </defs>
+              {/* 폴더 탭 */}
+              <path d="M 15 25 L 15 22 Q 15 18 19 18 L 35 18 Q 37 18 38 20 L 42 25 Z"
+                fill="url(#folderGradientDock)"
+                stroke="#4A8FB8"
+                strokeWidth="1"/>
+              {/* 폴더 본체 */}
+              <rect x="15" y="25" width="70" height="55" rx="6"
+                fill="url(#folderGradientDock)"
+                stroke="#4A8FB8"
+                strokeWidth="1.5"/>
+              {/* 하이라이트 */}
+              <rect x="17" y="27" width="66" height="3" rx="2"
+                fill="rgba(255,255,255,0.3)"/>
+            </svg>
             {openWindows.projects && <div className="dock-indicator"></div>}
           </div>
           <div
