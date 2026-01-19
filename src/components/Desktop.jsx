@@ -272,7 +272,7 @@ function Desktop({ onLogout }) {
 
     let statusMessage = ''
     if (todayCommits === 0) {
-      statusMessage = '오늘 아직 push가 없어요! 코딩을 시작해볼까요?'
+      statusMessage = '오늘 아직 Contribute가 없어요! 코딩을 시작해볼까요?'
     } else if (todayCommits <= 5) {
       statusMessage = '좋은 출발이에요! 조금만 더 힘내봐요!'
     } else if (todayCommits <= 10) {
@@ -280,12 +280,12 @@ function Desktop({ onLogout }) {
     } else if (todayCommits <= 15) {
       statusMessage = '대단해요! 오늘 정말 많이 하셨어요!'
     } else {
-      statusMessage = '와우! 오늘 push왕이시네요!'
+      statusMessage = '와우! 오늘 Contribute 왕이시네요!'
     }
 
     setModal({
       isOpen: true,
-      title: 'GitHub Push 배터리',
+      title: 'GitHub Contribute',
       width: 400,
       content: (
         <div style={{ padding: '8px' }}>
@@ -294,7 +294,7 @@ function Desktop({ onLogout }) {
               {todayCommits}
             </div>
             <div style={{ fontSize: '16px', color: '#666', marginBottom: '4px' }}>
-              오늘의 push 수
+              오늘의 Contribute
             </div>
             <div style={{ fontSize: '14px', color: '#999' }}>
               {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -302,7 +302,7 @@ function Desktop({ onLogout }) {
           </div>
 
           <div style={{ background: '#f5f5f5', padding: '16px', borderRadius: '8px', marginBottom: '16px' }}>
-            <div style={{ fontSize: '13px', color: '#666', marginBottom: '8px' }}>배터리 잔량</div>
+            <div style={{ fontSize: '13px', color: '#666', marginBottom: '8px' }}>Contribute 현황</div>
             <div style={{ background: '#e0e0e0', height: '12px', borderRadius: '6px', overflow: 'hidden' }}>
               <div style={{
                 background: batteryPercent > 50 ? '#28CA42' : batteryPercent > 20 ? '#FFBD2E' : '#FF5F57',
@@ -319,12 +319,8 @@ function Desktop({ onLogout }) {
 
           <div style={{ background: '#f0f7ff', padding: '14px', borderRadius: '8px', border: '1px solid #d0e7ff' }}>
             <div style={{ fontSize: '14px', color: '#007AFF', lineHeight: '1.6' }}>
-              💡 {statusMessage}
+              {statusMessage}
             </div>
-          </div>
-
-          <div style={{ marginTop: '16px', fontSize: '12px', color: '#999', textAlign: 'center' }}>
-            push 할때마다 배터리가 소모됩니다
           </div>
         </div>
       )
@@ -963,7 +959,7 @@ function Desktop({ onLogout }) {
                 </svg>
               </span>
             </div>
-            <span className="menu-icon" onClick={handleBatteryClick} title={`배터리: ${batteryPercent}% (오늘 ${todayCommits}개 push)`}>
+            <span className="menu-icon" onClick={handleBatteryClick} title={`Contribute: ${batteryPercent}% (오늘 ${todayCommits}개)`}>
               <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
                 <rect x="1" y="2" width="16" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
                 <rect x="17.5" y="4.5" width="1.5" height="3" rx="0.5" fill="currentColor"/>
