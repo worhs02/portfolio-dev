@@ -69,6 +69,9 @@ function Desktop({ onLogout }) {
     }
   })
 
+  // 현재 시간 상태
+  const [currentTime, setCurrentTime] = useState(new Date())
+
   // 디바이스 타입 감지 및 업데이트
   useEffect(() => {
     const handleResize = () => {
@@ -99,6 +102,14 @@ function Desktop({ onLogout }) {
     updateTimeOfDay()
     // 1분마다 시간대 체크
     const interval = setInterval(updateTimeOfDay, 60 * 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // 시계 업데이트 (1분마다)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 60 * 1000)
     return () => clearInterval(interval)
   }, [])
 
@@ -980,7 +991,7 @@ function Desktop({ onLogout }) {
                 <line x1="9.5" y1="9.5" x2="13.5" y2="13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               </svg>
             </span>
-            <span className="menu-time">{new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>
+            <span className="menu-time">{currentTime.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>
           </div>
           </div>
         )}
