@@ -704,23 +704,29 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
 
               {/* Overview Section */}
               <section className="mobile-section">
-                <h3 className="mobile-section-title">📄 프로젝트 개요</h3>
-                <div className="mobile-section-content">
-                  <pre>{selectedProject.overview}</pre>
+                <h3 className="mobile-section-title">프로젝트 개요</h3>
+                <div className="mobile-section-content markdown-content">
+                  <ReactMarkdown
+                    components={{
+                      img: ({ src, alt }) => <ExpandableImage src={src} alt={alt} />
+                    }}
+                  >{selectedProject.overview}</ReactMarkdown>
                 </div>
               </section>
 
               {/* Team Section */}
-              <section className="mobile-section">
-                <h3 className="mobile-section-title">👥 팀 구성</h3>
-                <div className="mobile-section-content">
-                  <pre>{selectedProject.team}</pre>
-                </div>
-              </section>
+              {selectedProject.team && (
+                <section className="mobile-section">
+                  <h3 className="mobile-section-title">팀 구성</h3>
+                  <div className="mobile-section-content">
+                    <pre>{selectedProject.team}</pre>
+                  </div>
+                </section>
+              )}
 
               {/* Skills Section */}
               <section className="mobile-section">
-                <h3 className="mobile-section-title">📦 기술 스택</h3>
+                <h3 className="mobile-section-title">기술 스택</h3>
                 <div className="mobile-section-content">
                   <pre>{JSON.stringify({ dependencies: selectedProject.skills }, null, 2)}</pre>
                 </div>
@@ -728,18 +734,18 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
 
               {/* Troubleshooting Section */}
               <section className="mobile-section">
-                <h3 className="mobile-section-title">🔧 트러블슈팅</h3>
-                <div className="mobile-section-content">
-                  <pre>{typeof selectedProject.troubleshooting === 'string'
+                <h3 className="mobile-section-title">트러블슈팅</h3>
+                <div className="mobile-section-content markdown-content">
+                  <ReactMarkdown>{typeof selectedProject.troubleshooting === 'string'
                     ? selectedProject.troubleshooting
-                    : selectedProject.troubleshooting.map((item, idx) => `${idx + 1}. ${item}`).join('\n\n')}</pre>
+                    : selectedProject.troubleshooting.map((item, idx) => `${idx + 1}. ${item}`).join('\n\n')}</ReactMarkdown>
                 </div>
               </section>
 
               {/* GitHub Section */}
               {selectedProject.github && (
                 <section className="mobile-section">
-                  <h3 className="mobile-section-title">🔗 GitHub</h3>
+                  <h3 className="mobile-section-title">GitHub</h3>
                   <div className="mobile-section-content">
                     <a href={selectedProject.github} target="_blank" rel="noopener noreferrer" className="mobile-github-link">
                       {selectedProject.github}
@@ -751,7 +757,7 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
               {/* Award Section */}
               {selectedProject.award && (
                 <section className="mobile-section">
-                  <h3 className="mobile-section-title">🏆 수상</h3>
+                  <h3 className="mobile-section-title">수상</h3>
                   <div className="mobile-section-content">
                     <pre>{typeof selectedProject.award === 'string' ? selectedProject.award :
                       `${selectedProject.award.name}\n\n수여 기관: ${selectedProject.award.from}${selectedProject.award.certificateUrl ? `\n\n증명서: ${selectedProject.award.certificateUrl}` : ''}`
