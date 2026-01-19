@@ -235,20 +235,20 @@ export const portfolioItems = [
 - **협업**: Git, 코드 리뷰
 
 ## 주요 기능
-### 📚 Library
+### Library
 - 재생목록, 노래, 앨범, 아티스트 세그먼트 구현
 - 세그먼트 바를 통한 카테고리 전환
 - 노래 터치 시 재생 기능
 - 앨범/아티스트 터치 시 상세 페이지 이동
 - 더보기(...) 메뉴 구현
 
-### 👤 MyPage + Recap
+### MyPage + Recap
 - 닉네임 변경 기능
 - 많이 들은 장르 기반 CD gradation 효과
 - 가장 많이 들은 장르 Carousel View
 - 가장 많이 들은 노래 Carousel View (2등-1등-3등 순서)
 
-### 📅 DatePicker
+### DatePicker
 - Carousel View를 응용한 커스텀 DatePicker
 - 화면 중심 기준 거리 계산
 - 거리에 따른 색상 opacity 조절
@@ -451,7 +451,7 @@ View 연결의 분업은 볼륨에 맞게 잘 진행되었지만, 시간이 지�
 - **Infra**: AWS EC2
 
 ## 주요 게임 규칙
-### 👮‍♂️ 경찰 vs 🏃‍♂️ 도둑
+### 경찰 vs  도둑
 - **경찰 승리**: 제한 시간 내에 모든 도둑을 검거하여 감옥에 가두면 승리
 - **도둑 승리**: 제한 시간 종료 시점까지 단 1명이라도 생존하면 승리
 
