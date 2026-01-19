@@ -596,6 +596,10 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
               key={item.id}
               className="portfolio-card"
               onClick={() => setSelectedProject(item)}
+              onTouchEnd={(e) => {
+                e.preventDefault()
+                setSelectedProject(item)
+              }}
             >
               {item.award && (
                 <div className="award-sticker">
@@ -726,7 +730,9 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
               <section className="mobile-section">
                 <h3 className="mobile-section-title">🔧 트러블슈팅</h3>
                 <div className="mobile-section-content">
-                  <pre>{selectedProject.troubleshooting.map((item, idx) => `${idx + 1}. ${item}`).join('\n\n')}</pre>
+                  <pre>{typeof selectedProject.troubleshooting === 'string'
+                    ? selectedProject.troubleshooting
+                    : selectedProject.troubleshooting.map((item, idx) => `${idx + 1}. ${item}`).join('\n\n')}</pre>
                 </div>
               </section>
 
