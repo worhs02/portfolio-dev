@@ -409,6 +409,8 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
             readOnly
             className="url-input"
             placeholder="URL"
+            onClick={() => window.open('https://github.com/worhs02', '_blank')}
+            style={{ cursor: 'pointer' }}
           />
         </div>
       </div>

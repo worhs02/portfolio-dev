@@ -4,12 +4,12 @@ import './Mail.css'
 
 function Mail({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }) {
   const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [size, setSize] = useState({ width: 900, height: 650 })
+  const [size, setSize] = useState({ width: 1100, height: 650 })
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
   const [resizeDirection, setResizeDirection] = useState(null)
   const [isMaximized, setIsMaximized] = useState(false)
-  const [prevSize, setPrevSize] = useState({ width: 900, height: 650 })
+  const [prevSize, setPrevSize] = useState({ width: 1100, height: 650 })
   const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 })
   const dragStartPos = useRef({ x: 0, y: 0 })
   const resizeStartPos = useRef({ x: 0, y: 0 })
@@ -123,7 +123,7 @@ Song Jaegon`
         windowWidth = windowHeight * aspectRatio
       }
     } else {
-      windowWidth = 900
+      windowWidth = 1100
       windowHeight = 650
     }
 
@@ -528,13 +528,15 @@ Song Jaegon`
 
       <div className="mail-toolbar">
         <div className="toolbar-spacer"></div>
-        <button className="compose-btn" onClick={() => setViewMode('compose')}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-          </svg>
-          메시지 작성
-        </button>
+        {viewMode !== 'compose' && (
+          <button className="compose-btn" onClick={() => setViewMode('compose')}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            메시지 작성
+          </button>
+        )}
       </div>
 
       <div className="mail-content">
