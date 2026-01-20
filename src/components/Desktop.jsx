@@ -5,6 +5,7 @@ import TechStack from './TechStack'
 import Velog from './Velog'
 import GitHub from './GitHub'
 import Mail from './Mail'
+import SystemSettings from './SystemSettings'
 import Modal from './Modal'
 import { portfolioItems } from '../data/portfolioData'
 import { getDeviceType, isMobile } from '../utils/deviceDetect'
@@ -15,7 +16,8 @@ function Desktop({ onLogout }) {
     techStack: false,
     velog: false,
     github: false,
-    mail: false
+    mail: false,
+    settings: false
   })
 
   const [windowZIndex, setWindowZIndex] = useState({
@@ -23,7 +25,8 @@ function Desktop({ onLogout }) {
     techStack: 100,
     velog: 100,
     github: 100,
-    mail: 100
+    mail: 100,
+    settings: 100
   })
 
   const [maxZIndex, setMaxZIndex] = useState(100)
@@ -34,7 +37,8 @@ function Desktop({ onLogout }) {
     techStack: false,
     velog: false,
     github: false,
-    mail: false
+    mail: false,
+    settings: false
   })
   const [modal, setModal] = useState({
     isOpen: false,
@@ -260,6 +264,17 @@ function Desktop({ onLogout }) {
             '보기': ['실제 크기', '확대', '축소'],
             '윈도우': ['최소화', '확대/축소'],
             '도움말': ['GitHub 도움말']
+          }
+        }
+      case 'settings':
+        return {
+          title: '설정',
+          menus: {
+            '파일': ['닫기'],
+            '편집': ['복사', '붙여넣기'],
+            '보기': ['실제 크기', '확대', '축소'],
+            '윈도우': ['최소화', '확대/축소'],
+            '도움말': ['설정 도움말']
           }
         }
       default:
@@ -1123,6 +1138,32 @@ function Desktop({ onLogout }) {
             </div>
             <div className="icon-label">Mail</div>
           </div>
+
+          <div
+            className="desktop-icon"
+            onDoubleClick={() => handleDoubleClick('settings')}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              handleDoubleClick('settings');
+            }}
+          >
+            <div className="icon-image app-icon-desktop">
+              <svg viewBox="0 0 100 100" width="60" height="60">
+                <defs>
+                  <linearGradient id="settingsGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#8E8E93', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#636366', stopOpacity: 1 }} />
+                  </linearGradient>
+                </defs>
+                <rect x="10" y="10" width="80" height="80" rx="18" fill="url(#settingsGradient)"/>
+                <g transform="translate(50, 50)">
+                  <path d="M0-22 L4-20 L6-16 L12-14 L16-18 L20-14 L16-10 L18-4 L22-2 L22 2 L18 4 L16 10 L20 14 L16 18 L12 14 L6 16 L4 20 L0 22 L-4 20 L-6 16 L-12 14 L-16 18 L-20 14 L-16 10 L-18 4 L-22 2 L-22-2 L-18-4 L-16-10 L-20-14 L-16-18 L-12-14 L-6-16 L-4-20 Z" fill="white" opacity="0.95"/>
+                  <circle cx="0" cy="0" r="8" fill="#636366"/>
+                </g>
+              </svg>
+            </div>
+            <div className="icon-label">Settings</div>
+          </div>
         </div>
 
         {/* Windows */}
@@ -1173,6 +1214,16 @@ function Desktop({ onLogout }) {
             onClick={(e) => bringToFront('mail', e)}
             zIndex={windowZIndex.mail}
             onMinimize={() => handleMinimize('mail')}
+            deviceType={deviceType}
+          />
+        )}
+
+        {openWindows.settings && !minimizedWindows.settings && (
+          <SystemSettings
+            onClose={() => handleCloseWindow('settings')}
+            onClick={(e) => bringToFront('settings', e)}
+            zIndex={windowZIndex.settings}
+            onMinimize={() => handleMinimize('settings')}
             deviceType={deviceType}
           />
         )}
@@ -1291,6 +1342,31 @@ function Desktop({ onLogout }) {
               </g>
             </svg>
             {openWindows.mail && <div className="dock-indicator"></div>}
+          </div>
+          <div
+            className={`dock-item ${openWindows.settings ? 'active' : ''}`}
+            onClick={() => {
+              if (minimizedWindows.settings) {
+                handleRestore('settings')
+              } else {
+                handleDoubleClick('settings')
+              }
+            }}
+          >
+            <svg viewBox="0 0 100 100" width="40" height="40">
+              <defs>
+                <linearGradient id="settingsGradientDock" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style={{ stopColor: '#8E8E93', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#636366', stopOpacity: 1 }} />
+                </linearGradient>
+              </defs>
+              <rect x="10" y="10" width="80" height="80" rx="18" fill="url(#settingsGradientDock)"/>
+              <g transform="translate(50, 50)">
+                <path d="M0-22 L4-20 L6-16 L12-14 L16-18 L20-14 L16-10 L18-4 L22-2 L22 2 L18 4 L16 10 L20 14 L16 18 L12 14 L6 16 L4 20 L0 22 L-4 20 L-6 16 L-12 14 L-16 18 L-20 14 L-16 10 L-18 4 L-22 2 L-22-2 L-18-4 L-16-10 L-20-14 L-16-18 L-12-14 L-6-16 L-4-20 Z" fill="white" opacity="0.95"/>
+                <circle cx="0" cy="0" r="8" fill="#636366"/>
+              </g>
+            </svg>
+            {openWindows.settings && <div className="dock-indicator"></div>}
           </div>
         </div>
       </div>
