@@ -579,6 +579,18 @@ function SystemSettings({ onClose, onClick, zIndex, onMinimize, deviceType = 'de
                   <div className="guide-item-title">상태 아이콘</div>
                   <div className="guide-item-desc">Wi-Fi, 배터리, 검색 등의 시스템 상태 아이콘이 표시됩니다.</div>
                 </div>
+                <div className="guide-item">
+                  <div className="guide-item-title">Contribute 배터리</div>
+                  <div className="guide-item-desc">배터리 아이콘은 오늘의 GitHub 기여도를 나타냅니다. 기여 횟수에 따라 배터리 레벨이 변경됩니다.</div>
+                </div>
+              </div>
+
+              <div className="guide-section">
+                <h3>데이터 수집</h3>
+                <div className="guide-item">
+                  <div className="guide-item-title">GitHub Actions</div>
+                  <div className="guide-item-desc">30분마다 GitHub Actions가 실행되어 기여도 데이터를 JSON 파일로 저장합니다. 이를 통해 API rate limit 문제를 해결했습니다.</div>
+                </div>
               </div>
             </div>
           )}
@@ -690,10 +702,6 @@ function SystemSettings({ onClose, onClick, zIndex, onMinimize, deviceType = 'de
                 <div className="guide-item">
                   <div className="guide-item-title">기여도 잔디</div>
                   <div className="guide-item-desc">GitHub의 기여도 그래프(잔디)를 시각화하여 표시합니다. 날짜별 커밋 수에 따라 색상 농도가 달라집니다.</div>
-                </div>
-                <div className="guide-item">
-                  <div className="guide-item-title">Contribute 배터리</div>
-                  <div className="guide-item-desc">데스크톱 상단의 배터리 아이콘은 오늘의 GitHub 기여도를 나타냅니다. 기여 횟수에 따라 배터리 레벨이 변경됩니다.</div>
                 </div>
               </div>
 
