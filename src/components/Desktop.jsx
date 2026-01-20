@@ -1157,8 +1157,8 @@ function Desktop({ onLogout }) {
                 </defs>
                 <rect x="10" y="10" width="80" height="80" rx="18" fill="url(#settingsGradient)"/>
                 <g transform="translate(50, 50)">
-                  <path d="M0-22 L4-20 L6-16 L12-14 L16-18 L20-14 L16-10 L18-4 L22-2 L22 2 L18 4 L16 10 L20 14 L16 18 L12 14 L6 16 L4 20 L0 22 L-4 20 L-6 16 L-12 14 L-16 18 L-20 14 L-16 10 L-18 4 L-22 2 L-22-2 L-18-4 L-16-10 L-20-14 L-16-18 L-12-14 L-6-16 L-4-20 Z" fill="white" opacity="0.95"/>
-                  <circle cx="0" cy="0" r="8" fill="#636366"/>
+                  <path d="M0-20L5-18L5-14L10-12L14-16L18-12L14-8L16-3L20 0L16 3L14 8L18 12L14 16L10 12L5 14L5 18L0 20L-5 18L-5 14L-10 12L-14 16L-18 12L-14 8L-16 3L-20 0L-16-3L-14-8L-18-12L-14-16L-10-12L-5-14L-5-18Z" fill="white" opacity="0.95"/>
+                  <circle cx="0" cy="0" r="7" fill="#636366"/>
                 </g>
               </svg>
             </div>
@@ -1362,8 +1362,8 @@ function Desktop({ onLogout }) {
               </defs>
               <rect x="10" y="10" width="80" height="80" rx="18" fill="url(#settingsGradientDock)"/>
               <g transform="translate(50, 50)">
-                <path d="M0-22 L4-20 L6-16 L12-14 L16-18 L20-14 L16-10 L18-4 L22-2 L22 2 L18 4 L16 10 L20 14 L16 18 L12 14 L6 16 L4 20 L0 22 L-4 20 L-6 16 L-12 14 L-16 18 L-20 14 L-16 10 L-18 4 L-22 2 L-22-2 L-18-4 L-16-10 L-20-14 L-16-18 L-12-14 L-6-16 L-4-20 Z" fill="white" opacity="0.95"/>
-                <circle cx="0" cy="0" r="8" fill="#636366"/>
+                <path d="M0-20L5-18L5-14L10-12L14-16L18-12L14-8L16-3L20 0L16 3L14 8L18 12L14 16L10 12L5 14L5 18L0 20L-5 18L-5 14L-10 12L-14 16L-18 12L-14 8L-16 3L-20 0L-16-3L-14-8L-18-12L-14-16L-10-12L-5-14L-5-18Z" fill="white" opacity="0.95"/>
+                <circle cx="0" cy="0" r="7" fill="#636366"/>
               </g>
             </svg>
             {openWindows.settings && <div className="dock-indicator"></div>}
