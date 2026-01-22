@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { GitHubCalendar } from 'react-github-calendar'
+import { portfolioItems } from '../data/portfolioData'
 import './GitHub.css'
 
 function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }) {
@@ -337,18 +338,16 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
               <div className="mobile-repositories">
                 <h2>My Projects</h2>
                 <div className="mobile-repo-list">
-                  {repos.map(repo => (
+                  {portfolioItems.map(project => (
                     <div
-                      key={repo.id}
+                      key={project.id}
                       className="mobile-repo-card"
-                      onClick={() => window.open(repo.html_url, '_blank', 'noopener,noreferrer')}
+                      onClick={() => window.open(project.githubUrl, '_blank', 'noopener,noreferrer')}
                     >
-                      <h3>{repo.name}</h3>
-                      <p className="mobile-repo-description">{repo.description || 'No description'}</p>
+                      <h3>{project.title}</h3>
+                      <p className="mobile-repo-description">{project.skills?.slice(0, 3).join(', ') || 'No description'}</p>
                       <div className="mobile-repo-stats">
-                        {repo.language && <span className="mobile-language">● {repo.language}</span>}
-                        <span className="mobile-pushes">📤 {repo.push_count || 0} pushes</span>
-                        <span className="mobile-stars">⭐ {repo.stargazers_count}</span>
+                        {project.skills?.[0] && <span className="mobile-language">● {project.skills[0]}</span>}
                       </div>
                     </div>
                   ))}
@@ -495,18 +494,16 @@ function GitHub({ onClose, onClick, zIndex, onMinimize, deviceType = 'desktop' }
             <div className="repositories">
               <h2>My Projects</h2>
               <div className="repo-grid">
-                {repos.map(repo => (
+                {portfolioItems.map(project => (
                   <div
-                    key={repo.id}
+                    key={project.id}
                     className="repo-card"
-                    onClick={() => window.open(repo.html_url, '_blank', 'noopener,noreferrer')}
+                    onClick={() => window.open(project.githubUrl, '_blank', 'noopener,noreferrer')}
                   >
-                    <h3>{repo.name}</h3>
-                    <p className="repo-description">{repo.description || 'No description'}</p>
+                    <h3>{project.title}</h3>
+                    <p className="repo-description">{project.skills?.slice(0, 3).join(', ') || 'No description'}</p>
                     <div className="repo-stats">
-                      {repo.language && <span className="language">● {repo.language}</span>}
-                      <span className="pushes">📤 {repo.push_count || 0} pushes</span>
-                      <span className="stars">⭐ {repo.stargazers_count}</span>
+                      {project.skills?.[0] && <span className="language">● {project.skills[0]}</span>}
                     </div>
                   </div>
                 ))}

@@ -92,6 +92,7 @@ export const portfolioItems = [
     color: '#E8F5FF',
     emoji: '🐳🌊',
     title: 'Divary',
+    githubUrl: 'https://github.com/DivaryOfficial/divary-spring',
     award: { name: 'UMC 데모데이 대상', from: 'UMC', url: 'https://www.kolleges.net/ko/neordinary/achievement/9725' },
     period: '',
     overview: `![Divary Banner](/portfolio-dev/images/divary.jpg)
@@ -221,7 +222,8 @@ export const portfolioItems = [
     id: 2,
     color: '#FFE5F5',
     emoji: '🎵🎧',
-    title: 'ARCHEIVE',
+    title: 'Archive',
+    githubUrl: 'https://github.com/UMC-Archive/Archive-iOS',
     award: { name: 'UMC 데모데이 우수상', from: 'UMC', url: 'https://www.kolleges.net/ko/neordinary/achievement/2775' },
     period: '',
     overview: `![ARCHEIVE Banner](/portfolio-dev/images/Archeive.png)
@@ -327,6 +329,7 @@ export const portfolioItems = [
     color: '#E3F2FD',
     emoji: '',
     title: 'Blism',
+    githubUrl: 'https://github.com/UMC-Blism',
     period: '',
     overview: `![Blism Banner](/portfolio-dev/images/blism.png)
 
@@ -431,6 +434,7 @@ View 연결의 분업은 볼륨에 맞게 잘 진행되었지만, 시간이 지�
     color: '#E0F2F1',
     emoji: '',
     title: '경도팟',
+    githubUrl: 'https://github.com/UMC-9th-hackathon-TEAM5/BE',
     award: { name: 'UMC 해커톤 최우수상', from: 'UMC' },
     period: '',
     overview: `![경도팟 Banner](/portfolio-dev/images/gyungdopat.png)
@@ -519,6 +523,7 @@ View 연결의 분업은 볼륨에 맞게 잘 진행되었지만, 시간이 지�
     color: '#F3E5F5',
     emoji: '',
     title: 'Portfolio',
+    githubUrl: 'https://github.com/worhs02/portfolio-dev',
     period: '',
     overview: `![Portfolio Banner](/portfolio-dev/images/portfolio.png)
 

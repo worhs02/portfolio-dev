@@ -1,47 +1,42 @@
 # Portfolio
 
-![Divary](./public/images/divary.jpg)
+macOS 스타일의 인터랙티브 포트폴리오 웹사이트
 
-## 🌊 다이버리 (Divary)
-
-**"바다를 기록하고, 추억을 꾸미다"**
-
-스쿠버다이빙을 사랑하는 사람들을 위한 감성 다이빙 로그 앱
-
-### 기술 스택
-- **Backend**: Spring Boot, MySQL
-- **Frontend**: iOS (UIKit), SwiftUI
-- **API**: GPT API, 날씨/수온 API
-- **기타**: Canvas API / PencilKit
-
-### 주요 기능
-- 📘 다이빙 로그 (날짜, 장소, 수심, 수온 등 기록)
-- 📓 다이빙 일기장 (사진, 스티커로 꾸미기)
-- 🐠 해양 도감 (GPT 연동 AI 생물 인식)
-- 🌊 나의 바다 & 아바타 (커스터마이징)
+**Live Demo**: [https://worhs02.github.io/portfolio-dev/](https://worhs02.github.io/portfolio-dev/)
 
 ---
 
-## 🚀 프로젝트 구성
+## 프로젝트 소개
 
-### 기술 스택
-- **Frontend**: React, Vite
-- **Styling**: CSS3, Responsive Design
+macOS 데스크톱 환경을 웹으로 구현한 개인 포트폴리오 사이트입니다.
+실제 macOS와 유사한 사용자 경험을 제공하며, Vibe Coding(AI 페어 프로그래밍)을 통해 개발하였습니다.
+
+---
+
+## 기술 스택
+
+- **Frontend**: React, Vite, JavaScript (ES6+)
+- **Styling**: CSS3 (Flexbox, Grid, Animation)
 - **Deployment**: GitHub Pages
-- **Tools**: Git, npm
-
-### 주요 기능
-- 🖥️ macOS 스타일 데스크톱 UI
-- 📁 인터랙티브 폴더/앱 시스템
-- 🎨 Finder 스타일 포트폴리오 브라우저
-- 💻 VS Code 스타일 프로젝트 뷰어
-- 🐙 GitHub 통합 (Contribution Graph, Repositories)
-- ✉️ 이메일 앱
-- 📝 Velog 연동
+- **CI/CD**: GitHub Actions (자동 데이터 수집)
+- **Development**: Vibe Coding with Claude Code
 
 ---
 
-## 📦 설치 및 실행
+## 주요 기능
+
+- macOS 스타일 데스크톱 UI
+- 드래그 가능한 윈도우 시스템
+- Dock 애니메이션 (마우스 호버 시 아이콘 확대)
+- 창 최소화/최대화/닫기 기능
+- Finder 스타일 포트폴리오 브라우저
+- GitHub 통합 (Contribution Graph, Repositories)
+- 이메일 앱
+- 반응형 디자인 (Desktop/Tablet/Mobile)
+
+---
+
+## 설치 및 실행
 
 ```bash
 # 의존성 설치
@@ -59,15 +54,7 @@ npm run deploy
 
 ---
 
-## 🌐 배포
-
-GitHub Pages를 통해 배포됩니다.
-
-**Live Demo**: [https://worhs02.github.io/portfolio-dev/](https://worhs02.github.io/portfolio-dev/)
-
----
-
-## 📂 프로젝트 구조
+## 프로젝트 구조
 
 ```
 portfolio-dev/
@@ -77,14 +64,14 @@ portfolio-dev/
 ├── src/
 │   ├── components/      # React 컴포넌트
 │   ├── data/           # 프로젝트 데이터
-│   └── styles/         # CSS 파일
+│   └── utils/          # 유틸리티 함수
 └── .github/
     └── workflows/      # GitHub Actions
 ```
 
 ---
 
-## 👨‍💻 개발자
+## 개발자
 
 **송재곤 (worhs02)**
 
