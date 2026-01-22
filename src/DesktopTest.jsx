@@ -1,22 +1,28 @@
 import React, { useState } from 'react'
 import Desktop from './components/Desktop'
 import LoginScreen from './components/LoginScreen'
+import BootScreen from './components/BootScreen'
 import './App.css'
 
 function DesktopTest() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [bootState, setBootState] = useState('booting') // 'booting' | 'login' | 'desktop'
+
+  const handleBootComplete = () => {
+    setBootState('login')
+  }
 
   const handleLogin = () => {
-    setIsLoggedIn(true)
+    setBootState('desktop')
   }
 
   const handleLogout = () => {
-    setIsLoggedIn(false)
+    setBootState('login')
   }
 
   return (
     <div className="App">
-      {!isLoggedIn && <LoginScreen onLogin={handleLogin} />}
+      {bootState === 'booting' && <BootScreen onBootComplete={handleBootComplete} />}
+      {bootState === 'login' && <LoginScreen onLogin={handleLogin} />}
       <Desktop onLogout={handleLogout} />
     </div>
   )

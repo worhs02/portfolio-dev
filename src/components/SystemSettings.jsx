@@ -182,6 +182,7 @@ function SystemSettings({ onClose, onClick, zIndex, onMinimize, deviceType = 'de
   const menuItems = [
     { id: 'about', label: '이 Mac에 관하여', icon: 'about' },
     { id: 'divider1', type: 'divider', label: '기능 설명' },
+    { id: 'boot', label: '부팅 화면', icon: 'boot' },
     { id: 'desktop', label: '데스크톱', icon: 'desktop' },
     { id: 'wallpaper', label: '배경화면', icon: 'wallpaper' },
     { id: 'menubar', label: '메뉴바', icon: 'menubar' },
@@ -207,6 +208,17 @@ function SystemSettings({ onClose, onClick, zIndex, onMinimize, deviceType = 'de
             </defs>
             <rect x="10" y="10" width="80" height="80" rx="16" fill="url(#aboutGradient)"/>
             <text x="50" y="68" fontSize="50" fontWeight="bold" fill="white" textAnchor="middle" fontFamily="Georgia, serif" fontStyle="italic">i</text>
+          </svg>
+        )
+      case 'boot':
+        return (
+          <svg viewBox="0 0 100 100" width={size} height={size}>
+            <rect x="10" y="10" width="80" height="80" rx="16" fill="#000"/>
+            <path
+              fill="#fff"
+              transform="translate(30, 25) scale(0.5)"
+              d="M75.19 65.12c-1.22 2.83-2.68 5.44-4.36 7.83-2.29 3.27-4.17 5.53-5.61 6.78-2.24 2.06-4.64 3.12-7.21 3.18-1.85 0-4.07-.53-6.66-1.59-2.6-1.06-4.99-1.59-7.17-1.59-2.29 0-4.75.53-7.37 1.59-2.63 1.07-4.75 1.62-6.37 1.68-2.46.1-4.92-.98-7.37-3.26-1.57-1.37-3.52-3.71-5.87-7.02-2.52-3.54-4.58-7.65-6.21-12.33-1.74-5.06-2.61-9.95-2.61-14.69 0-5.43 1.17-10.11 3.52-14.03 1.85-3.15 4.31-5.64 7.38-7.46s6.4-2.76 9.97-2.82c1.96 0 4.52.61 7.71 1.8 3.18 1.19 5.23 1.8 6.12 1.8.67 0 2.94-.71 6.79-2.12 3.64-1.31 6.71-1.85 9.22-1.64 6.82.55 11.94 3.24 15.34 8.08-6.1 3.69-9.11 8.87-9.05 15.5.05 5.17 1.93 9.47 5.62 12.88 1.67 1.59 3.54 2.81 5.61 3.68-.45 1.31-.93 2.56-1.43 3.76zM59.56 3.62c0 4.05-1.48 7.83-4.43 11.33-3.56 4.17-7.87 6.57-12.54 6.19a12.61 12.61 0 0 1-.09-1.54c0-3.89 1.69-8.05 4.7-11.46 1.5-1.72 3.41-3.16 5.72-4.3 2.31-1.13 4.5-1.75 6.55-1.86.06.55.09 1.1.09 1.64z"
+            />
           </svg>
         )
       case 'desktop':
@@ -494,6 +506,24 @@ function SystemSettings({ onClose, onClick, zIndex, onMinimize, deviceType = 'de
                   {skills.map((skill, index) => (
                     <span key={index} className="skill-tag">{skill}</span>
                   ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {selectedMenu === 'boot' && (
+            <div className="guide-content">
+              <h2>부팅 화면</h2>
+              <p className="guide-intro">macOS 스타일의 부팅 애니메이션과 사운드를 재현했습니다.</p>
+
+              <div className="guide-section">
+                <h3>화면 전환 흐름</h3>
+                <div className="guide-item">
+                  <div className="guide-item-desc">
+                    1. 부팅 화면 (Apple 로고 + 프로그레스 바)<br/>
+                    2. 잠금 화면 (시계 + 프로필)<br/>
+                    3. 데스크톱
+                  </div>
                 </div>
               </div>
             </div>
