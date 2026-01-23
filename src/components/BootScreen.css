@@ -11,32 +11,6 @@
   justify-content: center;
 }
 
-.power-button {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-.power-button:hover {
-  opacity: 1;
-  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
-  animation: none;
-}
-
-.power-button:active {
-  transform: scale(0.95);
-  opacity: 0.9;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.9;
-  }
-}
-
 .boot-content {
   display: flex;
   flex-direction: column;
