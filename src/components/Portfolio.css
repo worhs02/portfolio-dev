@@ -696,6 +696,99 @@
   color: #FFF;
 }
 
+/* Team Styles */
+.team-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.team-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.team-total {
+  font-size: 48px;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.team-label {
+  font-size: 17px;
+  font-weight: 400;
+  color: #86868b;
+}
+
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid #d2d2d7;
+}
+
+.team-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #d2d2d7;
+}
+
+.team-role {
+  font-size: 15px;
+  font-weight: 400;
+  color: #1d1d1f;
+}
+
+.team-count {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d1d1f;
+}
+
+.team-empty {
+  color: #86868b;
+  font-size: 15px;
+}
+
+/* Code Block Styles */
+.code-block {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.gradle-code {
+  margin: 0;
+  padding: 20px;
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #d4d4d4;
+  overflow-x: auto;
+}
+
+.gradle-code code {
+  white-space: pre;
+}
+
+.code-keyword {
+  color: #c586c0;
+}
+
+.code-string {
+  color: #6a9955;
+}
+
+.code-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+
 /* Scrollbar Styling */
 .vscode-sidebar::-webkit-scrollbar,
 .vscode-editor::-webkit-scrollbar,
@@ -818,6 +911,28 @@
   .file-body {
     padding: 12px;
     font-size: 12px;
+  }
+
+  .team-total {
+    font-size: 36px;
+  }
+
+  .team-label {
+    font-size: 15px;
+  }
+
+  .team-item {
+    padding: 12px 0;
+  }
+
+  .team-role,
+  .team-count {
+    font-size: 14px;
+  }
+
+  .skill-tag {
+    padding: 6px 12px;
+    font-size: 13px;
   }
 }
 

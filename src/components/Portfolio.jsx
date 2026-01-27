@@ -311,19 +311,19 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
         }] : [])
       ]
     },
-    {
+    ...(selectedProject.dependencies ? [{
       id: 'config',
       name: 'config',
       type: 'folder',
       children: [
         {
           id: 'skills',
-          name: 'package.json',
-          icon: '📦',
+          name: 'build.gradle',
+          icon: '',
           type: 'file'
         }
       ]
-    },
+    }] : []),
     ...(selectedProject.github ? [{
       id: 'github-folder',
       name: 'repository',
@@ -380,25 +380,120 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
         )
 
       case 'team':
+        // Parse team string like "5명 (백엔드 2명, iOS 3명)"
+        const parseTeam = (teamStr) => {
+          if (!teamStr) return { total: 0, roles: [] }
+          const totalMatch = teamStr.match(/(\d+)명/)
+          const total = totalMatch ? parseInt(totalMatch[1]) : 0
+          const rolesMatch = teamStr.match(/\(([^)]+)\)/)
+          if (!rolesMatch) return { total, roles: [] }
+          const roles = rolesMatch[1].split(',').map(r => {
+            const match = r.trim().match(/(.+?)\s*(\d+)명/)
+            return match ? { name: match[1].trim(), count: parseInt(match[2]) } : null
+          }).filter(Boolean)
+          return { total, roles }
+        }
+
+        const teamData = parseTeam(selectedProject.team)
+
         return (
           <div className="file-content">
             <div className="file-header">
               <span className="file-name">TEAM.md</span>
             </div>
             <div className="file-body">
-              <pre>{selectedProject.team}</pre>
+              {teamData.total > 0 ? (
+                <div className="team-container">
+                  <div className="team-header">
+                    <span className="team-total">{teamData.total}</span>
+                    <span className="team-label">Members</span>
+                  </div>
+                  <div className="team-list">
+                    {teamData.roles.map((role, idx) => (
+                      <div key={idx} className="team-item">
+                        <span className="team-role">{role.name}</span>
+                        <span className="team-count">{role.count}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="team-empty">팀 정보가 없습니다</div>
+              )}
             </div>
           </div>
         )
 
       case 'skills':
+        // dependencies 필드가 있으면 그대로 사용
+        if (selectedProject.dependencies) {
+          const highlightCode = (code) => {
+            return code.split('\n').map((line, idx) => {
+              // 주석 처리
+              if (line.trim().startsWith('//')) {
+                return <span key={idx}><span className="code-comment">{line}</span>{'\n'}</span>
+              }
+              // 키워드와 문자열 하이라이트
+              const highlighted = line
+                .replace(/(dependencies|implementation|runtimeOnly|compileOnly|testImplementation|testRuntimeOnly|annotationProcessor)\s/g, '<keyword>$1</keyword> ')
+                .replace(/'([^']+)'/g, '<string>\'$1\'</string>')
+                .replace(/\/\/(.*)$/g, '<comment>//$1</comment>')
+
+              const parts = highlighted.split(/(<keyword>|<\/keyword>|<string>|<\/string>|<comment>|<\/comment>)/)
+              let inKeyword = false
+              let inString = false
+              let inComment = false
+
+              return (
+                <span key={idx}>
+                  {parts.map((part, i) => {
+                    if (part === '<keyword>') { inKeyword = true; return null }
+                    if (part === '</keyword>') { inKeyword = false; return null }
+                    if (part === '<string>') { inString = true; return null }
+                    if (part === '</string>') { inString = false; return null }
+                    if (part === '<comment>') { inComment = true; return null }
+                    if (part === '</comment>') { inComment = false; return null }
+                    if (inKeyword) return <span key={i} className="code-keyword">{part}</span>
+                    if (inString) return <span key={i} className="code-string">{part}</span>
+                    if (inComment) return <span key={i} className="code-comment">{part}</span>
+                    return part
+                  })}
+                  {'\n'}
+                </span>
+              )
+            })
+          }
+
+          return (
+            <div className="file-content">
+              <div className="file-header">
+                <span className="file-name">build.gradle</span>
+              </div>
+              <div className="file-body">
+                <div className="code-block">
+                  <pre className="gradle-code">
+                    <code>{highlightCode(selectedProject.dependencies)}</code>
+                  </pre>
+                </div>
+              </div>
+            </div>
+          )
+        }
+
+        // dependencies 필드가 없으면 기본 메시지
         return (
           <div className="file-content">
             <div className="file-header">
-              <span className="file-name">package.json</span>
+              <span className="file-name">build.gradle</span>
             </div>
             <div className="file-body">
-              <pre>{JSON.stringify({ dependencies: selectedProject.skills }, null, 2)}</pre>
+              <div className="code-block">
+                <pre className="gradle-code">
+                  <code>
+                    <span className="code-comment">// No dependencies specified</span>
+                  </code>
+                </pre>
+              </div>
             </div>
           </div>
         )
