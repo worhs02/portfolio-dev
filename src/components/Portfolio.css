@@ -888,6 +888,42 @@
     border-bottom: 1px solid #1e1e1e;
   }
 
+  .vscode-tree {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 4px;
+  }
+
+  .tree-folder {
+    width: 50%;
+    flex-shrink: 0;
+  }
+
+  .tree-folder-header {
+    padding: 4px 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .tree-folder-content {
+    padding-left: 6px;
+  }
+
+  .tree-item {
+    padding: 3px 8px;
+    font-size: 10px;
+    gap: 4px;
+    margin: 0 4px;
+  }
+
+  .tree-item-icon {
+    font-size: 10px;
+  }
+
+  .tree-item-arrow {
+    font-size: 8px;
+  }
+
   .file-body {
     padding: 16px;
     font-size: 13px;
