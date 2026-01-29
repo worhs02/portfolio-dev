@@ -117,12 +117,15 @@ function Desktop({ onLogout }) {
     return () => clearInterval(interval)
   }, [])
 
-  // GitHub 오늘의 기여도 가져오기 (Static JSON에서)
+  // GitHub 전날 기여도 가져오기 (전날 contribution = 오늘 배터리)
   useEffect(() => {
-    const fetchTodayContributions = async () => {
+    const fetchYesterdayContributions = async () => {
       try {
-        const today = new Date().toISOString().split('T')[0]
-        console.log('오늘 날짜:', today)
+        // 전날 날짜 계산
+        const yesterday = new Date()
+        yesterday.setDate(yesterday.getDate() - 1)
+        const yesterdayStr = yesterday.toISOString().split('T')[0]
+        console.log('전날 날짜:', yesterdayStr)
 
         // github-data.json에서 데이터 가져오기
         const response = await fetch(`${import.meta.env.BASE_URL}github-data.json?t=${Date.now()}`)
@@ -131,25 +134,25 @@ function Desktop({ onLogout }) {
         }
 
         const data = await response.json()
-        const currentYear = new Date().getFullYear()
-        const contributions = data.contributions[currentYear] || []
+        const yearKey = yesterday.getFullYear()
+        const contributions = data.contributions[yearKey] || []
 
-        // 오늘 날짜의 기여도 찾기
-        const todayContribution = contributions.find(day => day.date === today)
-        const todayCount = todayContribution?.count || 0
+        // 전날 날짜의 기여도 찾기
+        const yesterdayContribution = contributions.find(day => day.date === yesterdayStr)
+        const yesterdayCount = yesterdayContribution?.count || 0
 
-        console.log('오늘의 기여도:', todayCount)
-        setTodayCommits(todayCount)
+        console.log('전날 기여도:', yesterdayCount)
+        setTodayCommits(yesterdayCount)
 
-        // 기여도에 따라 배터리 퍼센트 설정
+        // 전날 기여도에 따라 오늘 배터리 퍼센트 설정
         let percent = 100
-        if (todayCount === 0) {
+        if (yesterdayCount === 0) {
           percent = 100 // 기여가 없으면 100%
-        } else if (todayCount <= 5) {
+        } else if (yesterdayCount <= 5) {
           percent = 70 // 5개 이하면 70%
-        } else if (todayCount <= 10) {
+        } else if (yesterdayCount <= 10) {
           percent = 50 // 10개 이하면 50%
-        } else if (todayCount <= 15) {
+        } else if (yesterdayCount <= 15) {
           percent = 30 // 15개 이하면 30%
         } else {
           percent = 10 // 그 이상이면 10%
@@ -164,11 +167,7 @@ function Desktop({ onLogout }) {
       }
     }
 
-    fetchTodayContributions()
-
-    // 10분마다 업데이트
-    const interval = setInterval(fetchTodayContributions, 10 * 60 * 1000)
-    return () => clearInterval(interval)
+    fetchYesterdayContributions()
   }, [])
 
   const handleDoubleClick = (windowName) => {
@@ -296,17 +295,21 @@ function Desktop({ onLogout }) {
   const handleBatteryClick = () => {
     const isCharging = batteryPercent < 100
 
+    // 전날 날짜 계산
+    const yesterday = new Date()
+    yesterday.setDate(yesterday.getDate() - 1)
+
     let statusMessage = ''
     if (todayCommits === 0) {
-      statusMessage = '오늘 아직 Contribute가 없어요! 코딩을 시작해볼까요?'
+      statusMessage = '어제 쉬었으니 오늘은 열심히 해볼까요?'
     } else if (todayCommits <= 5) {
-      statusMessage = '좋은 출발이에요! 조금만 더 힘내봐요!'
+      statusMessage = '어제 가볍게 코딩했네요!'
     } else if (todayCommits <= 10) {
-      statusMessage = '열심히 하고 있네요! 계속 파이팅!'
+      statusMessage = '어제 열심히 했어요!'
     } else if (todayCommits <= 15) {
-      statusMessage = '대단해요! 오늘 정말 많이 하셨어요!'
+      statusMessage = '어제 정말 많이 하셨네요!'
     } else {
-      statusMessage = '와우! 오늘 Contribute 왕이시네요!'
+      statusMessage = '어제 불태웠군요! 오늘은 좀 쉬어도 돼요'
     }
 
     setModal({
@@ -320,15 +323,15 @@ function Desktop({ onLogout }) {
               {todayCommits}
             </div>
             <div style={{ fontSize: '16px', color: '#666', marginBottom: '4px' }}>
-              오늘의 Contribute
+              어제의 Contribute
             </div>
             <div style={{ fontSize: '14px', color: '#999' }}>
-              {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+              {yesterday.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
             </div>
           </div>
 
           <div style={{ background: '#f5f5f5', padding: '16px', borderRadius: '8px', marginBottom: '16px' }}>
-            <div style={{ fontSize: '13px', color: '#666', marginBottom: '8px' }}>Contribute 현황</div>
+            <div style={{ fontSize: '13px', color: '#666', marginBottom: '8px' }}>배터리 잔량</div>
             <div style={{ background: '#e0e0e0', height: '12px', borderRadius: '6px', overflow: 'hidden' }}>
               <div style={{
                 background: batteryPercent > 50 ? '#28CA42' : batteryPercent > 20 ? '#FFBD2E' : '#FF5F57',
@@ -985,7 +988,7 @@ function Desktop({ onLogout }) {
                 </svg>
               </span>
             </div>
-            <span className="menu-icon" onClick={handleBatteryClick} title={`Contribute: ${batteryPercent}% (오늘 ${todayCommits}개)`}>
+            <span className="menu-icon" onClick={handleBatteryClick} title={`Contribute: ${batteryPercent}% (어제 ${todayCommits}개)`}>
               <svg width="20" height="12" viewBox="0 0 20 12" fill="none">
                 <rect x="1" y="2" width="16" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
                 <rect x="17.5" y="4.5" width="1.5" height="3" rx="0.5" fill="currentColor"/>
