@@ -351,7 +351,20 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
         {
           id: 'award',
           name: 'AWARD.txt',
-          icon: '🏆',
+          icon: '',
+          type: 'file'
+        }
+      ]
+    }] : []),
+    ...(selectedProject.changelog ? [{
+      id: 'changelog-folder',
+      name: 'releases',
+      type: 'folder',
+      children: [
+        {
+          id: 'changelog',
+          name: 'CHANGELOG.md',
+          icon: '',
           type: 'file'
         }
       ]
@@ -553,6 +566,30 @@ function Portfolio({ onClose, isWindow = false, onClick, zIndex, deviceType = 'd
                   )}
                 </div>
               )}
+            </div>
+          </div>
+        )
+
+      case 'changelog':
+        return (
+          <div className="file-content">
+            <div className="file-header">
+              <span className="file-name">CHANGELOG.md</span>
+            </div>
+            <div className="file-body">
+              <div className="changelog-container">
+                {selectedProject.changelog.map((release, idx) => (
+                  <div key={idx} className="changelog-item">
+                    <div className="changelog-version">{release.version}</div>
+                    <div className="changelog-date">{release.date}</div>
+                    <ul className="changelog-list">
+                      {release.changes.map((change, i) => (
+                        <li key={i}>{change}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )
