@@ -6,6 +6,7 @@ import Velog from './Velog'
 import GitHub from './GitHub'
 import Mail from './Mail'
 import SystemSettings from './SystemSettings'
+import Terminal from './Terminal'
 import Modal from './Modal'
 import { portfolioItems } from '../data/portfolioData'
 import { getDeviceType, isMobile } from '../utils/deviceDetect'
@@ -17,7 +18,8 @@ function Desktop({ onLogout }) {
     velog: false,
     github: false,
     mail: false,
-    settings: false
+    settings: false,
+    terminal: false
   })
 
   const [windowZIndex, setWindowZIndex] = useState({
@@ -26,7 +28,8 @@ function Desktop({ onLogout }) {
     velog: 100,
     github: 100,
     mail: 100,
-    settings: 100
+    settings: 100,
+    terminal: 100
   })
 
   const [maxZIndex, setMaxZIndex] = useState(100)
@@ -38,7 +41,8 @@ function Desktop({ onLogout }) {
     velog: false,
     github: false,
     mail: false,
-    settings: false
+    settings: false,
+    terminal: false
   })
   const [modal, setModal] = useState({
     isOpen: false,
@@ -1167,6 +1171,23 @@ function Desktop({ onLogout }) {
             </div>
             <div className="icon-label">Settings</div>
           </div>
+
+          <div
+            className="desktop-icon"
+            onDoubleClick={() => handleDoubleClick('terminal')}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              handleDoubleClick('terminal');
+            }}
+          >
+            <div className="icon-image app-icon-desktop">
+              <svg viewBox="0 0 100 100" width="60" height="60">
+                <rect x="10" y="10" width="80" height="80" rx="12" fill="#1e1e1e"/>
+                <text x="50" y="68" fontSize="36" fontWeight="bold" fill="#00ff00" textAnchor="middle" fontFamily="Monaco, monospace">&gt;_</text>
+              </svg>
+            </div>
+            <div className="icon-label">Terminal</div>
+          </div>
         </div>
 
         {/* Windows */}
@@ -1227,6 +1248,16 @@ function Desktop({ onLogout }) {
             onClick={(e) => bringToFront('settings', e)}
             zIndex={windowZIndex.settings}
             onMinimize={() => handleMinimize('settings')}
+            deviceType={deviceType}
+          />
+        )}
+
+        {openWindows.terminal && !minimizedWindows.terminal && (
+          <Terminal
+            onClose={() => handleCloseWindow('terminal')}
+            onClick={(e) => bringToFront('terminal', e)}
+            zIndex={windowZIndex.terminal}
+            onMinimize={() => handleMinimize('terminal')}
             deviceType={deviceType}
           />
         )}
@@ -1370,6 +1401,22 @@ function Desktop({ onLogout }) {
               </g>
             </svg>
             {openWindows.settings && <div className="dock-indicator"></div>}
+          </div>
+          <div
+            className={`dock-item ${openWindows.terminal ? 'active' : ''}`}
+            onClick={() => {
+              if (minimizedWindows.terminal) {
+                handleRestore('terminal')
+              } else {
+                handleDoubleClick('terminal')
+              }
+            }}
+          >
+            <svg viewBox="0 0 100 100" width="40" height="40">
+              <rect x="10" y="10" width="80" height="80" rx="12" fill="#1e1e1e"/>
+              <text x="50" y="65" fontSize="28" fontWeight="bold" fill="#00ff00" textAnchor="middle" fontFamily="Monaco, monospace">&gt;_</text>
+            </svg>
+            {openWindows.terminal && <div className="dock-indicator"></div>}
           </div>
         </div>
       </div>
